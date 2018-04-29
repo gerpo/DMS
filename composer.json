@@ -16,13 +16,16 @@
     "gerpo/plugisto": "*",
     "laravel/framework": "5.6.*",
     "laravel/tinker": "~1.0",
-    "silber/bouncer": "v1.0.0-rc.1"
+    "silber/bouncer": "v1.0.0-rc.1",
+    "tightenco/ziggy": "^0.6.3"
   },
   "require-dev": {
+    "barryvdh/laravel-debugbar": "^3.1",
     "barryvdh/laravel-ide-helper": "^2.4",
     "filp/whoops": "~2.0",
     "fzaninotto/faker": "~1.4",
     "laravel/dusk": "^3.0",
+    "martinlindhe/laravel-vue-i18n-generator": "^0.1.28",
     "mockery/mockery": "~1.0",
     "nunomaduro/collision": "~2.0",
     "phpunit/phpunit": "~7.0",

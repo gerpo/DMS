@@ -2,6 +2,8 @@
 .env.*.php
 .env.php
 .env
-.idea/*
 .idea
 _ide_helper.php
+.env.dusk.*
+/vendor/
+/node_modules/

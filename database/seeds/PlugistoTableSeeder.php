@@ -30,14 +30,14 @@ class PlugistoTableSeeder extends Seeder
             'needed_permission' => 'manage_roles'
         ]);
 
-        Plugisto::create([
+        /*Plugisto::create([
             'name' => 'Abilities',
             'description' => 'View and manage abilities.',
             'route' => '/abilities',
             'namespace' => 'gerpo/dms/abilities',
             'manually_added' => true,
             'needed_permission' => 'manage_roles'
-        ]);
+        ]);*/
 
         Plugisto::create([
             'name' => 'Mails',
@@ -46,6 +46,15 @@ class PlugistoTableSeeder extends Seeder
             'namespace' => 'gerpo/dms/mails',
             'manually_added' => true,
             'needed_permission' => 'send_mails'
+        ]);
+
+        Plugisto::create([
+            'name' => 'Plugins',
+            'description' => 'View and managge installed plugins.',
+            'route' => '/plugins',
+            'namespace' => 'gerpo/dms/plugins',
+            'manually_added' => true,
+            'needed_permission' => 'manage_plugins'
         ]);
     }
 }

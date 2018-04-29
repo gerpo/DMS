@@ -12,11 +12,20 @@
     "devDependencies": {
         "axios": "^0.17",
         "bootstrap": "^4.0.0",
-        "popper.js": "^1.12",
+        "browser-sync": "^2.23.6",
+        "browser-sync-webpack-plugin": "2.0.1",
         "cross-env": "^5.1",
         "jquery": "^3.2",
         "laravel-mix": "^2.0",
         "lodash": "^4.17.4",
+        "popper.js": "^1.12",
         "vue": "^2.5.7"
+    },
+    "dependencies": {
+        "moment": "^2.22.0",
+        "vue-flash-message": "^0.6.0",
+        "vue-i18n": "^7.6.0",
+        "vue-moment": "^3.2.0",
+        "vue-table-component": "^1.9.1"
     }
 }

@@ -11,11 +11,14 @@
 |
 */
 
+use App\User;
+
 Route::get('/', function () {
     return view('welcome');
 });
 
 Auth::routes();
+
 Route::get('/register/confirm', 'Api\RegisterConfirmationController@index')->name('register.confirm');
 
 Route::group(['middleware' => 'auth'], function () {
@@ -25,23 +28,29 @@ Route::group(['middleware' => 'auth'], function () {
 
 
     Route::get('/roles', 'RolesController@index')->name('roles');
-    Route::post('/roles', 'RolesController@store')->name('roles.store')->middleware('check_ability:manage_roles');
+    Route::post('/roles',
+        'Api\RolesController@store')->name('api.roles.store')->middleware('check_ability:manage_roles');
+    Route::delete('/roles/{role}',
+        'Api\RolesController@destroy')->name('api.roles.destroy')->middleware('check_ability:manage_roles');
 
-    Route::get('/abilities', 'AbilitiesController@store')->name('abilities');
+    Route::get('/abilities', 'AbilitiesController@index')->name('abilities');
     Route::post('/abilities',
         'AbilitiesController@store')->name('abilities.store')->middleware('check_ability:manage_roles');
 
     Route::post('/roles/{role}/abilities',
-        'RoleAbilitiesController@store')->name('role-abilities.store')->middleware('check_ability:manage_roles');
+        'Api\RoleAbilitiesController@store')->name('api.role-abilities.store')->middleware('check_ability:manage_roles');
     Route::delete('/roles/{role}/abilities',
-        'RoleAbilitiesController@destroy')->name('role-abilities.destroy')->middleware('check_ability:manage_roles');
+        'Api\RoleAbilitiesController@destroy')->name('api.role-abilities.destroy')->middleware('check_ability:manage_roles');
 
 
     Route::post('/users/{user}/roles',
-        'UserRolesController@store')->name('user-roles.store')->middleware('check_ability:manage_users');
+        'Api\UserRolesController@store')->name('api.user-roles.store')->middleware('check_ability:manage_users');
     Route::delete('/users/{user}/roles',
-        'UserRolesController@destroy')->name('user-roles.destroy')->middleware('check_ability:manage_users');
+        'Api\UserRolesController@destroy')->name('api.user-roles.destroy')->middleware('check_ability:manage_users');
 
+    Route::get('/plugins', 'PluginsController@index')->name('plugins');
+    Route::patch('/plugins/{plugin}', 'Api\PluginsController@update')->name('api.plugins.update');
+    Route::delete('/plugins/{plugin}', 'Api\PluginsController@destroy')->name('api.plugins.destroy');
 
     Route::post('/mails', 'MailsController@store')->name('mails.store')->middleware('check_ability:send_mails');
 
@@ -49,4 +58,14 @@ Route::group(['middleware' => 'auth'], function () {
         'Api\MailAddressesController@index')->name('api.mailAddresses')->middleware('check_ability:send_mails,send_roleMails,send_floorMails');
     Route::post('/api/addresses',
         'Api\MailAddressesController@query')->name('api.mailAddressesQuery')->middleware('check_ability:send_mails');
+
+    Route::get('/api/users', 'Api\UsersController@index')->name('api.users')->middleware('check_ability:manage_users');
+    Route::post('/api/users/{user}',
+        'Api\UsersController@update')->name('api.users.update')->middleware('check_ability:manage_users');
+
+
+    Route::get('/me', function () {
+        $user = User::where('id', auth()->user()['id'])->with(['roles', 'abilities'])->first();
+        return view('profile')->with(['user' => $user]);
+    });
 });

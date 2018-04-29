@@ -2,7 +2,7 @@
 
 return [
     'dorms' =>
-        ['Dorm A', 'Dorm B', 'Dorm c'],
+        ['Dorm A', 'Dorm B', 'Dorm C'],
 
     'owner_dorm' => 'Dorm A',
 ];

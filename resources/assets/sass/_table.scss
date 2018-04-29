@@ -1,0 +1,34 @@
+.th {
+  text-transform: capitalize;
+}
+
+.table-component__th--sort, .table-component__th--sort-asc, .table-component__th--sort-desc {
+  text-decoration: underline;
+  cursor: pointer;
+  user-select: none;
+}
+
+.table-component__th--sort-asc:after, .table-component__th--sort-desc:after {
+  display: inline-block;
+}
+
+.table-component__th--sort-asc:after {
+  content: '↑';
+  font-family: monospace;
+}
+
+.table-component__th--sort-desc:after {
+  content: '↓';
+  font-family: monospace;
+}
+
+.table-component__filter__clear {
+  @extend .close;
+  position: relative;
+  margin: -2.4rem 0.5rem;
+}
+
+.table td.content-fit {
+  white-space: nowrap;
+  width: 1%;
+}

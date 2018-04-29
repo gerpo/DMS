@@ -24,7 +24,7 @@ class RoleAbilitiesTest extends TestCase
         $role = create(Role::class);
         $ability = create(Ability::class);
 
-        $this->post(route('role-abilities.store', ['id' => $role->id]), ['data' => [$ability->toArray()]])
+        $this->post(route('api.role-abilities.store', ['id' => $role->id]), ['data' => [$ability->toArray()]])
             ->assertSuccessful();
 
         $this->assertCount(1, $role->getAbilities());
@@ -40,7 +40,7 @@ class RoleAbilitiesTest extends TestCase
         $role = create(Role::class);
         $abilities = create(Ability::class, [], 2);
 
-        $this->post(route('role-abilities.store', ['id' => $role->id]), ['data' => $abilities->toArray()])
+        $this->post(route('api.role-abilities.store', ['id' => $role->id]), ['data' => $abilities->toArray()])
             ->assertSuccessful();
 
         $this->assertCount(2, $role->getAbilities());
@@ -62,7 +62,7 @@ class RoleAbilitiesTest extends TestCase
 
         $this->assertTrue($role->can($ability->name));
 
-        $this->delete(route('role-abilities.destroy', ['id' => $role->id]), ['data' => [$ability->toArray()]])
+        $this->delete(route('api.role-abilities.destroy', ['id' => $role->id]), ['data' => [$ability->toArray()]])
             ->assertSuccessful();
 
         $this->assertCount(0, $role->getAbilities());
@@ -84,7 +84,7 @@ class RoleAbilitiesTest extends TestCase
             $this->assertTrue($role->can($ability->name));
         });
 
-        $this->delete(route('role-abilities.destroy', ['id' => $role->id]), ['data' => $abilities->toArray()])
+        $this->delete(route('api.role-abilities.destroy', ['id' => $role->id]), ['data' => $abilities->toArray()])
             ->assertSuccessful();
 
         $this->assertCount(0, $role->getAbilities());
@@ -102,7 +102,7 @@ class RoleAbilitiesTest extends TestCase
         $role = create(Role::class);
         $ability = create(Ability::class);
 
-        $this->post(route('role-abilities.store', ['id' => $role->id]), ['data' => [$ability->toArray()]])
+        $this->post(route('api.role-abilities.store', ['id' => $role->id]), ['data' => [$ability->toArray()]])
             ->assertSuccessful();
 
         $this->assertCount(1, $role->getAbilities());
@@ -118,7 +118,7 @@ class RoleAbilitiesTest extends TestCase
         $role = create(Role::class);
         $abilities = create(Ability::class, [], 2);
 
-        $this->post(route('role-abilities.store', ['id' => $role->id]), ['data' => $abilities->toArray()])
+        $this->post(route('api.role-abilities.store', ['id' => $role->id]), ['data' => $abilities->toArray()])
             ->assertSuccessful();
 
         $this->assertCount(2, $role->getAbilities());
@@ -140,7 +140,7 @@ class RoleAbilitiesTest extends TestCase
 
         $this->assertTrue($role->can($ability->name));
 
-        $this->delete(route('role-abilities.destroy', ['id' => $role->id]), ['data' => [$ability->toArray()]])
+        $this->delete(route('api.role-abilities.destroy', ['id' => $role->id]), ['data' => [$ability->toArray()]])
             ->assertSuccessful();
 
         $this->assertCount(0, $role->getAbilities());
@@ -162,7 +162,7 @@ class RoleAbilitiesTest extends TestCase
             $this->assertTrue($role->can($ability->name));
         });
 
-        $this->delete(route('role-abilities.destroy', ['id' => $role->id]), ['data' => $abilities->toArray()])
+        $this->delete(route('api.role-abilities.destroy', ['id' => $role->id]), ['data' => $abilities->toArray()])
             ->assertSuccessful();
 
         $this->assertCount(0, $role->getAbilities());
@@ -180,7 +180,7 @@ class RoleAbilitiesTest extends TestCase
         $role = create(Role::class);
         $ability = create(Ability::class);
 
-        $this->post(route('role-abilities.store', ['id' => $role->id]), ['data' => [$ability->toArray()]])
+        $this->post(route('api.role-abilities.store', ['id' => $role->id]), ['data' => [$ability->toArray()]])
             ->Status(403);
 
         $this->assertCount(0, $role->getAbilities());
@@ -200,7 +200,7 @@ class RoleAbilitiesTest extends TestCase
 
         $this->assertTrue($role->can($ability->name));
 
-        $this->delete(route('role-abilities.destroy', ['id' => $role->id]), ['data' => [$ability->toArray()]])
+        $this->delete(route('api.role-abilities.destroy', ['id' => $role->id]), ['data' => [$ability->toArray()]])
             ->Status(403);
 
         $this->assertCount(1, $role->getAbilities());
@@ -217,7 +217,7 @@ class RoleAbilitiesTest extends TestCase
 
         $role = create(Role::class);
 
-        $this->post(route('role-abilities.store', ['id' => $role->id]), ['data' => null])
+        $this->post(route('api.role-abilities.store', ['id' => $role->id]), ['data' => null])
             ->assertSessionHasErrors('data')
             ->assertRedirect(route('roles'));
 
@@ -233,7 +233,7 @@ class RoleAbilitiesTest extends TestCase
 
         $role = create(Role::class);
 
-        $this->delete(route('role-abilities.destroy', ['id' => $role->id]), ['data' => null])
+        $this->delete(route('api.role-abilities.destroy', ['id' => $role->id]), ['data' => null])
             ->assertSessionHasErrors('data')
             ->assertRedirect(route('roles'));
 
@@ -250,7 +250,7 @@ class RoleAbilitiesTest extends TestCase
         $role = create(Role::class);
         $ability = create(Ability::class);
 
-        $this->post(route('role-abilities.store', ['id' => $role->id]), ['data' => $ability->name])
+        $this->post(route('api.role-abilities.store', ['id' => $role->id]), ['data' => $ability->name])
             ->assertSessionHasErrors('data')
             ->assertRedirect(route('roles'));
 
@@ -273,7 +273,7 @@ class RoleAbilitiesTest extends TestCase
 
         $this->assertTrue($role->can($ability->name));
 
-        $this->delete(route('role-abilities.destroy', ['id' => $role->id]), ['data' => $ability->name])
+        $this->delete(route('api.role-abilities.destroy', ['id' => $role->id]), ['data' => $ability->name])
             ->assertSessionHasErrors('data')
             ->assertRedirect(route('roles'));
 
@@ -292,7 +292,7 @@ class RoleAbilitiesTest extends TestCase
         $role = create(Role::class);
         $ability = create(Ability::class);
 
-        $this->post(route('role-abilities.store', ['id' => $role->id]), ['data' => $ability->toArray()])
+        $this->post(route('api.role-abilities.store', ['id' => $role->id]), ['data' => $ability->toArray()])
             ->assertSessionHasErrors('data.*')
             ->assertRedirect(route('roles'));
 
@@ -313,7 +313,7 @@ class RoleAbilitiesTest extends TestCase
 
         $role->allow($ability->name);
 
-        $this->delete(route('role-abilities.destroy', ['id' => $role->id]), ['data' => $ability->toArray()])
+        $this->delete(route('api.role-abilities.destroy', ['id' => $role->id]), ['data' => $ability->toArray()])
             ->assertSessionHasErrors('data.*')
             ->assertRedirect(route('roles'));
 
@@ -332,7 +332,7 @@ class RoleAbilitiesTest extends TestCase
         $role = create(Role::class);
         $ability = create(Ability::class);
 
-        $this->post(route('role-abilities.store', ['id' => $role->id]), ['data' => [$ability->name]])
+        $this->post(route('api.role-abilities.store', ['id' => $role->id]), ['data' => [$ability->name]])
             ->assertSessionHasErrors('data.*')
             ->assertRedirect(route('roles'));
 
@@ -355,7 +355,7 @@ class RoleAbilitiesTest extends TestCase
 
         $this->assertTrue($role->can($ability->name));
 
-        $this->delete(route('role-abilities.destroy', ['id' => $role->id]), ['data' => [$ability->name]])
+        $this->delete(route('api.role-abilities.destroy', ['id' => $role->id]), ['data' => [$ability->name]])
             ->assertSessionHasErrors('data.*')
             ->assertRedirect(route('roles'));
 
@@ -373,7 +373,7 @@ class RoleAbilitiesTest extends TestCase
 
         $role = create(Role::class);
 
-        $this->post(route('role-abilities.store', ['id' => $role->id]), ['data' => ['name' => null]])
+        $this->post(route('api.role-abilities.store', ['id' => $role->id]), ['data' => ['name' => null]])
             ->assertSessionHasErrors('data.*.name')
             ->assertRedirect(route('roles'));
 
@@ -394,7 +394,7 @@ class RoleAbilitiesTest extends TestCase
 
         $this->assertTrue($role->can($ability->name));
 
-        $this->delete(route('role-abilities.destroy', ['id' => $role->id]), ['data' => ['name' => null]])
+        $this->delete(route('api.role-abilities.destroy', ['id' => $role->id]), ['data' => ['name' => null]])
             ->assertSessionHasErrors('data.*.name')
             ->assertRedirect(route('roles'));
 
@@ -412,7 +412,7 @@ class RoleAbilitiesTest extends TestCase
 
         $role = create(Role::class);
 
-        $this->post(route('role-abilities.store', ['id' => $role->id]), ['data' => ['name' => 'not_existing']])
+        $this->post(route('api.role-abilities.store', ['id' => $role->id]), ['data' => ['name' => 'not_existing']])
             ->assertSessionHasErrors('data.*.name')
             ->assertRedirect(route('roles'));
 
@@ -431,7 +431,7 @@ class RoleAbilitiesTest extends TestCase
 
         $role->allow($ability->name);
 
-        $this->delete(route('role-abilities.destroy', ['id' => $role->id]), ['data' => ['name' => 'not_existing']])
+        $this->delete(route('api.role-abilities.destroy', ['id' => $role->id]), ['data' => ['name' => 'not_existing']])
             ->assertSessionHasErrors('data.*.name')
             ->assertRedirect(route('roles'));
 

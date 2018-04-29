@@ -3,6 +3,7 @@
 namespace App;
 
 use Gerpo\Plugisto\Models\Plugisto;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Silber\Bouncer\Database\HasRolesAndAbilities;
@@ -11,19 +12,17 @@ class User extends Authenticatable
 {
     use Notifiable;
     use HasRolesAndAbilities;
+    use SoftDeletes;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
+
     protected $guarded = [];
 
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
+    protected $dates = [
+        'created_at',
+        'updated_at',
+        'deleted_at'
+    ];
+
     protected $hidden = [
         'password',
         'remember_token',
@@ -31,7 +30,19 @@ class User extends Authenticatable
 
     protected $casts = [
         'confirmed' => 'boolean',
+        'is_subtenant' => 'boolean'
     ];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        self::saving(function ($user) {
+            $user->full_room = intval(str_pad($user->floor, 2, 0, STR_PAD_LEFT) . str_pad($user->room, 2, 0,
+                    STR_PAD_LEFT));
+        });
+    }
+
 
     public function confirm()
     {
@@ -39,6 +50,16 @@ class User extends Authenticatable
         $this->confirmation_token = null;
 
         $this->save();
+    }
+
+    public function setFirstnameAttribute($value)
+    {
+        $this->attributes['firstname'] = title_case($value);
+    }
+
+    public function setLastnameAttribute($value)
+    {
+        $this->attributes['lastname'] = title_case($value);
     }
 
     public function packages()

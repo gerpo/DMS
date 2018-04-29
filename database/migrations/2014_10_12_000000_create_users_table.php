@@ -21,12 +21,15 @@ class CreateUsersTable extends Migration
             $table->string('email')->unique();
             $table->unsignedTinyInteger('floor');
             $table->unsignedTinyInteger('room');
+            $table->unsignedInteger('full_room');
             $table->string('house');
             $table->string('password');
+            $table->boolean('is_subtenant')->default(0);
             $table->boolean('confirmed')->default(false);
             $table->string('confirmation_token', 25)->nullable()->unique();
             $table->rememberToken();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

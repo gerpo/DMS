@@ -52,7 +52,7 @@ class RegisterController extends Controller
      */
     protected function validator(array $data)
     {
-        $houses = implode(',', config('dms.dorms'));
+        $dorms = implode(',', config('dms.dorms'));
 
         return Validator::make($data, [
             'firstname' => 'required|string|max:100',
@@ -61,7 +61,7 @@ class RegisterController extends Controller
             'email' => 'required|string|email|max:255|unique:users',
             'floor' => 'required|integer|max:255',
             'room' => 'required|integer|max:255',
-            'house' => 'required|string|max:255|in:' . $houses,
+            'house' => 'required|string|max:255|in:' . $dorms,
             'password' => 'required|string|min:6|confirmed',
         ]);
     }

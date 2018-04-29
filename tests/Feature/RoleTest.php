@@ -13,7 +13,7 @@ class RoleTest extends TestCase
     {
         $this->signInAdmin();
 
-        $this->post(route('roles.store'), [
+        $this->post(route('api.roles.store'), [
             'name' => 'role_a',
             'title' => 'A new role',
         ])->assertSuccessful();
@@ -34,7 +34,7 @@ class RoleTest extends TestCase
 
         Auth::user()->allow('manage_roles');
 
-        $this->post(route('roles.store'), [
+        $this->post(route('api.roles.store'), [
             'name' => 'role_a',
             'title' => 'A new role',
         ]);
@@ -55,7 +55,7 @@ class RoleTest extends TestCase
 
         $this->from(route('roles'));
 
-        $this->post(route('roles.store'), [
+        $this->post(route('api.roles.store'), [
             'name' => 'role_a',
             'title' => 'A new role',
         ])
@@ -73,7 +73,7 @@ class RoleTest extends TestCase
             ->signInAdmin()
             ->from(route('roles'));
 
-        $this->post(route('roles.store'), $this->validParams([
+        $this->post(route('api.roles.store'), $this->validParams([
             'name' => null,
         ]))
             ->assertRedirect(route('roles'))
@@ -97,7 +97,7 @@ class RoleTest extends TestCase
             ->signInAdmin()
             ->from(route('roles'));
 
-        $this->post(route('roles.store'), $this->validParams([
+        $this->post(route('api.roles.store'), $this->validParams([
             'name' => str_repeat('a', 21),
         ]))
             ->assertRedirect(route('roles'))
@@ -115,7 +115,7 @@ class RoleTest extends TestCase
 
         $this->assertNotNull(Role::where('name', 'admin')->first());
 
-        $this->post(route('roles.store'), $this->validParams([
+        $this->post(route('api.roles.store'), $this->validParams([
             'name' => 'admin',
         ]))
             ->assertRedirect(route('roles'))
@@ -131,7 +131,7 @@ class RoleTest extends TestCase
             ->signInAdmin()
             ->from(route('roles'));
 
-        $this->post(route('roles.store'), $this->validParams([
+        $this->post(route('api.roles.store'), $this->validParams([
             'title' => null,
         ]))
             ->assertRedirect(route('roles'))
@@ -147,7 +147,7 @@ class RoleTest extends TestCase
             ->signInAdmin()
             ->from(route('roles'));
 
-        $this->post(route('roles.store'), $this->validParams([
+        $this->post(route('api.roles.store'), $this->validParams([
             'title' => str_repeat('a', 256),
         ]))
             ->assertRedirect(route('roles'))

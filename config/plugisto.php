@@ -1,6 +1,6 @@
 <?php
 
 return [
-    'load_routes' => false
+    'auto_load_routes' => false
 ];
 

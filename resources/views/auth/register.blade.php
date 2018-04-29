@@ -74,7 +74,7 @@
                                             class="form-control{{ $errors->has('house') ? ' is-invalid' : '' }}"
                                             name="house" required autofocus>
                                         @foreach(config('dms.dorms') as $dorm)
-                                            <option value="$dorm" {{ old('house') ? ' selected' : '' }}>{{ $dorm }}</option>
+                                            <option value="{{ $dorm }}" {{ $dorm == old('house') ? ' selected' : '' }}>{{ $dorm }}</option>
                                         @endforeach
                                     </select>
 
