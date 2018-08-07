@@ -1,7 +1,7 @@
 {
-  "name": "laravel/laravel",
-  "description": "The Laravel Framework.",
-  "keywords": ["framework", "laravel"],
+  "name": "gerpo/dms",
+  "description": "DMS - Dormitory Management System",
+  "keywords": ["DMS", "dorm", "dormitory", "management system", "laravel"],
   "license": "MIT",
   "type": "project",
   "repositories": [
