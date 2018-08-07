@@ -22,7 +22,8 @@
             window.laravel = {!! json_encode([
             'user_id' => Auth::user()->id,
             'roles' => Auth::user()->roles->pluck('name'),
-            'permissions' => Auth::user()->abilities->pluck('name')
+            'permissions' => Auth::user()->abilities->pluck('name'),
+            'user' => Auth::user()->only(['firstname', 'lastname', 'email', 'floor', 'room'])
         ]) !!}
         </script>
     @endif

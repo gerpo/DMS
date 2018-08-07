@@ -38,8 +38,8 @@ class User extends Authenticatable
         parent::boot();
 
         self::saving(function ($user) {
-            $user->full_room = intval(str_pad($user->floor, 2, 0, STR_PAD_LEFT) . str_pad($user->room, 2, 0,
-                    STR_PAD_LEFT));
+            $user->full_room = (int)str_pad($user->floor, 2, 0, STR_PAD_LEFT) . str_pad($user->room, 2, 0,
+                    STR_PAD_LEFT);
         });
     }
 
@@ -73,10 +73,8 @@ class User extends Authenticatable
         return Plugisto::allowed($this->permissionArray())->get();
     }
 
-    public function permissionArray()
+    public function permissionArray(): array
     {
         return $this->getAbilities()->pluck('name')->toArray();
     }
-
-
 }

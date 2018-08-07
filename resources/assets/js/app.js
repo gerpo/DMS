@@ -28,19 +28,13 @@ moment.locale(lang);
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-Vue.component('example-component', require('./components/ExampleComponent.vue'));
 Vue.component('user-component', require('./components/UserComponent.vue'));
 Vue.component('profile-component', require('./components/ProfileComponent.vue'));
-Vue.component('edit-user-component', require('./components/EditUserComponent.vue'));
 Vue.component('roles-component', require('./components/RolesComponent.vue'));
-Vue.component('role-abilities-component', require('./components/RoleAbilitiesComponent.vue'));
-Vue.component('user-roles-component', require('./components/UserRolesComponent.vue'));
 Vue.component('plugins-component', require('./components/PluginsComponent.vue'));
+Vue.component('mails-component', require('./components/MailsComponent.vue'));
 
 Vue.component('modal', require('./components/ModalComponent.vue'));
-Vue.component('autocomplete', require('./components/AutoCompleteComponent.vue'));
-Vue.component('table-component', TableComponent);
-Vue.component('table-column', TableColumn);
 
 // Alert components for vue
 Vue.use(VueFlashMessage, {
@@ -90,6 +84,12 @@ Vue.mixin({
                 window.laravel.user_id === user_id
         }
     }
+});
+
+Vue.filter('capitalize', function (value) {
+    if (!value) return '';
+    value = value.toString();
+    return value.charAt(0).toUpperCase() + value.slice(1)
 });
 
 const app = new Vue({

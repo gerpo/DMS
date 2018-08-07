@@ -49,15 +49,20 @@ Route::group(['middleware' => 'auth'], function () {
         'Api\UserRolesController@destroy')->name('api.user-roles.destroy')->middleware('check_ability:manage_users');
 
     Route::get('/plugins', 'PluginsController@index')->name('plugins');
-    Route::patch('/plugins/{plugin}', 'Api\PluginsController@update')->name('api.plugins.update');
-    Route::delete('/plugins/{plugin}', 'Api\PluginsController@destroy')->name('api.plugins.destroy');
+    Route::patch('/plugins/{plugin}',
+        'Api\PluginsController@update')->name('api.plugins.update')->middleware('check_ability:manage-plugins');
+    Route::delete('/plugins/{plugin}',
+        'Api\PluginsController@destroy')->name('api.plugins.destroy')->middleware('check_ability:manage-plugins');
 
+    Route::get('/mails', 'MailsController@index')->name('mails');
     Route::post('/mails', 'MailsController@store')->name('mails.store')->middleware('check_ability:send_mails');
 
     Route::get('/api/addresses',
         'Api\MailAddressesController@index')->name('api.mailAddresses')->middleware('check_ability:send_mails,send_roleMails,send_floorMails');
     Route::post('/api/addresses',
         'Api\MailAddressesController@query')->name('api.mailAddressesQuery')->middleware('check_ability:send_mails');
+
+    Route::post('/api/attachments', 'Api\MailAttachmentsController@store')->name('api.mailAttachments');
 
     Route::get('/api/users', 'Api\UsersController@index')->name('api.users')->middleware('check_ability:manage_users');
     Route::post('/api/users/{user}',

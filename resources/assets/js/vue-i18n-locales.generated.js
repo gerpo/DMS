@@ -11,7 +11,20 @@ export default {
             "filter": "filter | filter",
             "dorm": "dorm | dorms",
             "role": "role | roles",
-            "ability": "ability | abilities"
+            "ability": "ability | abilities",
+            "mail": "mail | mails"
+        },
+        "mail": {
+            "sender": "sender",
+            "to": "recipients",
+            "toAll": "Send to all residents.",
+            "moreReceiverOptions": "more options",
+            "lessReceiverOptions": "less options",
+            "cc": "cc",
+            "bcc": "bcc",
+            "subject": "subject",
+            "message": "message",
+            "send": "send"
         },
         "pagination": {
             "previous": "&laquo; Previous",

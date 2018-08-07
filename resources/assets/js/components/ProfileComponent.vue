@@ -74,8 +74,13 @@
 </template>
 
 <script>
+    import EditUserComponent from './EditUserComponent.vue';
+
     export default {
         name: "profile-component",
+        components:{
+            EditUserComponent
+        },
         props: {
             user: {
                 default: () => {

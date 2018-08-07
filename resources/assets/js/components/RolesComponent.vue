@@ -17,8 +17,15 @@
 </template>
 
 <script>
+    import UserRolesComponent from './UserRolesComponent.vue';
+    import RoleAbilitiesComponent from './RoleAbilitiesComponent.vue'
+
     export default {
         name: "roles-component",
+        components:{
+            UserRolesComponent,
+            RoleAbilitiesComponent
+        },
         props: {
             roles: {default: () => [], type: [Array]},
             abilities: {default: () => [], type: [Array]},

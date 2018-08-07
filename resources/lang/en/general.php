@@ -9,5 +9,7 @@ return [
     'dorm' => 'dorm | dorms',
 
     'role' => 'role | roles',
-    'ability' => 'ability | abilities'
+    'ability' => 'ability | abilities',
+
+    'mail' => 'mail | mails'
 ];

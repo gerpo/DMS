@@ -1,0 +1,28 @@
+.fade-in-enter-active,
+.fade-in-leave-active {
+  transition: all .3s ease;
+}
+
+.fade-in-enter,
+.fade-in-leave-to {
+  opacity: 0;
+}
+
+.slide-in-enter-active,
+.slide-in-leave-active {
+  transition: all .4s ease-in-out;
+  overflow: hidden;
+}
+
+.slide-in-enter,
+.slide-in-leave-to {
+  max-height: 0;
+}
+
+.slide-in-enter-to {
+  max-height: 500px;
+}
+
+.slide-in-leave {
+  max-height: 500px;
+}

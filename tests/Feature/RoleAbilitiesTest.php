@@ -17,7 +17,7 @@ class RoleAbilitiesTest extends TestCase
     }
 
     /** @test */
-    public function an_admin_can_add_an_ability_to_a_role()
+    public function an_admin_can_add_an_ability_to_a_role(): void
     {
         $this->signInAdmin();
 
@@ -33,7 +33,7 @@ class RoleAbilitiesTest extends TestCase
     }
 
     /** @test */
-    public function an_admin_can_add_multiple_abilities_to_a_role()
+    public function an_admin_can_add_multiple_abilities_to_a_role(): void
     {
         $this->signInAdmin();
 
@@ -51,7 +51,7 @@ class RoleAbilitiesTest extends TestCase
     }
 
     /** @test */
-    public function an_admin_can_remove_an_ability_from_a_role()
+    public function an_admin_can_remove_an_ability_from_a_role(): void
     {
         $this->signInAdmin();
 
@@ -71,7 +71,7 @@ class RoleAbilitiesTest extends TestCase
     }
 
     /** @test */
-    public function an_admin_can_remove_multiple_abilities_from_a_role()
+    public function an_admin_can_remove_multiple_abilities_from_a_role(): void
     {
         $this->signInAdmin();
 
@@ -95,7 +95,7 @@ class RoleAbilitiesTest extends TestCase
     }
 
     /** @test */
-    public function an_authorized_user_can_add_an_ability_to_a_role()
+    public function an_authorized_user_can_add_an_ability_to_a_role(): void
     {
         $this->signIn([], 'manage_roles');
 
@@ -111,7 +111,7 @@ class RoleAbilitiesTest extends TestCase
     }
 
     /** @test */
-    public function an_authorized_user_can_add_multiple_abilities_to_a_role()
+    public function an_authorized_user_can_add_multiple_abilities_to_a_role(): void
     {
         $this->signIn([], 'manage_roles');
 
@@ -129,7 +129,7 @@ class RoleAbilitiesTest extends TestCase
     }
 
     /** @test */
-    public function an_authorized_user_can_remove_an_ability_from_a_role()
+    public function an_authorized_user_can_remove_an_ability_from_a_role(): void
     {
         $this->signIn([], 'manage_roles');
 
@@ -149,7 +149,7 @@ class RoleAbilitiesTest extends TestCase
     }
 
     /** @test */
-    public function an_authorized_user_can_remove_multiple_abilities_from_a_role()
+    public function an_authorized_user_can_remove_multiple_abilities_from_a_role(): void
     {
         $this->signIn([], 'manage_roles');
 
@@ -173,7 +173,7 @@ class RoleAbilitiesTest extends TestCase
     }
 
     /** @test */
-    public function an_unauthorized_user_cannot_add_abilities_to_a_role()
+    public function an_unauthorized_user_cannot_add_abilities_to_a_role(): void
     {
         $this->withExceptionHandling()->signIn();
 
@@ -181,7 +181,7 @@ class RoleAbilitiesTest extends TestCase
         $ability = create(Ability::class);
 
         $this->post(route('api.role-abilities.store', ['id' => $role->id]), ['data' => [$ability->toArray()]])
-            ->Status(403);
+            ->assertStatus(403);
 
         $this->assertCount(0, $role->getAbilities());
 
@@ -189,7 +189,7 @@ class RoleAbilitiesTest extends TestCase
     }
 
     /** @test */
-    public function an_unauthorized_user_cannot_remove_abilities_from_a_role()
+    public function an_unauthorized_user_cannot_remove_abilities_from_a_role(): void
     {
         $this->withExceptionHandling()->signIn();
 
@@ -201,7 +201,7 @@ class RoleAbilitiesTest extends TestCase
         $this->assertTrue($role->can($ability->name));
 
         $this->delete(route('api.role-abilities.destroy', ['id' => $role->id]), ['data' => [$ability->toArray()]])
-            ->Status(403);
+            ->assertStatus(403);
 
         $this->assertCount(1, $role->getAbilities());
 
@@ -209,7 +209,7 @@ class RoleAbilitiesTest extends TestCase
     }
 
     /** @test */
-    public function data_key_is_required_to_add_ability()
+    public function data_key_is_required_to_add_ability(): void
     {
         $this->withExceptionHandling()
             ->signInAdmin()
@@ -225,7 +225,7 @@ class RoleAbilitiesTest extends TestCase
     }
 
     /** @test */
-    public function data_key_is_required_to_remove_ability()
+    public function data_key_is_required_to_remove_ability(): void
     {
         $this->withExceptionHandling()
             ->signInAdmin()
@@ -241,7 +241,7 @@ class RoleAbilitiesTest extends TestCase
     }
 
     /** @test */
-    public function data_key_to_add_ability_must_be_an_array()
+    public function data_key_to_add_ability_must_be_an_array(): void
     {
         $this->withExceptionHandling()
             ->signInAdmin()
@@ -260,7 +260,7 @@ class RoleAbilitiesTest extends TestCase
     }
 
     /** @test */
-    public function data_key_to_remove_ability_must_be_an_array()
+    public function data_key_to_remove_ability_must_be_an_array(): void
     {
         $this->withExceptionHandling()
             ->signInAdmin()
@@ -283,7 +283,7 @@ class RoleAbilitiesTest extends TestCase
     }
 
     /** @test */
-    public function ability_data_to_add_must_be_wrapped_in_an_array()
+    public function ability_data_to_add_must_be_wrapped_in_an_array(): void
     {
         $this->withExceptionHandling()
             ->signInAdmin()
@@ -302,7 +302,7 @@ class RoleAbilitiesTest extends TestCase
     }
 
     /** @test */
-    public function ability_data_to_remove_must_be_wrapped_in_an_array()
+    public function ability_data_to_remove_must_be_wrapped_in_an_array(): void
     {
         $this->withExceptionHandling()
             ->signInAdmin()
@@ -323,7 +323,7 @@ class RoleAbilitiesTest extends TestCase
     }
 
     /** @test */
-    public function ability_data_to_add_must_be_an_array()
+    public function ability_data_to_add_must_be_an_array(): void
     {
         $this->withExceptionHandling()
             ->signInAdmin()
@@ -342,7 +342,7 @@ class RoleAbilitiesTest extends TestCase
     }
 
     /** @test */
-    public function ability_data_to_remove_must_be_an_array()
+    public function ability_data_to_remove_must_be_an_array(): void
     {
         $this->withExceptionHandling()
             ->signInAdmin()
@@ -365,7 +365,7 @@ class RoleAbilitiesTest extends TestCase
     }
 
     /** @test */
-    public function ability_name_to_add_is_required()
+    public function ability_name_to_add_is_required(): void
     {
         $this->withExceptionHandling()
             ->signInAdmin()
@@ -381,7 +381,7 @@ class RoleAbilitiesTest extends TestCase
     }
 
     /** @test */
-    public function ability_name_to_remove_is_required()
+    public function ability_name_to_remove_is_required(): void
     {
         $this->withExceptionHandling()
             ->signInAdmin()
@@ -404,7 +404,7 @@ class RoleAbilitiesTest extends TestCase
     }
 
     /** @test */
-    public function ability_name_to_add_must_exists()
+    public function ability_name_to_add_must_exists(): void
     {
         $this->withExceptionHandling()
             ->signInAdmin()
@@ -420,7 +420,7 @@ class RoleAbilitiesTest extends TestCase
     }
 
     /** @test */
-    public function ability_name_to_remove_must_exists()
+    public function ability_name_to_remove_must_exists(): void
     {
         $this->withExceptionHandling()
             ->signInAdmin()

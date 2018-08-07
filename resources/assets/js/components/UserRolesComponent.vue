@@ -38,8 +38,13 @@
 </template>
 
 <script>
+    import Autocomplete from './AutoCompleteComponent.vue';
+
     export default {
         name: "user-roles-component",
+        components: {
+            Autocomplete
+        },
         props: {
             roles: {default: () => [], type: [Array]},
         },
