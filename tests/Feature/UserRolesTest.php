@@ -2,9 +2,9 @@
 
 namespace Tests\Feature;
 
+use App\Role;
 use App\User;
 use Bouncer;
-use Silber\Bouncer\Database\Role;
 use Tests\TestCase;
 
 class UserRolesTest extends TestCase

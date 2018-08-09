@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use App\Role;
 use Blade;
+use Bouncer;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -17,6 +19,8 @@ class AppServiceProvider extends ServiceProvider
         Blade::directive('langTitle',function($expression) {
             return "<?php echo title_case(trans($expression)); ?>";
         });
+
+        Bouncer::useRoleModel(Role::class);
     }
 
     /**

@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Role;
 use Silber\Bouncer\Database\Ability;
-use Silber\Bouncer\Database\Role;
 
 class RolesController extends Controller
 {

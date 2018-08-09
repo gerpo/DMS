@@ -3,9 +3,10 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Role;
 use App\User;
 use Illuminate\Support\Collection;
-use Silber\Bouncer\Database\Role;
+
 
 class MailAddressesController extends Controller
 {

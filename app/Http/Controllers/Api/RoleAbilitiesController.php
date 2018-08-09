@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use Silber\Bouncer\Database\Role;
+use App\Role;
 
 class RoleAbilitiesController extends Controller
 {
