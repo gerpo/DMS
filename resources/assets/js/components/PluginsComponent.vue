@@ -38,7 +38,7 @@
                 </p>
                 <p class="text-danger">Beware that deleting a plugin can break the functionality of the system. Delete
                     with caution.</p>
-                <button @click="deleteRole(pluginToDelete)" class="btn btn-lg btn-link">Yes!</button>
+                <button @click="deletePlugin(pluginToDelete)" class="btn btn-lg btn-link">Yes!</button>
                 <button @click="showConfirmDeletion = false" class="btn btn-lg btn-link text-secondary">Cancel</button>
             </div>
         </modal>
@@ -78,7 +78,7 @@
                     });
             },
             async deletePlugin() {
-                await axios.destroy(route('api.plugins.update', plugin.id))
+                await axios.delete(route('api.plugins.update', plugin.id))
                     .then(response => {
                         this.flash(`Plugin "${plugin.name}" was successfully deleted.`, 'success');
                     })
