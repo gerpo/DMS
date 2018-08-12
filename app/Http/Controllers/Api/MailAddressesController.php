@@ -47,7 +47,7 @@ class MailAddressesController extends Controller
 
     private function getFloorMails($floor = null)
     {
-        if (isset($floor)) {
+        if ($floor !== null) {
             $addresses = User::where('floor', $floor)->get(['email', 'floor']);
         } else {
             $addresses = User::get(['email', 'floor']);

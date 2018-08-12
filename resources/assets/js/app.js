@@ -14,11 +14,10 @@ import Locale from './vue-i18n-locales.generated';
 import route from "../../../vendor/tightenco/ziggy/src/js/route";
 // Vue components
 import VueFlashMessage from 'vue-flash-message';
-import {TableColumn, TableComponent} from 'vue-table-component';
 
 const lang = document.documentElement.lang.substr(0, 2);
 //const lang = navigator.language;
-const moment = require('moment');
+import moment from 'moment';
 moment.locale(lang);
 
 
