@@ -62,7 +62,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/api/addresses',
         'Api\MailAddressesController@query')->name('api.mailAddressesQuery')->middleware('check_ability:send_mails');
 
-    Route::post('/api/attachments', 'Api\MailAttachmentsController@store')->name('api.mailAttachments');
+    Route::post('/api/attachments', 'Api\MailAttachmentsController@store')->name('api.mailAttachments')->middleware('check_ability:send_mails');
+    Route::delete('/api/attachments', 'Api\MailAttachmentsController@destroy')->name('api.mailAttachments.destroy')->middleware('check_ability:send_mails');
 
     Route::get('/api/users', 'Api\UsersController@index')->name('api.users')->middleware('check_ability:manage_users');
     Route::post('/api/users/{user}',
