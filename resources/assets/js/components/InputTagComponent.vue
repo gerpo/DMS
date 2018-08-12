@@ -17,6 +17,7 @@
         props: {
             tags: {default: () => [], type: [Array]},
             delimiter: {default: ',', type: [String]},
+            spaceIsDelimiter: {default: true, type: [Boolean]},
             uniqueValues: {default: true, type: [Boolean]},
             validateTag: {default: (input) => true, type: [Function]},
             placeholder: {default: '', type: [String]},
@@ -31,8 +32,12 @@
         }),
         methods: {
             onKeyPress(input, event) {
-                if ((event.key === this.delimiter || event.key === 'Enter') && input.trim()) {
-                    this.addTag(input.trim());
+                if ((event.key === this.delimiter || event.key === 'Enter' || (event.key === ' ' && this.spaceIsDelimiter)) && input.trim()) {
+                    let re = new RegExp(this.delimiter, "g");
+                    input = input.replace(re, '').trim();
+                    if (input) {
+                        this.addTag(input);
+                    }
                 }
 
                 if (!input && event.key === 'Backspace') {
@@ -101,6 +106,7 @@
         flex: 1;
         padding: 0
     }
+
     .input-tag-input:disabled {
         background-color: #e9ecef;
     }
