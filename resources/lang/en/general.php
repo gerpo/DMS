@@ -11,5 +11,8 @@ return [
     'role' => 'role | roles',
     'ability' => 'ability | abilities',
 
-    'mail' => 'mail | mails'
+    'mail' => 'mail | mails',
+
+    'or' => 'or',
+    'and' => 'and'
 ];
