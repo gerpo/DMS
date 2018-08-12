@@ -5,7 +5,7 @@
             <option v-for="s in senderList" :value="s.name">Send as {{ s.name | capitalize }}</option>
         </select>
         <input-tag :tags="recipients" :validate-tag="validateRecipient" :placeholder="$t('mail.to') | capitalize"
-                   :disabled="toAll"/>
+                   :disabled="toAll || group !== ''"/>
         <button class="btn btn-link btn-sm pt-0" :disabled="toAll"
                 @click="showMoreReceiverOptions = !showMoreReceiverOptions">
             {{ showMoreReceiverOptions ? $tc('mail.lessReceiverOptions')
@@ -23,8 +23,7 @@
                            :placeholder="$t('mail.bcc')"/>
             </div>
         </transition>
-
-        <input type="text" class="form-control mb-2" :placeholder="$t('mail.subject') | capitalize" required/>
+        <input v-model="subject" type="text" class="form-control mb-2" :placeholder="$t('mail.subject') | capitalize" required/>
         <textarea v-model="content" class="form-control mb-2" id="message"
                   :placeholder="$t('mail.message') | capitalize" rows="13"></textarea>
 
@@ -35,17 +34,12 @@
             <div v-for="(file, index) in attachments" :key="file.id"
                  class="d-xxl-inline-block border mr-1 mb-1 p-2 rounded border-primary"
                  :class="{'border-danger': file.error, 'error': file.error, 'border-success': file.success, 'success': file.success}">
-                <button type="button" class="close" aria-label="Close" @click="removeFile(index)">
+                <button v-if="!file.active" type="button" class="close" aria-label="Close" @click="removeFile(index)">
                     <span aria-hidden="true">&times;</span>
                 </button>
                 <p class="mb-0 mr-3 text-nowrap">{{ file.name }}</p>
                 <span class="small font-italic">{{ file.size | formatSize }}</span>
                 <span v-if="file.error" class="ml-2">
-                    <!--<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 426.667 426.667" style="enable-background:new 0 0 426.667 426.667;" xml:space="preserve">-->
-                        <!--<path style="fill:#F05228;" d="M213.333,0C95.514,0,0,95.514,0,213.333s95.514,213.333,213.333,213.333-->
-                        <!--s213.333-95.514,213.333-213.333S331.153,0,213.333,0z M330.995,276.689l-54.302,54.306l-63.36-63.356l-63.36,63.36l-54.302-54.31-->
-	                    <!--l63.356-63.356l-63.356-63.36l54.302-54.302l63.36,63.356l63.36-63.356l54.302,54.302l-63.356,63.36L330.995,276.689z"></path>-->
-                    <!--</svg>-->
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 510 510" style="enable-background:new 0 0 510 510;" xml:space="preserve">
                         <g id="replay">
                             <path d="M255,102V0L127.5,127.5L255,255V153c84.15,0,153,68.85,153,153c0,84.15-68.85,153-153,153c-84.15,0-153-68.85-153-153H51
@@ -68,7 +62,7 @@
                          xmlns="http://www.w3.org/2000/svg" stroke="#fff">
                         <g fill="none" fill-rule="evenodd">
                             <g transform="translate(1 1)" stroke-width="2">
-                                <circle stroke-opacity=".5" cx="18" cy="18" r="18"/>
+                                <circle stroke-opacity=".5" cx="18" cy="18" r="18"></circle>
                                 <path d="M36 18c0-9.94-8.06-18-18-18" stroke="blue">
                                     <animateTransform
                                             attributeName="transform"
@@ -76,7 +70,7 @@
                                             from="0 18 18"
                                             to="360 18 18"
                                             dur="1s"
-                                            repeatCount="indefinite"/>
+                                            repeatCount="indefinite"></animateTransform>
                                 </path>
                             </g>
                         </g>
@@ -115,15 +109,20 @@
             showMoreReceiverOptions: false,
             sender: '',
             senderList: [],
+            group: '',
             toAll: false,
             recipients: [],
             ccRecipients: [],
             bccRecipients: [],
+            subject: '',
             content: '',
-            attachments: []
+            attachments: [],
+            attachmentPaths: {}
         }),
         mounted() {
             this.senderList = this.fetchSenderList();
+            //window.addEventListener('beforeunload', (e) => e.returnValue = true);
+            window.addEventListener('unload', this.cleanUpBeforeLeave);
         },
         methods: {
             validateRecipient(input) {
@@ -136,7 +135,9 @@
                     recipients: this.recipients,
                     ccRecipients: this.ccRecipients,
                     bccRecipients: this.bccRecipients,
-                    content: this.content
+                    subject: this.subject,
+                    content: this.content,
+                    attachmentPaths: this.attachmentPaths,
                 })
                     .then(response => {
                         console.log(response);
@@ -164,24 +165,6 @@
                             this.$refs.upload.update(newFile, {error: 'size'})
                         }
                     }
-                    if (newFile.progress !== oldFile.progress) {
-                        // progress
-                    }
-                    if (newFile.error && !oldFile.error) {
-                        // error
-                    }
-                    if (newFile.success && !oldFile.success) {
-                        // success
-                    }
-                }
-                if (!newFile && oldFile) {
-                    // remove
-                    if (oldFile.success && oldFile.response.id) {
-                        // $.ajax({
-                        //   type: 'DELETE',
-                        //   url: '/upload/delete?id=' + oldFile.response.id,
-                        // })
-                    }
                 }
                 // Automatically activate upload
                 if (Boolean(newFile) !== Boolean(oldFile) || oldFile.error !== newFile.error) {
@@ -191,12 +174,32 @@
                 }
             },
             removeFile(fileIndex) {
-                this.attachments.splice(fileIndex, 1)
+                let removed = this.attachments.splice(fileIndex, 1)[0];
+                if (this.attachmentPaths[removed.id] !== undefined) {
+                    this.removeUploadedAttachments(this.attachmentPaths[removed.id])
+                }
             },
-            async uploadAttachment(file) {
-                return await axios.post(route('api.mailAttachments'), {
-                    file: file
+            async uploadAttachment(data) {
+                let formData = new FormData();
+                formData.append('file', data.file);
+
+                await axios.post(route('api.mailAttachments'), formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                }).then(response => {
+                    if (response.status !== 200) throw new Error();
+                    this.attachmentPaths[data.id] = response.data;
+                }).catch(error => {
+                    throw new Error(error);
                 })
+            },
+            cleanUpBeforeLeave() {
+                this.removeUploadedAttachments(this.attachmentPaths);
+            },
+            async removeUploadedAttachments(paths) {
+                if (!(paths instanceof Object)) paths = [paths];
+                await axios.delete(route('api.mailAttachments.destroy'), {data: {paths: paths}})
             }
         },
         filters: {
