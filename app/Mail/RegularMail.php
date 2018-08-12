@@ -6,18 +6,21 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
+use Storage;
 
 class RegularMail extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
+    protected $mailData;
+
     /**
      * Create a new message instance.
      *
      */
-    public function __construct($message)
+    public function __construct($mailData)
     {
-        $this->message = $message;
+        $this->mailData = $mailData;
     }
 
     /**
@@ -25,8 +28,19 @@ class RegularMail extends Mailable implements ShouldQueue
      *
      * @return $this
      */
-    public function build()
+    public function build(): self
     {
-        return $this->markdown('emails.regular');
+        $this->from($this->mailData['sender'].'@'.$_SERVER['HTTP_HOST'])
+            ->subject($this->mailData['subject'])
+            ->markdown('emails.regular')
+            ->with('content', $this->mailData['content']);
+
+        foreach ($this->mailData['attachmentPaths'] as $attachment) {
+            if (Storage::has($attachment)) {
+                $this->attachFromStorage($attachment);
+            }
+        }
+
+        return $this;
     }
 }
