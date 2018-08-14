@@ -30,7 +30,7 @@ class RegularMail extends Mailable implements ShouldQueue
      */
     public function build(): self
     {
-        $this->from($this->mailData['sender'].'@'.$_SERVER['HTTP_HOST'])
+        $this->from($this->mailData['sender'].'@'.env('MAIL_DOMAIN'))
             ->subject($this->mailData['subject'])
             ->markdown('emails.regular')
             ->with('content', $this->mailData['content']);

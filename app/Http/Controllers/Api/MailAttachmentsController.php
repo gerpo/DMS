@@ -14,7 +14,31 @@ class MailAttachmentsController extends Controller
             'file' => 'required|file'
         ]);
 
-        return Storage::putFile('attachments', $data['file']);
+        $user = $request->user();
+        $path = $this->generatePath($user);
+        $fileName = $this->generateFileName($path, $data['file']->getClientOriginalName());
+
+        return $data['file']->storeAs($path, $fileName);
+    }
+
+    private function generatePath($user): string
+    {
+        return 'attachments/' . md5($user->id);
+    }
+
+    private function generateFileName($path, $originalName): string
+    {
+        $fullFileName = $originalName;
+        $count = 1;
+        while (Storage::exists(str_finish($path , '/') . $fullFileName) || $count <= 255) {
+            $fileName = pathinfo($originalName, PATHINFO_FILENAME) . " ({$count})";
+            $extension = pathinfo($originalName, PATHINFO_EXTENSION);
+
+            $fullFileName = $fileName .'.'. $extension;
+            $count++;
+        }
+
+        return $fullFileName;
     }
 
     public function destroy(Request $request)

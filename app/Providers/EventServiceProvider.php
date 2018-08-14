@@ -16,8 +16,7 @@ class EventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $listen = [
-        MessageSent::class => [MailSentListener::class]
-
+        //
     ];
 
     /**

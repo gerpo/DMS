@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\Api;
 
 use App\User;
 use Illuminate\Http\UploadedFile;
@@ -12,7 +12,7 @@ class MailAttachmentsTest extends TestCase
     /** @test */
     public function file_is_required(): void
     {
-        $this->withExceptionHandling()->signIn();
+        $this->withExceptionHandling()->signIn(create(User::class), 'send_mails');
 
         $this->post(route('api.mailAttachments'), ['file' => null])
             ->assertSessionHasErrors(['file']);
@@ -25,7 +25,7 @@ class MailAttachmentsTest extends TestCase
 
         $uploadedFile = UploadedFile::fake()->create('test.pdf');
 
-        $reponse = $this->post(route('api.mailAttachments'), ['file' => $uploadedFile])
+        $this->post(route('api.mailAttachments'), ['file' => $uploadedFile])
             ->assertStatus(403);
     }
 

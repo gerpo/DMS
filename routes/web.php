@@ -55,7 +55,9 @@ Route::group(['middleware' => 'auth'], function () {
         'Api\PluginsController@destroy')->name('api.plugins.destroy')->middleware('check_ability:manage-plugins');
 
     Route::get('/mails', 'MailsController@index')->name('mails');
-    Route::post('/mails', 'MailsController@store')->name('mails.store')->middleware('check_ability:send_mails');
+    Route::post('/mails', 'MailsController@store')->name('mails.store')->middleware('check_ability:send_mails,send_floorMails,send_roleMails');
+
+    Route::get('/api/mail-groups', 'Api\MailGroupController@index')->name('api.mailGroups');
 
     Route::get('/api/addresses',
         'Api\MailAddressesController@index')->name('api.mailAddresses')->middleware('check_ability:send_mails,send_roleMails,send_floorMails');

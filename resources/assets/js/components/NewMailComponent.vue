@@ -17,13 +17,18 @@
                     <input type="checkbox" class="custom-control-input" v-model="toAll" id="toAll">
                     <label class="custom-control-label" for="toAll">{{ $tc('mail.toAll') }}</label>
                 </div>
+                <select class="custom-select mb-2" v-model="group" :disabled="toAll">
+                    <option value="" selected>Choose group to send to</option>
+                    <option v-for="(g, key) in groupList" :value="key">Send to {{ g | capitalize }}</option>
+                </select>
                 <input-tag :tags="ccRecipients" :validate-tag="validateRecipient" class="mb-2"
-                           :placeholder="$t('mail.cc')"/>
+                           :placeholder="$t('mail.cc')" :disabled="toAll || group !== ''"/>
                 <input-tag :tags="bccRecipients" :validate-tag="validateRecipient" class="mb-2"
-                           :placeholder="$t('mail.bcc')"/>
+                           :placeholder="$t('mail.bcc')" :disabled="toAll || group !== ''"/>
             </div>
         </transition>
-        <input v-model="subject" type="text" class="form-control mb-2" :placeholder="$t('mail.subject') | capitalize" required/>
+        <input v-model="subject" type="text" class="form-control mb-2" :placeholder="$t('mail.subject') | capitalize"
+               required/>
         <textarea v-model="content" class="form-control mb-2" id="message"
                   :placeholder="$t('mail.message') | capitalize" rows="13"></textarea>
 
@@ -95,13 +100,11 @@
 
 <script>
     import InputTag from './InputTagComponent';
-    import AutoComplete from './AutoCompleteComponent';
     import VueUpload from 'vue-upload-component';
 
     export default {
         name: "new-mail-component",
         components: {
-            AutoComplete,
             InputTag,
             VueUpload
         },
@@ -110,6 +113,7 @@
             sender: '',
             senderList: [],
             group: '',
+            groupList: [],
             toAll: false,
             recipients: [],
             ccRecipients: [],
@@ -121,8 +125,9 @@
         }),
         mounted() {
             this.senderList = this.fetchSenderList();
+            this.fetchGroupList();
             //window.addEventListener('beforeunload', (e) => e.returnValue = true);
-            window.addEventListener('unload', this.cleanUpBeforeLeave);
+            window.addEventListener('unload', this.cleanUpAllAttachments);
         },
         methods: {
             validateRecipient(input) {
@@ -132,6 +137,7 @@
                 return await axios.post(route('mails.store'), {
                     sender: this.sender,
                     toAll: this.toAll,
+                    group: this.group,
                     recipients: this.recipients,
                     ccRecipients: this.ccRecipients,
                     bccRecipients: this.bccRecipients,
@@ -140,7 +146,7 @@
                     attachmentPaths: this.attachmentPaths,
                 })
                     .then(response => {
-                        console.log(response);
+                        this.resetForm();
                     })
                     .catch(error => {
                         console.log(error);
@@ -152,6 +158,14 @@
                 window.laravel.roles.forEach(role => list.push({
                     name: role,
                 }));
+
+                return list;
+            },
+            async fetchGroupList() {
+                let list = {};
+
+                await axios.get(route('api.mailGroups'))
+                    .then(response => this.groupList = response.data);
 
                 return list;
             },
@@ -194,12 +208,28 @@
                     throw new Error(error);
                 })
             },
-            cleanUpBeforeLeave() {
+            cleanUpAllAttachments() {
                 this.removeUploadedAttachments(this.attachmentPaths);
+            },
+            resetForm() {
+                this.recipients = [];
+                this.ccRecipients = [];
+                this.bccRecipients = [];
+                this.subject = '';
+                this.content = '';
+
+                this.attachments = [];
+                this.attachmentPaths = {};
             },
             async removeUploadedAttachments(paths) {
                 if (!(paths instanceof Object)) paths = [paths];
-                await axios.delete(route('api.mailAttachments.destroy'), {data: {paths: paths}})
+                console.log(paths);
+                if (paths.length || Object.keys(paths).length) {
+                    await axios.delete(route('api.mailAttachments.destroy'), {data: {paths: paths}})
+                        .then(response =>
+                            delete this.attachmentPaths[Object.keys(this.attachmentPaths).find(key => paths.includes(this.attachmentPaths[key]))]
+                        )
+                }
             }
         },
         filters: {
