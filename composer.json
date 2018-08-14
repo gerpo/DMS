@@ -4,12 +4,7 @@
   "keywords": ["DMS", "dorm", "dormitory", "management system", "laravel"],
   "license": "MIT",
   "type": "project",
-  "repositories": [
-    {
-      "type": "vcs",
-      "url": "D:\\Web-Projekte\\plugisto\\packages\\gerpo\\plugisto"
-    }
-  ],
+  "repositories": [],
   "require": {
     "php": ">=7.1.3",
     "fideloper/proxy": "^4.0",
