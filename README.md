@@ -1,4 +1,5 @@
 # DMS - Dormitory Management System
+[![Build Status](https://travis-ci.com/gerpo/DMS.svg?branch=master)](https://travis-ci.com/gerpo/DMS)
 
 Table of Contents
 
