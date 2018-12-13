@@ -6,6 +6,8 @@ return [
 
     'owner_dorm' => 'Dorm A',
 
-    'max_floor' => 15,
-    'max_room' => 20
+    'max_floor' => 17,
+    'max_room' => 20,
+
+    'public_roles' => ['admin']
 ];

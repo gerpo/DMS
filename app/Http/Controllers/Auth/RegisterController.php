@@ -96,8 +96,6 @@ class RegisterController extends Controller
      */
     protected function registered(Request $request, $user)
     {
-        Bouncer::assign('member')->to($user);
-
         Mail::to($user)->send(new ConfirmEmailMail($user));
     }
 }

@@ -8,16 +8,19 @@ require('./bootstrap');
 
 import Vue from 'vue';
 // Vue Extensions
+import TurbolinksAdapter from 'vue-turbolinks';
 import VueMoment from 'vue-moment';
+import VeeValidate from 'vee-validate';
 import VueInternationalization from 'vue-i18n';
 import Locale from './vue-i18n-locales.generated';
 import route from "../../../vendor/tightenco/ziggy/src/js/route";
 // Vue components
 import VueFlashMessage from 'vue-flash-message';
-
-const lang = document.documentElement.lang.substr(0, 2);
 //const lang = navigator.language;
 import moment from 'moment';
+
+const lang = document.documentElement.lang.substr(0, 2);
+
 moment.locale(lang);
 
 
@@ -35,6 +38,7 @@ Vue.component('mails-component', require('./components/MailsComponent.vue'));
 
 Vue.component('modal', require('./components/ModalComponent.vue'));
 
+Vue.use(TurbolinksAdapter);
 // Alert components for vue
 Vue.use(VueFlashMessage, {
     template: require('./templates/AlertTemplate.html'),
@@ -51,6 +55,8 @@ Vue.use(VueMoment, {
 
 // Translation helper for vue
 Vue.use(VueInternationalization);
+
+Vue.use(VeeValidate, {errorBagName: 'validationErrors'});
 
 const i18n = new VueInternationalization({
     locale: lang,
@@ -71,12 +77,7 @@ Vue.mixin({
             return window.laravel.roles.includes('admin') ||
                 window.laravel.permissions.includes(permission) ||
                 window.laravel.user_id === user_id;
-        }
-    }
-});
-
-Vue.mixin({
-    methods: {
+        },
         $is: (role, user_id = 0) => {
             return window.laravel.roles.includes('admin') ||
                 window.laravel.roles.includes(role) ||
@@ -85,13 +86,19 @@ Vue.mixin({
     }
 });
 
-Vue.filter('capitalize', function (value) {
-    if (!value) return '';
-    value = value.toString();
-    return value.charAt(0).toUpperCase() + value.slice(1)
-});
+import VueFilter from './plugins/VueFilter';
+Vue.use(VueFilter);
 
-const app = new Vue({
-    el: '#app',
-    i18n
+document.addEventListener('turbolinks:load', () => {
+    const element = document.getElementById("app");
+    if (element != null) {
+        const app = new Vue({
+            el: element,
+            i18n
+        });
+    }
+
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+    })
 });

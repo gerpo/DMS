@@ -1,6 +1,6 @@
 <transition-group :name="transitionName" class="alert-container w-100" tag="div">
     <div v-for="(message, index) in storage"
-         :key="index"
+         :key="`alert-${index}`"
          :class="'alert-' + cssClasses(index) + ' alert alert-dismissible'"
          class="container"
          role="alert"

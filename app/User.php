@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Bouncer;
 use Gerpo\Plugisto\Models\Plugisto;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -33,6 +34,10 @@ class User extends Authenticatable
         'is_subtenant' => 'boolean'
     ];
 
+    protected $appends = [
+        'full_name'
+    ];
+
     protected static function boot()
     {
         parent::boot();
@@ -40,6 +45,10 @@ class User extends Authenticatable
         self::saving(function ($user) {
             $user->full_room = (int)str_pad($user->floor, 2, 0, STR_PAD_LEFT) . str_pad($user->room, 2, 0,
                     STR_PAD_LEFT);
+        });
+
+        self::created(function ($user) {
+            Bouncer::assign('member')->to($user);
         });
     }
 
@@ -60,6 +69,11 @@ class User extends Authenticatable
     public function setLastnameAttribute($value)
     {
         $this->attributes['lastname'] = title_case($value);
+    }
+
+    public function getFullNameAttribute()
+    {
+        return "{$this->firstname} {$this->lastname}";
     }
 
     public function packages()

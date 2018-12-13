@@ -20,12 +20,14 @@
 
                     <td class="text-center" v-for="ability in abilities">
                         <div class="custom-control custom-checkbox d-inline">
-                            <input type="checkbox" class="custom-control-input" :data-role="role.name"
+                            <input type="checkbox" class="custom-control-input"
+                                   :data-role="role.name"
                                    :data-ability="ability.name" :ref="role.name"
                                    :id="role.name+'-'+ability.name"
-                                   :checked="role.abilities.some(ab => ab.name === ability.name)">
+                                   :checked="role.abilities.some(ab => ab.name === ability.name) || role.name === 'admin'"
+                                   :disabled="role.name === 'admin'">
                             <label class="custom-control-label"
-                                   :for="role.name+'-'+ability.name"></label>
+                                   :for="role.name+'-'+ability.name">&zwnj;</label>
                         </div>
                     </td>
 

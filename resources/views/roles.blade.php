@@ -1,5 +1,13 @@
 @extends('layouts.app')
 
 @section('content')
-    <roles-component :roles="{{ $roles }}" :abilities="{{ $abilities }}"></roles-component>
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
+                <li class="breadcrumb-item active" aria-current="page">@langTitleChoice('general.role')</li>
+            </ol>
+        </nav>
+        <roles-component :roles="{{ $roles }}" :abilities="{{ $abilities }}"></roles-component>
+    </div>
 @endsection

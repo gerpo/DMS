@@ -13,6 +13,7 @@ export default {
             "role": "role | roles",
             "ability": "ability | abilities",
             "mail": "mail | mails",
+            "plugin": "plugin | plugins",
             "or": "or",
             "and": "and"
         },
@@ -52,6 +53,7 @@ export default {
             "house": "house",
             "created_at": "created at",
             "deleted_at": "deleted at",
+            "confirmed": "confirmed",
             "subtenant": "subtenant | subtenants",
             "main_tenant": "main tenant | main tenants",
             "former_tenant": "former tenant | former tenants",

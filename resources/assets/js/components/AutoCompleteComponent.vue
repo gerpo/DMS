@@ -2,19 +2,22 @@
     <div class="input-group">
         <label :for="id" hidden>{{ label }}</label>
         <input :id="id" v-model="model[searchAttr]" @input="searchData" @keyup.up="onArrowUp" @keyup.down="onArrowDown"
-               @keyup.enter="onEnter" type="text" class="form-control"
+               @keyup.enter="onEnter" type="text" class="form-control rounded-left"
+               :class="{rounded: !showButton}"
                :placeholder="placeholder"/>
         <div class="input-group-append" v-if="showButton">
-            <button class="btn btn-primary input-group-text text-capitalize" @click="submit">{{ buttonText }}</button>
+            <button class="btn btn-primary input-group-text text-capitnpm rund alize" @click="submit">{{ buttonText }}</button>
         </div>
-        <div class="ac__suggestions list-group" v-if="suggestionsAreOpen">
+        <div class="ac__suggestions list-group w-100 pt-2" v-if="suggestionsAreOpen">
             <p class="list-group-item" v-if="isFetching">Loading...</p>
             <button class="ac__suggestion list-group-item list-group-item-action"
                     v-if="suggestions.length > 0"
                     v-for="(suggestion, i) in limitedSuggestions"
                     :class="{active: seletectedSuggestion===i}"
                     :key="suggestion[searchAttr]+i" @click="onSuggestionClick(i)">
-                {{ suggestion[searchAttr] }}
+                <slot :suggestion="suggestion" :search_query="model[searchAttr]">
+                    {{ suggestion[searchAttr] }}
+                </slot>
             </button>
             <p class="list-group-item" v-if="suggestions.length === 0 && !isFetching">No Resident found.</p>
         </div>
@@ -22,6 +25,8 @@
 </template>
 
 <script>
+    import {default as  debounce} from 'lodash-es/debounce';
+
     export default {
         name: "auto-complete-component",
         props: {
@@ -43,7 +48,10 @@
             caseSensitive: {default: false, type: [Boolean]},
             minInputLength: {default: 1, type: [Number]},
 
-            additionalProps: {default: () => {}, type: [Object]}
+            additionalProps: {
+                default: () => {
+                }, type: [Object]
+            }
         },
         data: () => ({
             model: {},
@@ -65,7 +73,7 @@
             },
         },
         methods: {
-            searchData: _.debounce(async function () {
+            searchData: debounce(async function () {
                 const inputValue = this.model[this.searchAttr];
 
                 if (inputValue.length < this.minInputLength) {
@@ -83,8 +91,8 @@
 
                 this.isFetching = false;
 
-                this.suggestions = (data.length > 0) ? data.filter(d => this.compareFunction(d[this.searchAttr], inputValue)) : [];
-            }, 150),
+                    this.suggestions = (data.length > 0) ? data.filter(d => this.compareFunction(d[this.searchAttr], inputValue)) : [];
+            }, 250),
             async fetchServerData(inputValue = '') {
 
                 const response = await this.data({
@@ -99,7 +107,7 @@
                     searchStr = searchStr.toLowerCase();
                 }
 
-                return str.startsWith(searchStr);
+                return str.includes(searchStr);
             },
             onArrowDown() {
                 if (this.seletectedSuggestion < this.suggestions.length) {

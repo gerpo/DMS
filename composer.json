@@ -6,26 +6,27 @@
   "type": "project",
   "repositories": [],
   "require": {
-    "php": ">=7.1.3",
+    "php": ">=7.3.0",
+    "barryvdh/laravel-dompdf": "^0.8.3",
     "fideloper/proxy": "^4.0",
     "gerpo/plugisto": "*",
-    "laravel/framework": "5.6.*",
+    "laravel/framework": "5.7.*",
     "laravel/tinker": "^1.0",
-    "silber/bouncer": "v1.0.0-rc.1",
+    "silber/bouncer": "v1.0.0-rc.4",
     "tightenco/ziggy": "^0.6.3"
   },
   "require-dev": {
+    "roave/security-advisories": "dev-master",
     "barryvdh/laravel-debugbar": "^3.1",
     "barryvdh/laravel-ide-helper": "^2.4",
     "filp/whoops": "^2.0",
     "fzaninotto/faker": "^1.4",
-    "laravel/dusk": "^3.0",
+    "laravel/dusk": "^4.0",
     "martinlindhe/laravel-vue-i18n-generator": "^0.1.28",
     "mockery/mockery": "^1.0",
     "nunomaduro/collision": "^2.0",
     "phpunit/phpunit": "^7.0",
-    "symfony/thanks": "^1.0",
-    "wnx/laravel-stats": "^1.6"
+    "symfony/thanks": "^1.0"
   },
   "autoload": {
     "classmap": ["database/seeds", "database/factories"],

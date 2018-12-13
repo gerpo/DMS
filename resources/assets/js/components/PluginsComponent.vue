@@ -1,5 +1,5 @@
 <template>
-    <div class="container">
+    <div class="plugins">
         <div class="card">
             <div class="card-header text-capitalize">
                 <span>{{ $tc('general.plugin', 2) }}</span>

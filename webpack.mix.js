@@ -18,6 +18,15 @@ mix.js('resources/assets/js/app.js', 'public/js')
     });
 
 mix.browserSync({
-    proxy: 'https://dms.app',
+    proxy: 'https://dms.test',
     https: true
+});
+
+const Visualizer = require('webpack-visualizer-plugin');
+const WebPack = require('webpack');
+mix.webpackConfig({
+    plugins: [
+        new WebPack.IgnorePlugin(/^\.\/locale$/, /(de|en)/),
+        new Visualizer(),
+    ]
 });

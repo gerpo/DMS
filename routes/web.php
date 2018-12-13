@@ -42,6 +42,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::delete('/roles/{role}/abilities',
         'Api\RoleAbilitiesController@destroy')->name('api.role-abilities.destroy')->middleware('check_ability:manage_roles');
 
+    Route::get('/role-poster', 'RolePosterController@index');
 
     Route::post('/users/{user}/roles',
         'Api\UserRolesController@store')->name('api.user-roles.store')->middleware('check_ability:manage_users');

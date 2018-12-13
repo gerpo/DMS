@@ -12,24 +12,31 @@
             </div>
             <div :id="role.name" class="collapse" data-parent="#accordion">
                 <div class="card-body row">
-                    <ul v-if="role.users.length > 0" class="list-group col-md-6 col-xxl-4 offset-xxl-1">
-                        <li v-for="user in role.users" :title="user.full_room"
-                            class="list-group-item d-flex justify-content-between align-items-center">
-                            <span>{{ user.firstname }} {{ user.lastname }} - {{ user.full_room }} {{ user.house }}</span>
-                            <button type="button" class="close text-danger" aria-label="Retract" title="Retract"
-                                    v-if="$can('manage_roles')"
-                                    @click="retractRole(user, role)">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </li>
-                    </ul>
+                    <list-pagination-component :data="role.users" searchAttr="full_name" v-if="role.users.length > 0"
+                                               :key="role.id">
+                        <template slot-scope="{item, search_query}">
+                            <li :title="item.full_room"
+                                class="list-group-item d-flex justify-content-between align-items-center">
+                                <span><span v-html="$options.filters.highlight(item.full_name, search_query)"></span> - {{ item.full_room }} {{ item.house }} </span>
+                                <button type="button" class="close text-danger" aria-label="Retract" title="Retract"
+                                        v-if="$can('manage_roles')"
+                                        @click="retractRole(item, role)">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </li>
+                        </template>
+                    </list-pagination-component>
                     <p v-else class="list-group-item col-md-6 col-xxl-4 offset-xxl-1">Role is not assigned to any
                         resident.</p>
 
                     <div class="col-md-6 col-xxl-4 offset-xxl-2" v-if="$can('manage_roles')">
-                        <autocomplete :data="fetchUsers" searchAttr="lastname"
+                        <autocomplete :data="fetchUsers" searchAttr="full_name"
                                       button-text="assign" placeholder="Assign to..." :onButtonClick="userSelected"
-                                      :additionalProps="{role}"/>
+                                      :additionalProps="{role}">
+                            <template slot-scope="{suggestion, search_query}">
+                                <span v-html="$options.filters.highlight(suggestion.full_name, search_query)"></span>
+                            </template>
+                        </autocomplete>
                     </div>
                 </div>
             </div>
@@ -39,10 +46,12 @@
 
 <script>
     import Autocomplete from './AutoCompleteComponent.vue';
+    import ListPaginationComponent from "./ListPaginationComponent";
 
     export default {
         name: "user-roles-component",
         components: {
+            ListPaginationComponent,
             Autocomplete
         },
         props: {
@@ -52,7 +61,7 @@
             currentRoles: [],
             errors: {},
         }),
-        mounted() {
+        async mounted() {
             this.currentRoles = this.roles;
         },
         methods: {
@@ -71,7 +80,7 @@
                 return await axios.post(route('api.user-roles.store', user.id), {data: [role]})
                     .then(response => {
                         role.users.push(user);
-                        this.flash('Role was successfully assigned from user.', 'success')
+                        this.flash('Role was successfully assigned to user.', 'success')
                     })
                     .catch(error => {
                         this.flash('Role could not be assigned to user.', 'danger');
@@ -81,6 +90,12 @@
             userSelected(value) {
                 const user = value.result;
                 const role = value.role;
+
+                if (role.users.some(role_user => role_user.id === user.id)) {
+                    this.flash('User has Role already.', 'info');
+                    return
+                }
+
                 this.assignRole(user, role);
             },
             async fetchUsers(input) {

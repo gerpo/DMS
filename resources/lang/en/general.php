@@ -13,6 +13,8 @@ return [
 
     'mail' => 'mail | mails',
 
+    'plugin' => 'plugin | plugins',
+
     'or' => 'or',
     'and' => 'and'
 ];

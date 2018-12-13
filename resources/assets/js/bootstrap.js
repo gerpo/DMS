@@ -1,6 +1,8 @@
 
-window._ = require('lodash');
-window.Popper = require('popper.js').default;
+//window.Popper = require('popper.js').default;
+
+import turbolinks from 'turbolinks';
+turbolinks.start();
 
 /**
  * We'll load jQuery and the Bootstrap jQuery plugin which provides support

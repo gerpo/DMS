@@ -28,6 +28,7 @@
         ]) !!}
         </script>
     @endif
+    <script src="{{ asset('js/app.js') }}"></script>
 </head>
 <body>
 <div id="app">
@@ -94,8 +95,10 @@
 </div>
 
 <!-- Scripts -->
-<script src="{{ asset('js/app.js') }}"></script>
 @yield('scripts')
+<script>
+
+</script>
 
 </body>
 </html>

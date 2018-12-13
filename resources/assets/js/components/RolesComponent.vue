@@ -1,17 +1,14 @@
 <template>
-    <div class="container">
-        <div class="card">
-            <div class="card-header text-capitalize">
-                <span>{{ $tc('general.role', 2) }}</span>
-            </div>
-            <div class="card-body">
-                <p class="lead" v-if="$can('manage_roles')">Create and manage roles for residents.</p>
-                <p class="lead" v-else>A overview of all assigned roles.</p>
+    <div class="card">
+        <div class="card-header text-capitalize">
+            <span>{{ $tc('general.role', 2) }}</span>
+        </div>
+        <div class="card-body">
+            <p class="lead" v-if="$can('manage_roles')">Create and manage roles for residents.</p>
+            <p class="lead" v-else>A overview of all assigned roles.</p>
 
-                <user-roles-component :roles="roles" class="mb-4" />
-                <role-abilities-component :roles="roles" :abilities="abilities" v-if="$can('manage_roles')"/>
-
-            </div>
+            <user-roles-component :roles="roles" class="mb-4"/>
+            <role-abilities-component :roles="roles" :abilities="abilities" v-if="$can('manage_roles')"/>
         </div>
     </div>
 </template>
@@ -22,7 +19,7 @@
 
     export default {
         name: "roles-component",
-        components:{
+        components: {
             UserRolesComponent,
             RoleAbilitiesComponent
         },
@@ -30,8 +27,7 @@
             roles: {default: () => [], type: [Array]},
             abilities: {default: () => [], type: [Array]},
         },
-        data: () => ({
-        }),
+        data: () => ({}),
         mounted() {
         },
         methods: {}

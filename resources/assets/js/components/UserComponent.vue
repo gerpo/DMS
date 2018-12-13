@@ -1,5 +1,5 @@
 <template>
-    <div class="card m-3">
+    <div class="card">
         <div class="card-header text-capitalize">{{ $tc('user.user', 2) }}</div>
         <div class="card-body row">
 
@@ -15,21 +15,22 @@
 
                     ref="table"
             >
-                <table-column show="lastname" :label="$t('user.last_name')"/>
-                <table-column show="firstname" :label="$t('user.first_name')"/>
-                <table-column show="username" :label="$t('user.username')"/>
-                <table-column show="email" :label="$t('user.email')"/>
-                <table-column show="full_room" :label="$t('user.room')" data-type="numeric"/>
-                <table-column show="house" :label="$t('user.house')"/>
-                <table-column show="confirmed" label="Confirmed" :filterable="false"/>
+                <table-column show="lastname" :label="$t('user.last_name')" header-class="text-capitalize" />
+                <table-column show="firstname" :label="$t('user.first_name')" header-class="text-capitalize" />
+                <table-column show="username" :label="$t('user.username')" header-class="text-capitalize" />
+                <table-column show="email" :label="$t('user.email')" header-class="text-capitalize" />
+                <table-column show="full_room" :label="$t('user.room')" header-class="text-capitalize" />
+                <table-column show="house" :label="$t('user.house')" header-class="text-capitalize" />
+                <table-column show="confirmed" :label="$t('user.confirmed')" :filterable="false" header-class="text-capitalize" />
                 <table-column :filterable="false">
                     <template slot-scope="row">
-                        <a @click="editUser(row)" href="#" class="text-capitalize">Edit</a>
+                        <button @click="editUser(row)" class="btn btn-link text-capitalize">Edit</button>
                     </template>
                 </table-column>
                 <table-column :filterable="false">
                     <template slot-scope="row">
-                        <a @click="" href="#" class="text-capitalize">{{ $t('general.contact') }}</a>
+                        <button @click="" href="#" class="btn btn-link text-capitalize">{{ $t('general.contact') }}
+                        </button>
                     </template>
                 </table-column>
             </table-component>
@@ -56,7 +57,8 @@
                         <div class="custom-control custom-checkbox">
                             <input type="checkbox" class="custom-control-input" v-model="filter.checked"
                                    @change="filterChanged" :id="filter.name">
-                            <label class="custom-control-label" :for="filter.name">{{ $tc('user.' + filter.name, 2) }}</label>
+                            <label class="custom-control-label" :for="filter.name">{{ $tc('user.' + filter.name, 2)
+                                }}</label>
                         </div>
                     </li>
                 </ul>
@@ -64,7 +66,7 @@
 
         </div>
         <modal :show="showEditUserModal" @close="showEditUserModal = false">
-            <edit-user-component :houseNames="houseNames" :user="selectedUser" />
+            <edit-user-component :houseNames="houseNames" :user="selectedUser"/>
         </modal>
     </div>
 </template>
@@ -132,7 +134,9 @@
         },
         watch: {
             showEditUserModal(value) {
-                if (!value) { this.selectedUser = {}; }
+                if (!value) {
+                    this.selectedUser = {};
+                }
             }
         }
     }
