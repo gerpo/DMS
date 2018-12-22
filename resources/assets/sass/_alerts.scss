@@ -1,6 +1,37 @@
-.alert-container {
+.flash__wrapper {
+  @extend .container;
   position: fixed;
   bottom: 2rem;
   word-wrap: break-word;
   z-index: $zindex-popover;
+}
+
+.flash__message {
+  @extend .alert;
+  @extend .alert-primary;
+  @extend .alert-dismissible;
+}
+
+.flash__message.success {
+  @extend .alert-success;
+}
+
+.flash__message.warning {
+  @extend .alert-warning;
+}
+
+.flash__message.error {
+  @extend .alert-danger;
+}
+
+.flash__message.info {
+  @extend .alert-info;
+}
+
+.flash__close-button {
+  @extend .close;
+}
+
+.flash__close-button:active, .flash__close-button:focus {
+  outline: none
 }

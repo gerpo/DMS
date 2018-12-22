@@ -30,6 +30,14 @@ class UserTest extends TestCase
     }
 
     /** @test */
+    public function users_full_room_is_padded(): void
+    {
+        $user = create(User::class, ['room' => 1, 'floor' => 2]);
+
+        $this->assertEquals(201, $user->refresh()->full_room);
+    }
+
+    /** @test */
     public function a_user_can_be_confirmed(): void
     {
         $user = create(User::class);

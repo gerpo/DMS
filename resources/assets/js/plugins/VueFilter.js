@@ -15,6 +15,11 @@ const VueFilter = {
                 return ('<span class=\'font-weight-bold\'>' + matchedTxt + '</span>');
             });
         });
+
+        Vue.filter('transform-role', function (value) {
+            if (!value) return '';
+            return value.toString().replace('_', ' ');
+        });
     }
 };
 

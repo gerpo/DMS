@@ -5,8 +5,8 @@
                 <thead class="text-center">
                 <th></th>
                 <th v-for="ability in abilities" scope="col" data-toggle="tooltip" data-placement="auto"
-                    :title="ability.title">
-                    {{ ability.name }}
+                    :title="ability.title" class="text-capitalize">
+                    {{ ability.name | transform-role }}
                 </th>
                 <th></th>
                 <th></th>

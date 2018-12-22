@@ -23,12 +23,12 @@
             window.laravel = {!! json_encode([
             'user_id' => Auth::user()->id,
             'roles' => Auth::user()->roles->pluck('name'),
-            'permissions' => Auth::user()->abilities->pluck('name'),
+            'permissions' => Auth::user()->abilities->pluck('name')->merge(Auth::user()->roles->flatMap(function($role) {return $role->abilities;})->pluck('name'))->unique(),
             'user' => Auth::user()->only(['firstname', 'lastname', 'email', 'floor', 'room'])
         ]) !!}
         </script>
     @endif
-    <script src="{{ asset('js/app.js') }}"></script>
+
 </head>
 <body>
 <div id="app">
@@ -89,16 +89,16 @@
     </nav>
 
     <main class="py-4">
-        <flash-message></flash-message>
+        <flash-message class="container px-0"></flash-message>
         @yield('content')
     </main>
 </div>
 
 <!-- Scripts -->
 @yield('scripts')
-<script>
-
-</script>
+<script src="{{ asset('js/manifest.js') }}"></script>
+<script src="{{ asset('js/vendor.js') }}"></script>
+<script src="{{ asset('js/app.js') }}"></script>
 
 </body>
 </html>

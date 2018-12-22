@@ -8,7 +8,6 @@ require('./bootstrap');
 
 import Vue from 'vue';
 // Vue Extensions
-import TurbolinksAdapter from 'vue-turbolinks';
 import VueMoment from 'vue-moment';
 import VeeValidate from 'vee-validate';
 import VueInternationalization from 'vue-i18n';
@@ -18,6 +17,7 @@ import route from "../../../vendor/tightenco/ziggy/src/js/route";
 import VueFlashMessage from 'vue-flash-message';
 //const lang = navigator.language;
 import moment from 'moment';
+import VueFilter from './plugins/VueFilter';
 
 const lang = document.documentElement.lang.substr(0, 2);
 
@@ -30,21 +30,19 @@ moment.locale(lang);
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-Vue.component('user-component', require('./components/UserComponent.vue'));
-Vue.component('profile-component', require('./components/ProfileComponent.vue'));
-Vue.component('roles-component', require('./components/RolesComponent.vue'));
-Vue.component('plugins-component', require('./components/PluginsComponent.vue'));
-Vue.component('mails-component', require('./components/MailsComponent.vue'));
+Vue.component('user-component', require('./components/UserComponent.vue').default);
+Vue.component('profile-component', require('./components/ProfileComponent.vue').default);
+Vue.component('roles-component', require('./components/RolesComponent.vue').default);
+Vue.component('plugins-component', require('./components/PluginsComponent.vue').default);
+Vue.component('mails-component', require('./components/MailsComponent.vue').default);
 
-Vue.component('modal', require('./components/ModalComponent.vue'));
+Vue.component('modal', require('./components/ModalComponent.vue').default);
 
-Vue.use(TurbolinksAdapter);
 // Alert components for vue
 Vue.use(VueFlashMessage, {
-    template: require('./templates/AlertTemplate.html'),
     messageOptions: {
         timeout: 4000,
-        pauseOnInteract: true
+        pauseOnInteract: true,
     }
 });
 
@@ -86,19 +84,20 @@ Vue.mixin({
     }
 });
 
-import VueFilter from './plugins/VueFilter';
+
+Vue.mixin({
+    methods: {
+        $tv: function (key) {
+            const newKey = `vendor.${key.replace('::', '.')}`;
+            return this.$t(newKey)
+        }
+    }
+});
+
 Vue.use(VueFilter);
 
-document.addEventListener('turbolinks:load', () => {
-    const element = document.getElementById("app");
-    if (element != null) {
-        const app = new Vue({
-            el: element,
-            i18n
-        });
-    }
 
-    $(function () {
-        $('[data-toggle="tooltip"]').tooltip()
-    })
+const app = new Vue({
+    el: '#app',
+    i18n
 });

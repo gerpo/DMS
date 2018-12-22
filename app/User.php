@@ -53,7 +53,7 @@ class User extends Authenticatable
     }
 
 
-    public function confirm()
+    public function confirm(): void
     {
         $this->confirmed = true;
         $this->confirmation_token = null;
@@ -61,17 +61,17 @@ class User extends Authenticatable
         $this->save();
     }
 
-    public function setFirstnameAttribute($value)
+    public function setFirstnameAttribute($value): void
     {
         $this->attributes['firstname'] = title_case($value);
     }
 
-    public function setLastnameAttribute($value)
+    public function setLastnameAttribute($value): void
     {
         $this->attributes['lastname'] = title_case($value);
     }
 
-    public function getFullNameAttribute()
+    public function getFullNameAttribute(): string
     {
         return "{$this->firstname} {$this->lastname}";
     }
