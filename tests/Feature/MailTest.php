@@ -2,14 +2,13 @@
 
 namespace Tests\Feature;
 
-use App\Mail\RegularMail;
-use App\User;
-use Bus;
+use Mail;
 use Event;
+use App\User;
+use Tests\TestCase;
+use App\Mail\RegularMail;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
-use Mail;
-use Tests\TestCase;
 
 class MailTest extends TestCase
 {
@@ -47,7 +46,7 @@ class MailTest extends TestCase
             'recipients' => ['test@dms.com'],
             'subject' => '',
             'content' => '',
-            'attachmentPaths' => []
+            'attachmentPaths' => [],
         ], $overwrites);
     }
 
@@ -64,7 +63,7 @@ class MailTest extends TestCase
 
         Mail::assertQueued(RegularMail::class, function ($mail) use ($user1, $user2) {
             return $mail->hasTo($user1->email) &&
-                !$mail->hasTo($user2->email);
+                ! $mail->hasTo($user2->email);
         });
     }
 
@@ -134,7 +133,7 @@ class MailTest extends TestCase
 
         Mail::assertQueued(RegularMail::class, function ($mail) use ($user1, $user2) {
             return $mail->hasTo($user1->email) &&
-                !$mail->hasTo($user2->email);
+                ! $mail->hasTo($user2->email);
         });
     }
 
@@ -397,11 +396,11 @@ class MailTest extends TestCase
 
         Mail::assertQueued(RegularMail::class, function ($mail) use ($user1, $user2) {
             return $mail->hasTo($user1->email) &&
-                !$mail->hasTo($user2->email);
+                ! $mail->hasTo($user2->email);
         });
         Mail::assertQueued(RegularMail::class, function ($mail) use ($user1, $user2) {
             return $mail->hasTo($user2->email) &&
-                !$mail->hasTo($user1->email);
+                ! $mail->hasTo($user1->email);
         });
     }
 
@@ -420,11 +419,11 @@ class MailTest extends TestCase
 
         Mail::assertQueued(RegularMail::class, function ($mail) use ($user1, $user2) {
             return $mail->hasTo($user1->email) &&
-                !$mail->hasTo($user2->email);
+                ! $mail->hasTo($user2->email);
         });
         Mail::assertQueued(RegularMail::class, function ($mail) use ($user1, $user2) {
             return $mail->hasTo($user2->email) &&
-                !$mail->hasTo($user1->email);
+                ! $mail->hasTo($user1->email);
         });
     }
 
@@ -438,6 +437,7 @@ class MailTest extends TestCase
 
         Mail::assertQueued(RegularMail::class, function ($mail) {
             $mail->build();
+
             return $mail->subject === 'Test Subject';
         });
     }
@@ -452,6 +452,7 @@ class MailTest extends TestCase
 
         Mail::assertQueued(RegularMail::class, function ($mail) {
             $mail->build();
+
             return $mail->viewData['content'] === 'Test Content';
         });
     }
@@ -464,12 +465,13 @@ class MailTest extends TestCase
         $this->signInAdmin();
 
         $this->post(route('mails.store'), $this->validParams([
-            'attachmentPaths' => [$path]
+            'attachmentPaths' => [$path],
         ]))
             ->assertSuccessful();
 
         Mail::assertQueued(RegularMail::class, function ($mail) {
             $mail = $mail->build();
+
             return count($mail->diskAttachments) === 1;
         });
     }
@@ -484,7 +486,7 @@ class MailTest extends TestCase
 
         $this->post(route('mails.store'), $this->validParams([
             'toAll' => true,
-            'attachmentPaths' => [$path]
+            'attachmentPaths' => [$path],
         ]))
             ->assertSuccessful();
 
@@ -492,15 +494,16 @@ class MailTest extends TestCase
 
         Mail::assertQueued(RegularMail::class, function ($mail) use ($user) {
             $mail = $mail->build();
+
             return count($mail->diskAttachments) === 1 && $mail->hasTo($user->email);
         });
 
         Mail::assertQueued(RegularMail::class, function ($mail) use ($admin) {
             $mail = $mail->build();
+
             return count($mail->diskAttachments) === 2 && $mail->hasTo($admin->email);
         });
     }
-
 
     protected function setUp(): void
     {

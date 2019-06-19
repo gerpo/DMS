@@ -11,7 +11,7 @@ class RolesController extends Controller
     {
         $roles = Role::orderBy('name')->with(['abilities', 'users'])->get();
         $abilities = Ability::all();
-        
+
         return view('roles')->with(['roles' => $roles, 'abilities' => $abilities]);
     }
 }

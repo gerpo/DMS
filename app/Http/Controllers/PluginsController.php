@@ -10,6 +10,7 @@ class PluginsController extends Controller
     public function index()
     {
         $plugins = Plugisto::withoutGlobalScope(ActiveScope::class)->get();
+
         return view('plugins')->with(['plugins' => $plugins]);
     }
 }

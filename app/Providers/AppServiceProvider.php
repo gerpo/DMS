@@ -2,9 +2,9 @@
 
 namespace App\Providers;
 
-use App\Role;
 use Blade;
 use Bouncer;
+use App\Role;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -16,11 +16,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        Blade::directive('langTitle',function($expression) {
+        Blade::directive('langTitle', function ($expression) {
             return "<?php echo title_case(trans($expression)); ?>";
         });
 
-        Blade::directive('langTitleChoice',function($expression) {
+        Blade::directive('langTitleChoice', function ($expression) {
             return "<?php echo title_case(trans_choice($expression, 10)); ?>";
         });
 

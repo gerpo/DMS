@@ -42,14 +42,13 @@ class MailAddressesTest extends TestCase
             $roles = Role::with('users')->get();
         } else {
             $roles = Role::whereIn('name', $roles)->with('users')->get();
-        };
+        }
 
         return collect([
             'roles' => $roles->pluck('users', 'name')->map(function ($users) {
                 return $users->pluck('email');
-            })->sort()
+            })->sort(),
         ]);
-
     }
 
     private function getFloorMails($floor = null)
@@ -63,7 +62,7 @@ class MailAddressesTest extends TestCase
         return collect([
             'floors' => $users->mapToGroups(function ($user) {
                 return [$user['floor'] => $user['email']];
-            })->sortKeys()
+            })->sortKeys(),
         ]);
     }
 

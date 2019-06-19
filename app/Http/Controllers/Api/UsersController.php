@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
 use App\User;
+use App\Http\Controllers\Controller;
 
 class UsersController extends Controller
 {
     public function index()
     {
-        $filter = request()->filter . '%';
+        $filter = request()->filter.'%';
         $orderColumn = json_decode(request()->sort)->fieldName ?? 'lastname';
         $order = json_decode(request()->sort)->order ?? 'asc';
         $dorms = json_decode(request()->houses) ?? [];
@@ -36,25 +36,25 @@ class UsersController extends Controller
         $query = new User();
 
         switch (true) {
-            case in_array('former_tenant', $residentFilter) && !in_array('current_tenant', $residentFilter):
+            case in_array('former_tenant', $residentFilter) && ! in_array('current_tenant', $residentFilter):
                 $query = $query->onlyTrashed();
                 break;
             case in_array('former_tenant', $residentFilter) && in_array('current_tenant', $residentFilter):
                 $query = $query->withTrashed();
                 break;
-            case !in_array('former_tenant', $residentFilter) && !in_array('current_tenant', $residentFilter):
+            case ! in_array('former_tenant', $residentFilter) && ! in_array('current_tenant', $residentFilter):
                 $query = $query->where('house', 'INVALID');
                 break;
         }
 
         switch (true) {
-            case in_array('main_tenant', $residentFilter) && !in_array('subtenant', $residentFilter):
+            case in_array('main_tenant', $residentFilter) && ! in_array('subtenant', $residentFilter):
                 $query = $query->where('is_subtenant', false);
                 break;
-            case in_array('subtenant', $residentFilter) && !in_array('main_tenant', $residentFilter):
+            case in_array('subtenant', $residentFilter) && ! in_array('main_tenant', $residentFilter):
                 $query = $query->where('is_subtenant', true);
                 break;
-            case !in_array('subtenant', $residentFilter) && !in_array('main_tenant', $residentFilter):
+            case ! in_array('subtenant', $residentFilter) && ! in_array('main_tenant', $residentFilter):
                 $query = $query->where('house', 'INVALID');
                 break;
         }
@@ -69,11 +69,11 @@ class UsersController extends Controller
         $user->update(request()->validate([
             'firstname' => 'required|string|max:100',
             'lastname' => 'required|string|max:100',
-            'username' => 'required|max:255|alpha_dash|unique:users,username,' . $user->id,
-            'email' => 'required|email|max:255|unique:users,email,' . $user->id,
+            'username' => 'required|max:255|alpha_dash|unique:users,username,'.$user->id,
+            'email' => 'required|email|max:255|unique:users,email,'.$user->id,
             'floor' => 'required|integer|max:255',
             'room' => 'required|integer|max:255',
-            'house' => 'required|string|max:255|in:' . $dorms,
+            'house' => 'required|string|max:255|in:'.$dorms,
         ]));
 
         return $user;

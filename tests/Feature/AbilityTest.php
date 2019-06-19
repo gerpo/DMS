@@ -3,8 +3,8 @@
 namespace Tests\Feature;
 
 use Auth;
-use Silber\Bouncer\Database\Ability;
 use Tests\TestCase;
+use Silber\Bouncer\Database\Ability;
 
 class AbilityTest extends TestCase
 {
@@ -15,7 +15,7 @@ class AbilityTest extends TestCase
 
         $this->post(route('abilities.store'), [
             'name' => 'ability_a',
-            'title' => 'A new ability'
+            'title' => 'A new ability',
         ])->assertSuccessful();
 
         $ability = Ability::where('name', 'ability_a')->first();
@@ -86,7 +86,7 @@ class AbilityTest extends TestCase
 
         $this->post(route('abilities.store'), $this->validParams([
             'name' => 'ability_a',
-            'title' => 'different title'
+            'title' => 'different title',
         ]))
             ->assertRedirect(route('abilities'))
             ->assertSessionHasErrors('name');
@@ -132,7 +132,7 @@ class AbilityTest extends TestCase
         $this->withExceptionHandling()
             ->signInAdmin()
             ->from(route('abilities'));
-        #
+        //
         $this->post(route('abilities.store'), $this->validParams([
             'title' => str_repeat('a', 256),
         ]))
@@ -149,5 +149,4 @@ class AbilityTest extends TestCase
             'title' => 'A new ability',
         ], $overwrites);
     }
-
 }

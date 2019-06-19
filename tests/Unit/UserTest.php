@@ -1,13 +1,11 @@
 <?php
 
-
 namespace Tests\Unit;
 
-
-use App\User;
 use Bouncer;
-use Gerpo\Plugisto\Models\Plugisto;
+use App\User;
 use Tests\TestCase;
+use Gerpo\Plugisto\Models\Plugisto;
 
 class UserTest extends TestCase
 {

@@ -26,7 +26,6 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('/users', 'UsersController@index')->name('users')->middleware('check_ability:manage_users');
 
-
     Route::get('/roles', 'RolesController@index')->name('roles');
     Route::post('/roles',
         'Api\RolesController@store')->name('api.roles.store')->middleware('check_ability:manage_roles');
@@ -72,9 +71,9 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/api/users/{user}',
         'Api\UsersController@update')->name('api.users.update')->middleware('check_ability:manage_users');
 
-
     Route::get('/me', function () {
         $user = User::where('id', auth()->user()['id'])->with(['roles', 'abilities'])->first();
+
         return view('profile')->with(['user' => $user]);
     });
 });

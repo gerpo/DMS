@@ -3,9 +3,9 @@
 namespace Tests\Feature;
 
 use Auth;
+use Tests\TestCase;
 use Gerpo\Plugisto\Models\Plugisto;
 use Gerpo\Plugisto\Scopes\ActiveScope;
-use Tests\TestCase;
 
 class DashboardTest extends TestCase
 {
