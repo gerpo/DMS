@@ -4,6 +4,8 @@ namespace Tests\Feature;
 
 use App\Mail\RegularMail;
 use App\User;
+use Bus;
+use Event;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Mail;
@@ -468,7 +470,7 @@ class MailTest extends TestCase
 
         Mail::assertQueued(RegularMail::class, function ($mail) {
             $mail = $mail->build();
-            return \count($mail->rawAttachments) === 1;
+            return count($mail->diskAttachments) === 1;
         });
     }
 
@@ -490,14 +492,15 @@ class MailTest extends TestCase
 
         Mail::assertQueued(RegularMail::class, function ($mail) use ($user) {
             $mail = $mail->build();
-            return \count($mail->rawAttachments) === 1 && $mail->hasTo($user->email);
+            return count($mail->diskAttachments) === 1 && $mail->hasTo($user->email);
         });
 
         Mail::assertQueued(RegularMail::class, function ($mail) use ($admin) {
             $mail = $mail->build();
-            return \count($mail->rawAttachments) === 2 && $mail->hasTo($admin->email);
+            return count($mail->diskAttachments) === 2 && $mail->hasTo($admin->email);
         });
     }
+
 
     protected function setUp(): void
     {
@@ -505,5 +508,8 @@ class MailTest extends TestCase
 
         Mail::fake();
         Storage::fake();
+        Event::fake([
+            RegularMail::class,
+        ]);
     }
 }

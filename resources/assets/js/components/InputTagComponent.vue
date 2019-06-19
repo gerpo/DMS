@@ -4,7 +4,7 @@
             <tag-component v-for="(t, i) in currentTags" :key="i" :id="i" :title="t" :btnAction="removeTag"
                            tag-class="bg-primary text-white" :disabled="disabled"/>
         </div>
-        <input type="text" class="input-tag-input" v-model="tag" @keyup="onKeyPress(tag, $event)"
+        <input type="text" class="input-tag-input" v-model="tag" @keydown="onKeyPress(tag, $event)"
                title="recipient-input" :placeholder="placeholder" :disabled="disabled">
     </div>
 </template>
@@ -32,7 +32,7 @@
         }),
         methods: {
             onKeyPress(input, event) {
-                if ((event.key === this.delimiter || event.key === 'Enter' || (event.key === ' ' && this.spaceIsDelimiter)) && input.trim()) {
+                if ((event.key === this.delimiter || event.key === 'Enter' || event.key === 'Tab' || (event.key === ' ' && this.spaceIsDelimiter)) && input.trim()) {
                     let re = new RegExp(this.delimiter, "g");
                     input = input.replace(re, '').trim();
                     if (input) {

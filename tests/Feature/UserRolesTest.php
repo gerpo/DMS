@@ -9,7 +9,7 @@ use Tests\TestCase;
 
 class UserRolesTest extends TestCase
 {
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -41,7 +41,7 @@ class UserRolesTest extends TestCase
         $this->post(route('api.user-roles.store', ['id' => $user->id]), ['data' => $roles->toArray()])
             ->assertSuccessful();
 
-        $roles->each(function($role, $key) use ($user) {
+        $roles->each(function ($role, $key) use ($user) {
             $this->assertTrue($user->isA($role->name));
         });
     }
@@ -72,7 +72,7 @@ class UserRolesTest extends TestCase
         $user = create(User::class);
         $roles = create(Role::class, [], 2);
 
-        $roles->each(function($role, $key) use ($user) {
+        $roles->each(function ($role, $key) use ($user) {
             $user->assign($role->name);
 
             $this->assertTrue($user->isA($role->name));
@@ -81,7 +81,7 @@ class UserRolesTest extends TestCase
         $this->delete(route('api.user-roles.destroy', ['id' => $user->id]), ['data' => $roles->toArray()])
             ->assertSuccessful();
 
-        $roles->each(function($role, $key) use ($user) {
+        $roles->each(function ($role, $key) use ($user) {
             $this->assertFalse($user->isA($role->name));
         });
     }
@@ -111,7 +111,7 @@ class UserRolesTest extends TestCase
         $this->post(route('api.user-roles.store', ['id' => $user->id]), ['data' => $roles->toArray()])
             ->assertSuccessful();
 
-        $roles->each(function($role, $key) use ($user) {
+        $roles->each(function ($role, $key) use ($user) {
             $this->assertTrue($user->isA($role->name));
         });
     }
@@ -142,7 +142,7 @@ class UserRolesTest extends TestCase
         $user = create(User::class);
         $roles = create(Role::class, [], 2);
 
-        $roles->each(function($role, $key) use ($user) {
+        $roles->each(function ($role, $key) use ($user) {
             $user->assign($role->name);
 
             $this->assertTrue($user->isA($role->name));
@@ -151,7 +151,7 @@ class UserRolesTest extends TestCase
         $this->delete(route('api.user-roles.destroy', ['id' => $user->id]), ['data' => $roles->toArray()])
             ->assertSuccessful();
 
-        $roles->each(function($role, $key) use ($user) {
+        $roles->each(function ($role, $key) use ($user) {
             $this->assertFalse($user->isA($role->name));
         });
     }

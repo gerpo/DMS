@@ -7,6 +7,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Contracts\Debug\ExceptionHandler;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
+use ReflectionObject;
 
 abstract class TestCase extends BaseTestCase
 {
@@ -15,7 +16,7 @@ abstract class TestCase extends BaseTestCase
 
     private $oldExceptionHandler;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

@@ -50,7 +50,7 @@ class PlugistoTableSeeder extends Seeder
 
         Plugisto::create([
             'name' => 'Plugins',
-            'description' => 'View and managge installed plugins.',
+            'description' => 'View and manage installed plugins.',
             'route' => '/plugins',
             'namespace' => 'gerpo/dms/plugins',
             'manually_added' => true,

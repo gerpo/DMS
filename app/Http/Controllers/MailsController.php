@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\SendGroupMail;
 use App\Mail\RegularMail;
 use App\Role;
 use App\User;
@@ -61,9 +62,12 @@ class MailsController extends Controller
 
         $recipients = User::all();
 
-        foreach ($recipients as $recipient) {
-            Mail::to($recipient)->send(new RegularMail($mailData));
-        }
+        $mailData['recipients'] = $recipients;
+
+        $this->dispatch(new SendGroupMail($mailData));
+        //foreach ($recipients as $recipient) {
+         //   Mail::to($recipients)->send(new RegularMail($mailData));
+        //}
     }
 
     private function sendMailToGroup($mailData, $user): void

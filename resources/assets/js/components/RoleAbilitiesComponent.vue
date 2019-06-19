@@ -62,7 +62,7 @@
                 </button>
             </div>
         </section>
-        <modal :show="showConfirmDeletion" @close="showConfirmDeletion = false">
+        <modal-component :show="showConfirmDeletion" @close="showConfirmDeletion = false">
             <div class="text-center">
                 <p class="h4 my-3">Are you sure you want to delete the role
                     <strong class="text-capitalize">{{ roleToDelete.name }}</strong>?
@@ -70,7 +70,7 @@
                 <button @click="deleteRole(roleToDelete)" class="btn btn-lg btn-link">Yes!</button>
                 <button @click="showConfirmDeletion = false" class="btn btn-lg btn-link text-secondary">Cancel</button>
             </div>
-        </modal>
+        </modal-component>
     </div>
 </template>
 

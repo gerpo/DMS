@@ -1,5 +1,5 @@
 <template>
-    <div class="container">
+    <div class="col-10 offset-1">
         <select class="custom-select mb-2" v-model="sender">
             <option value="" selected>Choose role as sender</option>
             <option v-for="s in senderList" :value="s.name">Send as {{ s.name | capitalize }}</option>
@@ -27,8 +27,7 @@
                            :placeholder="$t('mail.bcc')" :disabled="toAll || group !== ''"/>
             </div>
         </transition>
-        <input v-model="subject" type="text" class="form-control mb-2" :placeholder="$t('mail.subject') | capitalize"
-               required/>
+        <input v-model="subject" type="text" class="form-control mb-2" :placeholder="$t('mail.subject') | capitalize"/>
         <textarea v-model="content" class="form-control mb-2" id="message"
                   :placeholder="$t('mail.message') | capitalize" rows="13"></textarea>
 
@@ -45,7 +44,8 @@
                 <p class="mb-0 mr-3 text-nowrap">{{ file.name }}</p>
                 <span class="small font-italic">{{ file.size | formatSize }}</span>
                 <span v-if="file.error" class="ml-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 510 510" style="enable-background:new 0 0 510 510;" xml:space="preserve">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 510 510"
+                         style="enable-background:new 0 0 510 510;" xml:space="preserve">
                         <g id="replay">
                             <path d="M255,102V0L127.5,127.5L255,255V153c84.15,0,153,68.85,153,153c0,84.15-68.85,153-153,153c-84.15,0-153-68.85-153-153H51
                             c0,112.2,91.8,204,204,204s204-91.8,204-204S367.2,102,255,102z" fill="#474747"></path>
@@ -53,7 +53,8 @@
                     </svg>
                 </span>
                 <span v-else-if="file.success" class="ml-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 510 510" style="enable-background:new 0 0 510 510;" xml:space="preserve">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 510 510"
+                         style="enable-background:new 0 0 510 510;" xml:space="preserve">
                         <g>
                             <g id="check-circle">
                                 <path d="M255,0C114.75,0,0,114.75,0,255s114.75,255,255,255s255-114.75,255-255S395.25,0,255,0z M204,382.5L76.5,255l35.7-35.7
@@ -87,12 +88,12 @@
         <vue-upload ref="upload" :post-action="route('api.mailAttachments')" :custom-action="uploadAttachment"
                     v-model="attachments" :multiple="true"
                     :drop="true" :drop-directory="true" @input-file="inputFile"
-                    class="btn btn-outline-secondary">
+                    class="btn btn-outline-secondary mb-2">
             Attach Files
         </vue-upload>
         <div class="d-flex justify-content-lg-end justify-content-center">
             <button class="btn btn-block btn-primary" type="submit" @click="sendMail">
-                {{ $t('mail.send') }}
+                {{ $t('mail.send') | capitalize }}
             </button>
         </div>
     </div>
@@ -107,6 +108,9 @@
         components: {
             InputTag,
             VueUpload
+        },
+        props: {
+            to: {default: '', type: [String]},
         },
         data: () => ({
             showMoreReceiverOptions: false,
@@ -128,6 +132,8 @@
             this.fetchGroupList();
             //window.addEventListener('beforeunload', (e) => e.returnValue = true);
             window.addEventListener('unload', this.cleanUpAllAttachments);
+
+            if(this.to) this.recipients = [this.to];
         },
         methods: {
             validateRecipient(input) {
@@ -146,6 +152,7 @@
                     attachmentPaths: this.attachmentPaths,
                 })
                     .then(response => {
+                        this.flash('Mail send.', 'success');
                         this.resetForm();
                     })
                     .catch(error => {
@@ -223,7 +230,6 @@
             },
             async removeUploadedAttachments(paths) {
                 if (!(paths instanceof Object)) paths = [paths];
-                console.log(paths);
                 if (paths.length || Object.keys(paths).length) {
                     await axios.delete(route('api.mailAttachments.destroy'), {data: {paths: paths}})
                         .then(response =>
@@ -245,7 +251,7 @@
                 }
                 return size.toString() + ' B'
             }
-        }
+        },
     }
 </script>
 

@@ -10,5 +10,6 @@ return[
     'bcc' => 'bcc',
     'subject' => 'subject',
     'message' => 'message',
-    'send' => 'send'
+    'send' => 'send',
+    'newMail' => 'new message',
 ];

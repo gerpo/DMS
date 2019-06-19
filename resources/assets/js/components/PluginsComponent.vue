@@ -46,12 +46,14 @@
 </template>
 
 <script>
+    import modal from './ModalComponent.vue';
     import toggle from './ToggleComponent.vue';
 
     export default {
         name: "plugins-component",
         components: {
-            toggle
+            modal,
+            toggle,
         },
         props: {
             plugins: {default: () => [], type: [Array]}

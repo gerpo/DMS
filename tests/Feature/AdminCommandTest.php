@@ -10,7 +10,7 @@ use Tests\TestCase;
 class AdminCommandTest extends TestCase
 {
 
-    public function setUp()
+    public function setUp():void
     {
         parent::setUp();
 

@@ -1,11 +1,25 @@
 <template>
-    <transition name="modal">
-        <div class="modal-mask" @click="close" v-show="show">
-            <div class="modal-container" @click.stop>
-                <slot></slot>
+    <portal to="modals">
+        <div @click="close" aria-hidden="true" aria-labelledby="exampleModalCenterTitle" class="modal fade show d-block"
+             id="exampleModalCenter" role="dialog" tabindex="-1" v-if="show">
+            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title text-capitalize" id="exampleModalCenterTitle">
+                            <slot name="title"></slot>
+                        </h5>
+                        <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body" @click.stop>
+                        <slot></slot>
+                    </div>
+                </div>
             </div>
         </div>
-    </transition>
+        <div class="modal-backdrop show fade" v-if="show" @click="close"></div>
+    </portal>
 </template>
 
 <script>
@@ -19,57 +33,24 @@
         },
         mounted() {
             document.addEventListener("keydown", (e) => {
-                if (this.show && e.keyCode === 27) {
+                if (this.show && (e.key === 'Esc' || e.key === 'Escape')) {
                     this.close();
                 }
             });
+        },
+        watch: {
+            show(value) {
+                const bodyEl = document.getElementsByTagName('body')[0];
+                if (value) {
+                    bodyEl.classList.add('modal-open');
+                } else {
+                    bodyEl.classList.remove('modal-open');
+                }
+            }
         }
     }
 </script>
 
 <style scoped>
-    .modal-mask {
-        position: fixed;
-        z-index: 1040;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, .5);
-        transition: opacity .3s ease;
-    }
 
-    .modal-container {
-        max-width: 35%;
-        margin: 40px auto 0;
-        padding: 20px 30px;
-        background-color: #fff;
-        border-radius: 2px;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, .33);
-        transition: all .3s ease;
-        font-family: Helvetica, Arial, sans-serif;
-    }
-
-    .modal-header h3 {
-        margin-top: 0;
-        color: #42b983;
-    }
-
-    .modal-body {
-        margin: 20px 0;
-    }
-
-    .modal-enter {
-        opacity: 0;
-    }
-
-    .modal-leave-active {
-        opacity: 0;
-    }
-
-    .modal-enter .modal-container,
-    .modal-leave-active .modal-container {
-        -webkit-transform: scale(1.1);
-        transform: scale(1.1);
-    }
 </style>

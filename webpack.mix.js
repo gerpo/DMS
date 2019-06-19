@@ -1,4 +1,5 @@
 let mix = require('laravel-mix');
+require('laravel-mix-purgecss');
 
 /*
  |--------------------------------------------------------------------------
@@ -16,18 +17,25 @@ mix.js('resources/assets/js/app.js', 'public/js')
     .options({
         processCssUrls: false
     })
-    .extract();
+    .sourceMaps(false)
+    .purgeCss();
 
 mix.browserSync({
-    proxy: 'https://dms.test',
+    proxy: 'https://tower.test',
     https: true
 });
 
-const Visualizer = require('webpack-visualizer-plugin');
 const WebPack = require('webpack');
 mix.webpackConfig({
     plugins: [
         new WebPack.IgnorePlugin(/^\.\/locale$/, /(de|en)/),
-        new Visualizer(),
-    ]
+    ],
+    resolve: {
+        alias: {
+            '@': __dirname + '/resources/assets/js'
+        }
+    },
+    output: {
+        chunkFilename: 'js/[name].js',
+    },
 });

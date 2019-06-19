@@ -92,12 +92,13 @@
         <flash-message class="container px-0"></flash-message>
         @yield('content')
     </main>
+    <portal-target name="modals"></portal-target>
 </div>
 
 <!-- Scripts -->
 @yield('scripts')
-<script src="{{ asset('js/manifest.js') }}"></script>
-<script src="{{ asset('js/vendor.js') }}"></script>
+{{--<script src="{{ asset('js/manifest.js') }}"></script>
+<script src="{{ asset('js/vendor.js') }}"></script>--}}
 <script src="{{ asset('js/app.js') }}"></script>
 
 </body>

@@ -4,7 +4,7 @@
             <span>{{ $tc('general.mail', 2) }}</span>
         </div>
         <div class="card-body row">
-            <new-mail class="col-10 offset-1"/>
+            <new-mail/>
         </div>
     </div>
 </template>

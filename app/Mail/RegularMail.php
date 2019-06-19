@@ -30,15 +30,17 @@ class RegularMail extends Mailable implements ShouldQueue
      */
     public function build(): self
     {
-        $this->from($this->mailData['sender'].'@'.env('MAIL_DOMAIN'))
+        $this->from($this->mailData['sender'] . '@' . env('MAIL_DOMAIN'))
             ->subject($this->mailData['subject'])
             ->markdown('emails.regular')
             ->with('content', $this->mailData['content']);
 
         foreach ($this->mailData['attachmentPaths'] as $attachment) {
-            if (Storage::has($attachment)) {
-                $this->attachFromStorage($attachment);
+            if (!Storage::has($attachment)) {
+                continue;
             }
+
+            $this->attachFromStorage($attachment);
         }
 
         return $this;

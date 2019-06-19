@@ -1,6 +1,6 @@
 <template>
     <label class="switch">
-        <input type="checkbox" :checked="toggled" @change="toggle">
+        <input type="checkbox" :checked="value" @change="toggle">
         <span class="slider"></span>
     </label>
 </template>
@@ -12,7 +12,7 @@
             value: {default: false, type: [Boolean]},
         },
         data: () => ({
-            toggled: !!this.value
+            toggled: false,
         }),
         mounted() {
             this.toggled = !!this.value;

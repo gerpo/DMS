@@ -1,0 +1,21 @@
+<transition-group :name="transitionName" class="alert-container w-100" tag="div">
+    <div v-for="(message, index) in storage"
+         :key="`alert-${index}`"
+         :class="'alert-' + cssClasses(index) + ' alert alert-dismissible'"
+         class="container"
+         role="alert"
+         aria-live="polite"
+         aria-atomic="true"
+         @mouseover="onMouseOver(index)"
+         @mouseleave="onMouseOut(index)">
+        <div class="flash__message-content" v-html="message.content"></div>
+        <button v-if="!message.options.important"
+                type="button"
+                class="flash__close-button close"
+                data-dismiss="alert"
+                aria-label="alertClose"
+                @click.stop.prevent="destroyFlash(index)">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+</transition-group>

@@ -2,7 +2,7 @@
     <div>
         <div class="form-group row">
 
-            <div class="col-10 offset-1">
+            <div class="col-md-10 offset-md-1">
                 <label for="firstname">First Name</label>
                 <input id="firstname" type="text" :placeholder="$t('user.first_name')"
                        :class="{ 'form-control': true, 'is-invalid': errors.firstname }"
@@ -18,7 +18,7 @@
 
         <div class="form-group row">
 
-            <div class="col-10 offset-1">
+            <div class="col-md-10 offset-md-1">
                 <label for="lastname">Last Name</label>
                 <input id="lastname" type="text" :placeholder="$t('user.last_name')"
                        :class="{ 'form-control': true, 'is-invalid': errors.lastname }"
@@ -32,7 +32,7 @@
 
         <div class="form-group row">
 
-            <div class="col-md-2 offset-1">
+            <div class="col-md-2 offset-md-1">
                 <label for="floor">Floor</label>
                 <input id="floor" type="number" min="0" max="15" size="2"
                        :placeholder="$t('user.floor')"
@@ -73,7 +73,7 @@
 
         <div class="form-group row">
 
-            <div class="col-10 offset-1">
+            <div class="col-md-10 offset-md-1">
                 <label for="username">Username</label>
                 <input id="username" type="text" :placeholder="$t('user.username')"
                        :class="{ 'form-control': true, 'is-invalid': errors.username }"
@@ -88,7 +88,7 @@
 
         <div class="form-group row">
 
-            <div class="col-10 offset-1">
+            <div class="col-md-10 offset-md-1">
                 <label for="email">Email</label>
                 <input id="email" type="email" :placeholder="$t('user.email')"
                        :class="{ 'form-control': true, 'is-invalid': errors.email }"
@@ -101,7 +101,7 @@
         </div>
 
         <div class="form-group row mb-0">
-            <div class="col-6 offset-3">
+            <div class="col-md-6 offset-md-3">
                 <button @click="saveUser" class="btn btn-block btn-success">
                     Save
                 </button>

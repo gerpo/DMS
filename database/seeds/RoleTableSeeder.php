@@ -18,6 +18,11 @@ class RoleTableSeeder extends Seeder
         ]);
 
         factory(Role::class)->create([
+            'name' => 'resident',
+            'title' => 'A resident of this house',
+        ]);
+
+        factory(Role::class)->create([
             'name' => 'admin',
             'title' => 'Administrator',
         ]);

@@ -23,7 +23,7 @@ $factory->define(App\User::class, function (Faker $faker) {
         'room' => $faker->numberBetween(0,10),
         'house' => array_random(config('dms.dorms')),
         'password' => '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', // secret
-        'confirmed' => false,
+        'confirmed' => true,
         'remember_token' => str_random(10),
     ];
 });

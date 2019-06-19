@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Storage;
 
 class MailAttachmentsController extends Controller
@@ -30,7 +31,7 @@ class MailAttachmentsController extends Controller
     {
         $fullFileName = $originalName;
         $count = 1;
-        while (Storage::exists(str_finish($path , '/') . $fullFileName) || $count <= 255) {
+        while (Storage::exists(Str::finish($path , '/') . $fullFileName) && $count <= 255) {
             $fileName = pathinfo($originalName, PATHINFO_FILENAME) . " ({$count})";
             $extension = pathinfo($originalName, PATHINFO_EXTENSION);
 

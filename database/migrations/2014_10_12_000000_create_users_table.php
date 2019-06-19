@@ -21,7 +21,7 @@ class CreateUsersTable extends Migration
             $table->string('email')->unique();
             $table->unsignedTinyInteger('floor');
             $table->unsignedTinyInteger('room');
-            $table->unsignedInteger('full_room');
+            $table->string('full_room');
             $table->string('house');
             $table->string('password');
             $table->boolean('is_subtenant')->default(0);

@@ -8,13 +8,16 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Silber\Bouncer\Database\HasRolesAndAbilities;
+use Gerpo\DmsCredits\Traits\HasCreditAccount;
+use Gerpo\DmsCredits\Traits\UsesCodes;
 
 class User extends Authenticatable
 {
     use Notifiable;
     use HasRolesAndAbilities;
     use SoftDeletes;
-
+    use HasCreditAccount;
+    use UsesCodes;
 
     protected $guarded = [];
 
@@ -43,12 +46,16 @@ class User extends Authenticatable
         parent::boot();
 
         self::saving(function ($user) {
-            $user->full_room = (int)str_pad($user->floor, 2, 0, STR_PAD_LEFT) . str_pad($user->room, 2, 0,
+            $user->full_room = str_pad($user->floor, 2, 0, STR_PAD_LEFT) . str_pad($user->room, 2, 0,
                     STR_PAD_LEFT);
         });
 
         self::created(function ($user) {
             Bouncer::assign('member')->to($user);
+
+            if ($user->house === config('dms.owner_dorm')){
+                Bouncer::assign('resident')->to($user);
+            }
         });
     }
 

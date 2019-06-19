@@ -9,13 +9,13 @@ require('./bootstrap');
 import Vue from 'vue';
 // Vue Extensions
 import VueMoment from 'vue-moment';
+import PortalVue from 'portal-vue';
 import VeeValidate from 'vee-validate';
 import VueInternationalization from 'vue-i18n';
 import Locale from './vue-i18n-locales.generated';
 import route from "../../../vendor/tightenco/ziggy/src/js/route";
 // Vue components
 import VueFlashMessage from 'vue-flash-message';
-//const lang = navigator.language;
 import moment from 'moment';
 import VueFilter from './plugins/VueFilter';
 
@@ -30,16 +30,19 @@ moment.locale(lang);
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-Vue.component('user-component', require('./components/UserComponent.vue').default);
-Vue.component('profile-component', require('./components/ProfileComponent.vue').default);
-Vue.component('roles-component', require('./components/RolesComponent.vue').default);
-Vue.component('plugins-component', require('./components/PluginsComponent.vue').default);
-Vue.component('mails-component', require('./components/MailsComponent.vue').default);
-
-Vue.component('modal', require('./components/ModalComponent.vue').default);
+const files = require.context('./', true, /\.vue$/i, 'lazy');
+files.keys().forEach(file =>
+    Vue.component(file.split('/').pop().split('.')[0],
+        () => import(
+            /*webpackChunkName: "[request]" */
+            `${file}`
+            )
+    )
+);
 
 // Alert components for vue
 Vue.use(VueFlashMessage, {
+    template: '@/templates/AlertTemplate.html',
     messageOptions: {
         timeout: 4000,
         pauseOnInteract: true,
@@ -84,18 +87,23 @@ Vue.mixin({
     }
 });
 
-
 Vue.mixin({
     methods: {
-        $tv: function (key) {
+        $tv: function (key, ...values) {
             const newKey = `vendor.${key.replace('::', '.')}`;
-            return this.$t(newKey)
+            return this.$t(newKey, ...values)
         }
     }
 });
 
 Vue.use(VueFilter);
+Vue.use(PortalVue);
 
+import ElementUi from 'element-ui';
+import 'element-ui/lib/theme-chalk/index.css'
+Vue.use(ElementUi, {
+    locale: lang,
+});
 
 const app = new Vue({
     el: '#app',
