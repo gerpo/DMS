@@ -2,6 +2,7 @@
 /public/storage
 /public/css
 /public/js
+/public/vendor
 /vendor/
 /node_modules/
 /packages/
