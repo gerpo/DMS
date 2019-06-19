@@ -2,8 +2,8 @@
 
 namespace Tests\Feature;
 
-use Gerpo\Plugisto\Models\Plugisto;
 use Tests\TestCase;
+use Gerpo\Plugisto\Models\Plugisto;
 
 class PluginsTest extends TestCase
 {
@@ -55,7 +55,7 @@ class PluginsTest extends TestCase
     /** @test */
     public function an_authorized_user_can_delete_a_plugin()
     {
-        $this->signIn( null , 'manage-plugins');
+        $this->signIn(null, 'manage-plugins');
 
         $plugin = Plugisto::create($this->validParams());
 

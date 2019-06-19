@@ -1,7 +1,7 @@
 <?php
 
-use Gerpo\Plugisto\Models\Plugisto;
 use Illuminate\Database\Seeder;
+use Gerpo\Plugisto\Models\Plugisto;
 
 class PlugistoTableSeeder extends Seeder
 {
@@ -18,7 +18,7 @@ class PlugistoTableSeeder extends Seeder
             'route' => '/users',
             'namespace' => 'gerpo/dms/users',
             'manually_added' => true,
-            'needed_permission' => 'manage_users'
+            'needed_permission' => 'manage_users',
         ]);
 
         Plugisto::create([
@@ -27,7 +27,7 @@ class PlugistoTableSeeder extends Seeder
             'route' => '/roles',
             'namespace' => 'gerpo/dms/roles',
             'manually_added' => true,
-            'needed_permission' => 'manage_roles'
+            'needed_permission' => 'manage_roles',
         ]);
 
         /*Plugisto::create([
@@ -45,7 +45,7 @@ class PlugistoTableSeeder extends Seeder
             'route' => '/mails',
             'namespace' => 'gerpo/dms/mails',
             'manually_added' => true,
-            'needed_permission' => 'send_mails'
+            'needed_permission' => 'send_mails',
         ]);
 
         Plugisto::create([
@@ -54,7 +54,7 @@ class PlugistoTableSeeder extends Seeder
             'route' => '/plugins',
             'namespace' => 'gerpo/dms/plugins',
             'manually_added' => true,
-            'needed_permission' => 'manage_plugins'
+            'needed_permission' => 'manage_plugins',
         ]);
     }
 }

@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
-use App\Role;
 use Bouncer;
+use App\Role;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class RolesController extends Controller
 {

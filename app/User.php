@@ -4,12 +4,12 @@ namespace App;
 
 use Bouncer;
 use Gerpo\Plugisto\Models\Plugisto;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use Silber\Bouncer\Database\HasRolesAndAbilities;
-use Gerpo\DmsCredits\Traits\HasCreditAccount;
 use Gerpo\DmsCredits\Traits\UsesCodes;
+use Illuminate\Notifications\Notifiable;
+use Gerpo\DmsCredits\Traits\HasCreditAccount;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Silber\Bouncer\Database\HasRolesAndAbilities;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {
@@ -24,7 +24,7 @@ class User extends Authenticatable
     protected $dates = [
         'created_at',
         'updated_at',
-        'deleted_at'
+        'deleted_at',
     ];
 
     protected $hidden = [
@@ -34,11 +34,11 @@ class User extends Authenticatable
 
     protected $casts = [
         'confirmed' => 'boolean',
-        'is_subtenant' => 'boolean'
+        'is_subtenant' => 'boolean',
     ];
 
     protected $appends = [
-        'full_name'
+        'full_name',
     ];
 
     protected static function boot()
@@ -46,19 +46,18 @@ class User extends Authenticatable
         parent::boot();
 
         self::saving(function ($user) {
-            $user->full_room = str_pad($user->floor, 2, 0, STR_PAD_LEFT) . str_pad($user->room, 2, 0,
+            $user->full_room = str_pad($user->floor, 2, 0, STR_PAD_LEFT).str_pad($user->room, 2, 0,
                     STR_PAD_LEFT);
         });
 
         self::created(function ($user) {
             Bouncer::assign('member')->to($user);
 
-            if ($user->house === config('dms.owner_dorm')){
+            if ($user->house === config('dms.owner_dorm')) {
                 Bouncer::assign('resident')->to($user);
             }
         });
     }
-
 
     public function confirm(): void
     {
@@ -86,9 +85,7 @@ class User extends Authenticatable
     public function packages()
     {
         if ($this->isA('admin')) {
-
             return Plugisto::all();
-
         }
 
         return Plugisto::allowed($this->permissionArray())->get();

@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
 use Gerpo\Plugisto\Models\Plugisto;
+use App\Http\Controllers\Controller;
 use Gerpo\Plugisto\Scopes\ActiveScope;
 
 class PluginsController extends Controller
@@ -12,7 +12,7 @@ class PluginsController extends Controller
     {
         Plugisto::withoutGlobalScope(ActiveScope::class)->findOrFail($id)
             ->update(request()->validate([
-                'is_active' => 'required|boolean'
+                'is_active' => 'required|boolean',
             ]));
     }
 

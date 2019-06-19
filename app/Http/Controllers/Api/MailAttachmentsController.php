@@ -2,17 +2,17 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 use Storage;
+use Illuminate\Support\Str;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class MailAttachmentsController extends Controller
 {
     public function store(Request $request)
     {
         $data = $request->validate([
-            'file' => 'required|file'
+            'file' => 'required|file',
         ]);
 
         $user = $request->user();
@@ -24,18 +24,18 @@ class MailAttachmentsController extends Controller
 
     private function generatePath($user): string
     {
-        return 'attachments/' . md5($user->id);
+        return 'attachments/'.md5($user->id);
     }
 
     private function generateFileName($path, $originalName): string
     {
         $fullFileName = $originalName;
         $count = 1;
-        while (Storage::exists(Str::finish($path , '/') . $fullFileName) && $count <= 255) {
-            $fileName = pathinfo($originalName, PATHINFO_FILENAME) . " ({$count})";
+        while (Storage::exists(Str::finish($path, '/').$fullFileName) && $count <= 255) {
+            $fileName = pathinfo($originalName, PATHINFO_FILENAME)." ({$count})";
             $extension = pathinfo($originalName, PATHINFO_EXTENSION);
 
-            $fullFileName = $fileName .'.'. $extension;
+            $fullFileName = $fileName.'.'.$extension;
             $count++;
         }
 
@@ -46,7 +46,7 @@ class MailAttachmentsController extends Controller
     {
         $data = $request->validate([
             'paths' => 'required|array',
-            'paths.*' => 'string'
+            'paths.*' => 'string',
         ]);
 
         foreach ($data['paths'] as $path) {

@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
 use App\Role;
 use App\User;
 use Illuminate\Support\Collection;
+use App\Http\Controllers\Controller;
 
 class MailGroupController extends Controller
 {
@@ -37,7 +37,7 @@ class MailGroupController extends Controller
     {
         return Role::all('name')
             ->mapWithKeys(function ($role) {
-                return ['role_' . $role->name => $role->name];
+                return ['role_'.$role->name => $role->name];
             })->toBase();
     }
 
@@ -46,7 +46,7 @@ class MailGroupController extends Controller
         return User::select('floor')
             ->distinct()->orderBy('floor')->get()
             ->mapWithKeys(function ($user) {
-                return ['floor_' . $user->floor => 'Floor '.$user->floor];
+                return ['floor_'.$user->floor => 'Floor '.$user->floor];
             });
     }
 }

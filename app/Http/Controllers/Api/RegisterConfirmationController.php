@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
 use App\User;
+use App\Http\Controllers\Controller;
 
 class RegisterConfirmationController extends Controller
 {

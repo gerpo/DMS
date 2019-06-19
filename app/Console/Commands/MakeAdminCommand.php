@@ -3,7 +3,6 @@
 namespace App\Console\Commands;
 
 use App\User;
-use Bouncer;
 use Illuminate\Console\Command;
 
 class MakeAdminCommand extends Command

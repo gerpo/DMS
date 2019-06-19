@@ -2,14 +2,13 @@
 
 namespace Tests\Feature\Auth;
 
-use App\Mail\ConfirmEmailMail;
-use App\Mail\PleaseConfirmYourEmail;
 use App\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
+use App\Mail\ConfirmEmailMail;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
-use Tests\TestCase;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class RegisterUserTest extends TestCase
 {
@@ -294,7 +293,7 @@ class RegisterUserTest extends TestCase
         $this->from(route('register'));
 
         $response = $this->post(route('register'), $this->validParams([
-            'email' => substr(str_repeat('a', 256) . '@example.com', -256),
+            'email' => substr(str_repeat('a', 256).'@example.com', -256),
         ]));
 
         $response->assertRedirect(route('register'));
@@ -357,7 +356,7 @@ class RegisterUserTest extends TestCase
 
         $response = $this->post(route('register'), $this->validParams([
             'password' => 'foo',
-            'password_confirmation' => 'bar'
+            'password_confirmation' => 'bar',
         ]));
 
         $response->assertRedirect(route('register'));
@@ -478,7 +477,7 @@ class RegisterUserTest extends TestCase
         $this->from(route('register'));
 
         $this->post(route('register'), $this->validParams([
-            'house' => 'invalid house name'
+            'house' => 'invalid house name',
         ]))
             ->assertRedirect(route('register'))
             ->assertSessionHasErrors('house');
@@ -491,7 +490,7 @@ class RegisterUserTest extends TestCase
         $validDorm = array_random($validDorm);
 
         $this->post(route('register'), $this->validParams([
-            'house' => $validDorm
+            'house' => $validDorm,
         ]))
             ->assertRedirect(route('home'));
 

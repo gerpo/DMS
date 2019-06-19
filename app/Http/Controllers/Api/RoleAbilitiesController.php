@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
 use App\Role;
+use App\Http\Controllers\Controller;
 
 class RoleAbilitiesController extends Controller
 {

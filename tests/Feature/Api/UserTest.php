@@ -64,8 +64,8 @@ class UserTest extends TestCase
             'residentFilter' => json_encode([
                 'current_tenant',
                 'main_tenant',
-                'subtenant'
-            ])
+                'subtenant',
+            ]),
         ]))
             ->assertSuccessful()
             ->assertJson(['data' => $users, 'total' => 3]);
@@ -85,8 +85,8 @@ class UserTest extends TestCase
             'residentFilter' => json_encode([
                 'current_tenant',
                 'main_tenant',
-                'subtenant'
-            ])
+                'subtenant',
+            ]),
         ]))
             ->assertSuccessful()
             ->assertJson(['data' => $users]);
@@ -106,8 +106,8 @@ class UserTest extends TestCase
             'residentFilter' => json_encode([
                 'current_tenant',
                 'main_tenant',
-                'subtenant'
-            ])
+                'subtenant',
+            ]),
         ]))
             ->assertSuccessful()
             ->assertJson(['data' => $users]);
@@ -128,8 +128,8 @@ class UserTest extends TestCase
             'residentFilter' => json_encode([
                 'current_tenant',
                 'main_tenant',
-                'subtenant'
-            ])
+                'subtenant',
+            ]),
         ]))
             ->assertSuccessful()
             ->assertJson(['data' => $users, 'total' => 1]);
@@ -150,8 +150,8 @@ class UserTest extends TestCase
             'residentFilter' => json_encode([
                 'current_tenant',
                 'main_tenant',
-                'subtenant'
-            ])
+                'subtenant',
+            ]),
         ]))
             ->assertSuccessful()
             ->assertJson(['data' => $users, 'total' => 1]);
@@ -172,8 +172,8 @@ class UserTest extends TestCase
             'residentFilter' => json_encode([
                 'current_tenant',
                 'main_tenant',
-                'subtenant'
-            ])
+                'subtenant',
+            ]),
         ]))
             ->assertSuccessful()
             ->assertJson(['data' => $users, 'total' => 1]);
@@ -194,8 +194,8 @@ class UserTest extends TestCase
             'residentFilter' => json_encode([
                 'current_tenant',
                 'main_tenant',
-                'subtenant'
-            ])
+                'subtenant',
+            ]),
         ]))
             ->assertSuccessful()
             ->assertJson(['data' => $users, 'total' => 1]);
@@ -303,7 +303,7 @@ class UserTest extends TestCase
             ->assertSuccessful()
             ->assertJson([
                 'data' => [],
-                'total' => 0
+                'total' => 0,
             ]);
     }
 
@@ -319,7 +319,7 @@ class UserTest extends TestCase
             ->assertSuccessful()
             ->assertJson([
                 'data' => [],
-                'total' => 0
+                'total' => 0,
             ]);
     }
 
@@ -337,7 +337,7 @@ class UserTest extends TestCase
             ->assertSuccessful()
             ->assertJson([
                 'data' => $users['data'],
-                'total' => $users['total']
+                'total' => $users['total'],
             ]);
     }
 }

@@ -16,5 +16,5 @@ return [
     'plugin' => 'plugin | plugins',
 
     'or' => 'or',
-    'and' => 'and'
+    'and' => 'and',
 ];

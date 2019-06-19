@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Jobs\SendGroupMail;
-use App\Mail\RegularMail;
+use Mail;
 use App\Role;
 use App\User;
+use App\Mail\RegularMail;
+use App\Jobs\SendGroupMail;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
-use Mail;
 
 class MailsController extends Controller
 {
@@ -28,8 +28,8 @@ class MailsController extends Controller
                 'array',
                 'nullable',
                 Rule::requiredIf(function () use ($request) {
-                    return !$request->get('toAll') && empty($request->get('group'));
-                })
+                    return ! $request->get('toAll') && empty($request->get('group'));
+                }),
             ],
             'recipients.*' => 'email',
             'ccRecipients' => 'array',
@@ -39,7 +39,7 @@ class MailsController extends Controller
             'subject' => 'string|nullable',
             'content' => 'string|nullable',
             'attachmentPaths' => 'array|nullable',
-            'attachmentPaths.*' => 'string'
+            'attachmentPaths.*' => 'string',
         ]);
 
         if ($request->get('toAll')) {

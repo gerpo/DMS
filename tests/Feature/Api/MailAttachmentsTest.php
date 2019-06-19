@@ -3,9 +3,9 @@
 namespace Tests\Feature\Api;
 
 use App\User;
+use Tests\TestCase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
-use Tests\TestCase;
 
 class MailAttachmentsTest extends TestCase
 {
@@ -63,7 +63,6 @@ class MailAttachmentsTest extends TestCase
 
         Storage::assertExists($response->getContent());
     }
-
 
     protected function setUp(): void
     {

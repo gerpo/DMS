@@ -2,11 +2,9 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
 use App\Role;
 use App\User;
-use Illuminate\Support\Collection;
-
+use App\Http\Controllers\Controller;
 
 class MailAddressesController extends Controller
 {
@@ -41,7 +39,7 @@ class MailAddressesController extends Controller
                 ->pluck('users', 'name')
                 ->map(function ($users) {
                     return $users->pluck('email');
-                })->sortKeys()
+                })->sortKeys(),
         ]);
     }
 
@@ -57,14 +55,14 @@ class MailAddressesController extends Controller
             'floors' => $addresses
                 ->mapToGroups(function ($user) {
                     return [$user->floor => $user['email']];
-                })->sortKeys()
+                })->sortKeys(),
         ]);
     }
 
     public function query()
     {
         $this->validate(request(), [
-            'query' => 'required'
+            'query' => 'required',
         ]);
 
         $query = request('query');
