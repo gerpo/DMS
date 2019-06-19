@@ -13,6 +13,7 @@
     "/js/components-ProfileComponent.js": "/js/components-ProfileComponent.js",
     "/js/components-RoleAbilitiesComponent.js": "/js/components-RoleAbilitiesComponent.js",
     "/js/components-RolesComponent.js": "/js/components-RolesComponent.js",
+    "/js/components-TableComponent.js": "/js/components-TableComponent.js",
     "/js/components-TagComponent.js": "/js/components-TagComponent.js",
     "/js/components-ToggleComponent.js": "/js/components-ToggleComponent.js",
     "/js/components-UserComponent.js": "/js/components-UserComponent.js",
@@ -29,12 +30,13 @@
     "/js/vendors~components-AutoCompleteComponent~components-EditUserComponent~components-MailsComponent~comp~af714dae.js": "/js/vendors~components-AutoCompleteComponent~components-EditUserComponent~components-MailsComponent~comp~af714dae.js",
     "/js/vendors~components-AutoCompleteComponent~components-RolesComponent~components-UserRolesComponent.js": "/js/vendors~components-AutoCompleteComponent~components-RolesComponent~components-UserRolesComponent.js",
     "/js/vendors~components-MailsComponent~components-NewMailComponent.js": "/js/vendors~components-MailsComponent~components-NewMailComponent.js",
+    "/js/vendors~components-UserComponent.js": "/js/vendors~components-UserComponent.js",
     "/js/vendors~components-UserComponent~gerpo-DmsCredits-AccountComponent~gerpo-DmsCredits-AccountTransacti~76ebf6ec.js": "/js/vendors~components-UserComponent~gerpo-DmsCredits-AccountComponent~gerpo-DmsCredits-AccountTransacti~76ebf6ec.js",
     "/js/ziggy.js": "/js/ziggy.js",
-    "/js/vendors~components-AutoCompleteComponent~components-InputTagComponent~components-MailsComponent~comp~471865d5.js": "/js/vendors~components-AutoCompleteComponent~components-InputTagComponent~components-MailsComponent~comp~471865d5.js",
     "/js/vendors~components-AutoCompleteComponent~components-EditUserComponent~components-MailsComponent~comp~00a86029.js": "/js/vendors~components-AutoCompleteComponent~components-EditUserComponent~components-MailsComponent~comp~00a86029.js",
     "/js/vendors~gerpo-DmsCredits-AccountComponent~gerpo-DmsCredits-AccountTransactionsComponent~gerpo-DmsCre~a11541a5.js": "/js/vendors~gerpo-DmsCredits-AccountComponent~gerpo-DmsCredits-AccountTransactionsComponent~gerpo-DmsCre~a11541a5.js",
-    "/js/components-UserComponent-vue___jb_tmp___.js": "/js/components-UserComponent-vue___jb_tmp___.js",
-    "/js/vendors~components-UserComponent.js": "/js/vendors~components-UserComponent.js",
-    "/js/components-TableComponent.js": "/js/components-TableComponent.js"
+    "/js/components-TableColumnComponent.js": "/js/components-TableColumnComponent.js",
+    "/js/vendors~components-AutoCompleteComponent~components-EditUserComponent~components-MailsComponent~comp~32164aad.js": "/js/vendors~components-AutoCompleteComponent~components-EditUserComponent~components-MailsComponent~comp~32164aad.js",
+    "/js/components-TableComponent~components-UserComponent.js": "/js/components-TableComponent~components-UserComponent.js",
+    "/js/vendors~components-AutoCompleteComponent~components-EditUserComponent~components-MailsComponent~comp~7f3ea6f9.js": "/js/vendors~components-AutoCompleteComponent~components-EditUserComponent~components-MailsComponent~comp~7f3ea6f9.js"
 }
