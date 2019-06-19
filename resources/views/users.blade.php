@@ -8,6 +8,6 @@
                 <li class="breadcrumb-item active" aria-current="page">@langTitleChoice('user.user')</li>
             </ol>
         </nav>
-        <user-component :users="{{ $users }}" :house-names="{{ json_encode(config('dms.dorms')) }}"></user-component>
+        <user-component :users-data="{{ $users }}" :house-names="{{ json_encode(config('dms.dorms')) }}"></user-component>
     </div>
 @endsection

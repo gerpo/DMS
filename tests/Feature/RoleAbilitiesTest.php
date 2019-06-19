@@ -206,7 +206,7 @@ class RoleAbilitiesTest extends TestCase
         $this->assertCount(1, $role->getAbilities());
 
         $this->assertTrue($role->can($ability->name));
-    }u
+    }
 
     /** @test */
     public function data_key_is_required_to_add_ability(): void

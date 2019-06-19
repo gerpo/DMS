@@ -23,7 +23,8 @@
     "laravel/telescope": "^2.0",
     "laravel/tinker": "^1.0",
     "silber/bouncer": "v1.0.0-rc.5",
-    "tightenco/ziggy": "^0.6.3"
+    "tightenco/ziggy": "^0.6.3",
+    "ext-json": "*"
   },
   "require-dev": {
     "barryvdh/laravel-ide-helper": "^2.4",

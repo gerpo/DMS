@@ -11,7 +11,7 @@ class ConfirmUserCommandTest extends TestCase
     /** @test */
     public function a_user_can_be_confirmed_by_username()
     {
-        $user = create(User::class);
+        $user = create(User::class, ['confirmed' => false]);
 
         $this->assertFalse($user->confirmed);
 
@@ -23,7 +23,7 @@ class ConfirmUserCommandTest extends TestCase
     /** @test */
     public function a_user_can_be_confirmed_by_email()
     {
-        $user = create(User::class);
+        $user = create(User::class, ['confirmed' => false]);
 
         $this->assertFalse($user->confirmed);
 

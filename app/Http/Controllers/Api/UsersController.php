@@ -18,7 +18,7 @@ class UsersController extends Controller
 
         $query = $this->buildResidentFilterQuery($residentFilter);
 
-        return $query->whereNotIn('house', $dorms)
+        $users = $query->whereNotIn('house', $dorms)
             ->where(function ($subQuery) use ($filter, $orderColumn, $order) {
                 $subQuery->where('email', 'LIKE', $filter)
                     ->orWhere('firstname', 'LIKE', $filter)
@@ -26,7 +26,9 @@ class UsersController extends Controller
                     ->orWhere('username', 'LIKE', $filter);
             })
             ->orderBy($orderColumn, $order)
-            ->paginate(50);
+            ->get();
+
+        return json_encode(['data' => $users, 'total' => $users->count()]);
     }
 
     private function buildResidentFilterQuery($residentFilter)

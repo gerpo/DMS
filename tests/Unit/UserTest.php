@@ -40,7 +40,7 @@ class UserTest extends TestCase
     /** @test */
     public function a_user_can_be_confirmed(): void
     {
-        $user = create(User::class);
+        $user = create(User::class, ['confirmed' => false]);
 
         $this->assertFalse($user->confirmed);
 
