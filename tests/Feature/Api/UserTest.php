@@ -3,12 +3,13 @@
 namespace Tests\Feature\Api;
 
 use App\User;
+use Hash;
 use Tests\TestCase;
 
 class UserTest extends TestCase
 {
     /** @test */
-    public function an_admin_can_see_all_users()
+    public function an_admin_can_see_all_users(): void
     {
         $this->signInAdmin();
 

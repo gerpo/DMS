@@ -70,6 +70,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/api/users', 'Api\UsersController@index')->name('api.users')->middleware('check_ability:manage_users');
     Route::post('/api/users/{user}',
         'Api\UsersController@update')->name('api.users.update')->middleware('check_ability:manage_users');
+    Route::post('/api/users/{user}/password',
+        'Api\UsersPasswordController@update')->name('api.users.password');
 
     Route::get('/me', function () {
         $user = User::where('id', auth()->user()['id'])->with(['roles', 'abilities'])->first();
