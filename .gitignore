@@ -1,8 +1,7 @@
 /public/hot
 /public/storage
-/public/css
-/public/js
-/public/vendor
+/public/*/
+/public/mix-manifest.json
 /vendor/
 /node_modules/
 /packages/

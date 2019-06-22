@@ -13,6 +13,7 @@ require('laravel-mix-purgecss');
  */
 
 mix.js('resources/assets/js/app.js', 'public/js')
+    .copyDirectory('resources/images', 'public/images')
     .sass('resources/assets/sass/app.scss', 'public/css')
     .options({
         processCssUrls: false
