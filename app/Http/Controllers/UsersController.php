@@ -12,4 +12,10 @@ class UsersController extends Controller
 
         return view('users', compact('users'));
     }
+
+    public function show(User $user)
+    {
+        $user->load(['roles', 'abilities']);
+        return view('profile')->with(['user' => $user]);
+    }
 }

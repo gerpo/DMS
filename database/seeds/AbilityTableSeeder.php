@@ -9,7 +9,7 @@ class AbilityTableSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
         Bouncer::ability()->create([
             'name' => 'manage_users',
@@ -34,6 +34,11 @@ class AbilityTableSeeder extends Seeder
         Bouncer::ability()->create([
             'name' => 'send_floorMails',
             'title' => 'Send mails to all residents of the own floor.',
+        ]);
+
+        Bouncer::ability()->create([
+            'name' => 'manage_plugins',
+            'title' => 'Manage installed plugins.',
         ]);
     }
 }

@@ -18,7 +18,8 @@
                                            placeholder="@langTitle('general.firstname')" name="firstname"
                                            class="form-control{{ $errors->has('firstname') ? ' is-invalid' : '' }}"
                                            :class="{'is-invalid': validationErrors.has('firstname')}"
-                                           data-toggle="tooltip" :data-original-title="validationErrors.first('firstname')"
+                                           data-toggle="tooltip"
+                                           :data-original-title="validationErrors.first('firstname')"
                                            value="{{ old('firstname') }}" required autofocus>
 
                                     @if ($errors->has('firstname'))
@@ -36,7 +37,8 @@
                                            placeholder="@langTitle('general.lastname')" name="lastname"
                                            class="form-control{{ $errors->has('lastname') ? ' is-invalid' : '' }}"
                                            :class="{'is-invalid': validationErrors.has('lastname')}"
-                                           data-toggle="tooltip" :data-original-title="validationErrors.first('lastname')"
+                                           data-toggle="tooltip"
+                                           :data-original-title="validationErrors.first('lastname')"
                                            value="{{ old('lastname') }}" required autofocus>
 
                                     @if ($errors->has('lastname'))
@@ -106,7 +108,8 @@
                                            placeholder="@langTitle('general.username')" name="username"
                                            class="form-control{{ $errors->has('username') ? ' is-invalid' : '' }}"
                                            :class="{'is-invalid': validationErrors.has('username')}"
-                                           data-toggle="tooltip" :data-original-title="validationErrors.first('username')"
+                                           data-toggle="tooltip"
+                                           :data-original-title="validationErrors.first('username')"
                                            value="{{ old('username') }}" required autofocus>
 
                                     @if ($errors->has('username'))
@@ -141,9 +144,10 @@
                                     <input id="password" type="password"
                                            v-validate="'required|confirmed:password_confirmation'"
                                            placeholder="@langTitle('general.password')" name="password"
-                                           class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}"
+                                           class="form-control"
                                            :class="{'is-invalid': validationErrors.has('password')}"
-                                           data-toggle="tooltip" :data-original-title="validationErrors.first('password')"
+                                           data-toggle="tooltip"
+                                           :data-original-title="validationErrors.first('password')"
                                            required>
 
                                     @if ($errors->has('password'))

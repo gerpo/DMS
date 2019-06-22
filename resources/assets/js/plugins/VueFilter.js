@@ -3,7 +3,7 @@ const VueFilter = {
         Vue.filter('capitalize', function (value) {
             if (!value) return '';
             value = value.toString();
-            return value.charAt(0).toUpperCase() + value.slice(1)
+            return value.split(' ').map(item => item.charAt(0).toUpperCase() + item.slice(1)).join(' ');
         });
 
         Vue.filter('highlight', function (value, query) {

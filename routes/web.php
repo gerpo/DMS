@@ -11,6 +11,7 @@
 |
 */
 
+use App\Http\Middleware\OnlyAuthedUser;
 use App\User;
 
 Route::get('/', function () {
@@ -25,6 +26,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/home', 'HomeController@index')->name('home');
 
     Route::get('/users', 'UsersController@index')->name('users')->middleware('check_ability:manage_users');
+    Route::get('/users/{user}', 'UsersController@show')->name('users.show')->middleware('check_ability:manage_users');
 
     Route::get('/roles', 'RolesController@index')->name('roles');
     Route::post('/roles',
@@ -55,7 +57,8 @@ Route::group(['middleware' => 'auth'], function () {
         'Api\PluginsController@destroy')->name('api.plugins.destroy')->middleware('check_ability:manage-plugins');
 
     Route::get('/mails', 'MailsController@index')->name('mails');
-    Route::post('/mails', 'MailsController@store')->name('mails.store')->middleware('check_ability:send_mails,send_floorMails,send_roleMails');
+    Route::post('/mails',
+        'MailsController@store')->name('mails.store')->middleware('check_ability:send_mails,send_floorMails,send_roleMails');
 
     Route::get('/api/mail-groups', 'Api\MailGroupController@index')->name('api.mailGroups');
 
@@ -64,14 +67,18 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/api/addresses',
         'Api\MailAddressesController@query')->name('api.mailAddressesQuery')->middleware('check_ability:send_mails');
 
-    Route::post('/api/attachments', 'Api\MailAttachmentsController@store')->name('api.mailAttachments')->middleware('check_ability:send_mails');
-    Route::delete('/api/attachments', 'Api\MailAttachmentsController@destroy')->name('api.mailAttachments.destroy')->middleware('check_ability:send_mails');
+    Route::post('/api/attachments',
+        'Api\MailAttachmentsController@store')->name('api.mailAttachments')->middleware('check_ability:send_mails');
+    Route::delete('/api/attachments',
+        'Api\MailAttachmentsController@destroy')->name('api.mailAttachments.destroy')->middleware('check_ability:send_mails');
 
     Route::get('/api/users', 'Api\UsersController@index')->name('api.users')->middleware('check_ability:manage_users');
     Route::post('/api/users/{user}',
         'Api\UsersController@update')->name('api.users.update')->middleware('check_ability:manage_users');
+    Route::post('/api/users/{user}/email',
+        'Api\UserEmailController@update')->name('api.user.email')->middleware(OnlyAuthedUser::class);
     Route::post('/api/users/{user}/password',
-        'Api\UsersPasswordController@update')->name('api.users.password');
+        'Api\UserPasswordController@update')->name('api.user.password')->middleware(OnlyAuthedUser::class);
 
     Route::get('/me', function () {
         $user = User::where('id', auth()->user()['id'])->with(['roles', 'abilities'])->first();

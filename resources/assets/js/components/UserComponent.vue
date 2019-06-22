@@ -4,8 +4,10 @@
         <div class="card-body row">
 
             <div class="col-12 col-lg-10 table-responsive">
-                <table-component :data="displayedUsers" :search-function="searchFunction">
-                    <template slot="columns">
+                <table-component :data="users" :loading="isLoading" :search-function="searchFunction"
+                                 sort-by="lastname">
+                    <template #columns>
+                        <th class="align-middle"></th>
                         <th class="align-middle">{{$t('user.last_name') }}</th>
                         <th class="align-middle">{{ $t('user.first_name') }}</th>
                         <th class="align-middle">{{ $t('user.username') }}</th>
@@ -17,6 +19,11 @@
                         <th class="align-middle"></th>
                     </template>
                     <template slot-scope="{row, index}">
+                        <td class="align-middle">
+                            <a :href="route('users.show', row.id)" class="btn btn-link text-capitalize px-0">
+                                <img src="/images/icons/info.svg" alt="user profile" style="width: 16px">
+                            </a>
+                        </td>
                         <td class="align-middle">{{ row.lastname }}</td>
                         <td class="align-middle">{{ row.firstname }}</td>
                         <td class="align-middle">{{ row.username }}</td>
@@ -84,32 +91,98 @@
                 </div>
             </div>
         </div>
-        <modal-component :show="showEditUserModal" @close="showEditUserModal = false">
+        <modal-component :show="showEditUserModal" @close="$store.dispatch('hideEditUserModal')">
             <template #title>
                 {{ `${selectedUser.firstname} ${selectedUser.lastname}` }}
             </template>
             <edit-user-component :houseNames="houseNames" :user="selectedUser"/>
         </modal-component>
-        <modal-component :show="showContactUserModal" @close="showContactUserModal = false">
+        <modal-component :show="showContactUserModal" @close="$store.dispatch('hideContactUserModal')">
             <template #title>
                 {{ $t('mail.newMail') }}
             </template>
-            <new-mail-component :to="selectedUser.email"/>
+            <new-mail-component :to="selectedUser.email"></new-mail-component>
         </modal-component>
     </div>
 </template>
 
 <script>
     import TableComponent from './TableComponent';
-    import EditUserComponent from "./EditUserComponent";
-    import {DataTables} from 'vue-data-tables';
+    import EditUserComponent from './EditUserComponent';
+    import {mapState} from 'vuex';
+
+    const userStore = {
+        state: {
+            users: [],
+            showEditUserModal: false,
+            showContactUserModal: false,
+            selectedUser: {}
+        },
+        mutations: {
+            addUserData(state, userData) {
+                state.users = userData;
+            },
+            filterUserData(state, filteredUsers) {
+                state.users = filteredUsers;
+            },
+            showEditUserModal(state) {
+                state.showEditUserModal = true;
+            },
+            hideEditUserModal(state) {
+                state.showEditUserModal = false;
+            },
+            showContactUserModal(state) {
+                state.showContactUserModal = true;
+            },
+            hideContactUserModal(state) {
+                state.showContactUserModal = false;
+            },
+            userUpdated(state, user) {
+                const index = state.users.findIndex(item => item.id === user.id);
+                state.users.splice(index, 1, user);
+            },
+            selectUser(state, user) {
+                state.selectedUser = user;
+            }
+        },
+        actions: {
+            addUserData(context, userData) {
+                context.commit('addUserData', userData);
+            },
+            filterUserData(context, filteredUsers) {
+                context.commit('filterUserData', filteredUsers)
+            },
+            showEditUserModal(context) {
+                context.commit('showEditUserModal');
+            },
+            hideEditUserModal(context) {
+                context.commit('hideEditUserModal');
+            },
+            showContactUserModal(context) {
+                context.commit('showContactUserModal');
+            },
+            hideContactUserModal(context) {
+                context.commit('hideContactUserModal');
+            },
+            userUpdated(context, user) {
+                context.commit('userUpdated', user);
+                context.commit('hideEditUserModal');
+            },
+            selectUser(context, user) {
+                context.commit('selectUser', user);
+            }
+        },
+    };
 
     export default {
         name: "user-component",
         components: {
             EditUserComponent,
             TableComponent,
-            DataTables,
+        },
+        props: {
+            houseNames: {default: () => [], type: [Array]},
+            usersData: {default: () => [], type: [Array]},
         },
         data: () => ({
             houses: [],
@@ -117,45 +190,51 @@
             page: 1,
             filter: '',
             sort: '',
-            showEditUserModal: false,
-            showContactUserModal: false,
-            selectedUser: {},
             residentFilter: [
                 {name: 'main_tenant', checked: true},
                 {name: 'subtenant', checked: true},
                 {name: 'current_tenant', checked: true},
                 {name: 'former_tenant', checked: false},
             ],
+            isLoading: false,
         }),
-        props: {
-            houseNames: {default: () => [], type: [Array]},
-            usersData: {default: () => [], type: [Array]},
+        beforeCreate() {
+            this.$store.registerModule('userModule', userStore);
         },
         async created() {
-            this.displayedUsers = this.usersData;
+            await this.$store.dispatch('addUserData', this.usersData);
             this.houseNames.forEach(house => {
                 this.houses.push({name: house, checked: true});
             });
         },
         computed: {
+            ...mapState({
+                users: state => state.userModule.users,
+                selectedUser: state => state.userModule.selectedUser,
+                showEditUserModal: state => state.userModule.showEditUserModal,
+                showContactUserModal: state => state.userModule.showContactUserModal,
+            }),
+
             filters() {
                 return [{prop: 'house', value: this.houses.filter(house => house.checked).map(house => house.name)}];
             },
             totalPages() {
-                return this.displayedUsers / this.itemsPerPage;
+                return this.users / this.itemsPerPage;
             }
         },
         methods: {
             async fetchUsers() {
 
                 const residentFilter = JSON.stringify(this.residentFilter.filter(filter => filter.checked).map(filter => filter['name']));
-
+                this.isLoading = true;
                 await axios.get(route('api.users'), {params: {residentFilter}})
-                    .then(response =>
-                        this.displayedUsers = response.data.data);
+                    .then(response => {
+                        this.isLoading = false;
+                        this.$store.dispatch('addUserData', response.data.data);
+                    })
             },
             filterChanged() {
-                this.displayedUsers = this.usersData.filter(user => this.houses.some(house => house.checked && user.house === house.name));
+                this.$store.dispatch('filterUserData', this.usersData.filter(user => this.houses.some(house => house.checked && user.house === house.name)));
             },
             searchFunction(user, searchQuery) {
                 return user.lastname.toLowerCase().includes(searchQuery.toLowerCase())
@@ -165,23 +244,23 @@
                     || user.full_room.toLowerCase().includes(searchQuery.toLowerCase());
             },
             editUser(user) {
-                this.selectedUser = user;
-                this.showEditUserModal = true;
+                this.$store.dispatch('selectUser', user);
+                this.$store.dispatch('showEditUserModal');
             },
             contactUser(user) {
-                this.selectedUser = user;
-                this.showContactUserModal = true;
-            }
+                this.$store.dispatch('selectUser', user);
+                this.$store.dispatch('showContactUserModal');
+            },
         },
         watch: {
             showEditUserModal(value) {
                 if (!value) {
-                    this.selectedUser = {};
+                    this.$store.dispatch('selectUser', {});
                 }
             },
             showContactUserModal(value) {
                 if (!value) {
-                    this.selectedUser = {};
+                    this.$store.dispatch('selectUser', {});
                 }
             }
         }

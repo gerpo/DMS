@@ -41,24 +41,6 @@ class User extends Authenticatable
         'full_name',
     ];
 
-    protected static function boot()
-    {
-        parent::boot();
-
-        self::saving(function ($user) {
-            $user->full_room = str_pad($user->floor, 2, 0, STR_PAD_LEFT).str_pad($user->room, 2, 0,
-                    STR_PAD_LEFT);
-        });
-
-        self::created(function ($user) {
-            Bouncer::assign('member')->to($user);
-
-            if ($user->house === config('dms.owner_dorm')) {
-                Bouncer::assign('resident')->to($user);
-            }
-        });
-    }
-
     public function confirm(): void
     {
         $this->confirmed = true;

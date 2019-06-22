@@ -2,10 +2,15 @@
 
 namespace Tests\Unit;
 
-use Bouncer;
+use App\Events\UserEmailChanged;
+use App\Listeners\SendEmailConfirmationEmail;
+use App\Mail\ConfirmEmailMail;
 use App\User;
-use Tests\TestCase;
+use Bouncer;
+use Event;
 use Gerpo\Plugisto\Models\Plugisto;
+use Mail;
+use Tests\TestCase;
 
 class UserTest extends TestCase
 {
@@ -25,6 +30,84 @@ class UserTest extends TestCase
 
         $this->assertEquals('Mixedcase', $user->lastname);
         $this->assertNotEquals('mIxEdCaSe', $user->lastname);
+    }
+
+    /** @test */
+    public function after_email_update_user_is_not_confirmed(): void
+    {
+        $user = create(User::class);
+
+        $newEmail = 'newemail@dms.test';
+
+        $user->email = $newEmail;
+        $user->save();
+
+        $this->assertFalse($user->fresh()->confirmed);
+    }
+
+    /** @test */
+    public function after_email_update_confirmation_token_is_set(): void
+    {
+        $user = create(User::class);
+        $newEmail = 'newemail@dms.test';
+        $user->confirm();
+
+        $this->assertNull($user->confirmation_token);
+
+        $user->email = $newEmail;
+        $user->save();
+
+        $this->assertNotNull($user->fresh()->confirmation_token);
+    }
+
+    /** @test */
+    public function after_email_update_UserEmailChanged_event_fired(): void
+    {
+        Event::fake([UserEmailChanged::class]);
+
+        $user = create(User::class);
+
+        $newEmail = 'newemail@dms.test';
+
+        $user->email = $newEmail;
+        $user->save();
+
+        Event::assertDispatched(UserEmailChanged::class, function ($event) use ($user) {
+            return $event->user === $user;
+        });
+    }
+
+    /** @test */
+    public function after_email_update_email_confirmation_email_send(): void
+    {
+        Mail::fake();
+
+        $user = create(User::class);
+
+        $newEmail = 'newemail@dms.test';
+
+        $user->email = $newEmail;
+        $user->save();
+
+        Mail::assertQueued(ConfirmEmailMail::class, function ($event) use ($user) {
+            return $event->user === $user;
+        });
+    }
+
+    /** @test */
+    public function a_user_is_assigned_member_role_after_creation(): void
+    {
+        $user = create(User::class);
+
+        $this->assertTrue($user->isA('member'));
+    }
+
+    /** @test */
+    public function a_user_of_owner_dorm_is_assigned_resident_role_after_creation(): void
+    {
+        $user = create(User::class, ['house' => config('dms.owner_dorm')]);
+
+        $this->assertTrue($user->isA('resident'));
     }
 
     /** @test */

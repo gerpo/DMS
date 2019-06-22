@@ -24,7 +24,7 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function an_authorized_user_can_see_all_users()
+    public function an_authorized_user_can_see_all_users(): void
     {
         $this->signIn([], 'manage_users');
 
@@ -39,7 +39,7 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function an_unauthorized_user_cannot_see_all_users()
+    public function an_unauthorized_user_cannot_see_all_users(): void
     {
         $this->withExceptionHandling()->signIn();
 
@@ -49,7 +49,7 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function users_can_be_filtered_by_dorm_name()
+    public function users_can_be_filtered_by_dorm_name(): void
     {
         $admin = create(User::class, ['house' => 'Dorm A']);
 
@@ -73,7 +73,7 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function users_can_be_sorted_by_column_name()
+    public function users_can_be_sorted_by_column_name(): void
     {
         $this->signInAdmin();
 
@@ -94,7 +94,7 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function sort_order_can_be_changed()
+    public function sort_order_can_be_changed(): void
     {
         $this->signInAdmin();
 
@@ -115,7 +115,7 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function users_can_be_filtered_by_lastname()
+    public function users_can_be_filtered_by_lastname(): void
     {
         $this->signInAdmin();
 
@@ -137,7 +137,7 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function users_can_be_filtered_by_firstname()
+    public function users_can_be_filtered_by_firstname(): void
     {
         $this->signInAdmin();
 
@@ -159,7 +159,7 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function users_can_be_filtered_by_username()
+    public function users_can_be_filtered_by_username(): void
     {
         $this->signInAdmin();
 
@@ -181,7 +181,7 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function users_can_be_filtered_by_email()
+    public function users_can_be_filtered_by_email(): void
     {
         $this->signInAdmin();
 
@@ -203,7 +203,7 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function only_current_users_can_be_shown()
+    public function only_current_users_can_be_shown(): void
     {
         $this->signInAdmin();
 
@@ -221,7 +221,7 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function only_former_users_can_be_shown()
+    public function only_former_users_can_be_shown(): void
     {
         $this->signInAdmin();
 
@@ -237,7 +237,7 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function former_and_current_users_can_be_shown()
+    public function former_and_current_users_can_be_shown(): void
     {
         $this->signInAdmin();
 
@@ -255,7 +255,7 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function only_current_main_tenants_can_be_shown()
+    public function only_current_main_tenants_can_be_shown(): void
     {
         $this->signInAdmin();
 
@@ -274,7 +274,7 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function only_current_sub_tenants_can_be_shown()
+    public function only_current_sub_tenants_can_be_shown(): void
     {
         $this->signInAdmin();
 
@@ -293,7 +293,7 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function no_users_shown_when_neither_active_nor_former_tenants_selected()
+    public function no_users_shown_when_neither_active_nor_former_tenants_selected(): void
     {
         $this->signInAdmin();
 
@@ -309,7 +309,7 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function no_users_shown_when_neither_main_nor_sub_tenants_selected()
+    public function no_users_shown_when_neither_main_nor_sub_tenants_selected(): void
     {
         $this->signInAdmin();
 
@@ -325,20 +325,79 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function user_data_is_paginated()
+    public function user_data_includes_total(): void
     {
         $this->signInAdmin();
 
         create(User::class, [], 60);
 
-        $users = User::orderBy('lastname')->paginate(50)->toArray();
+        $users = ['data' => User::orderBy('lastname')->get()->toArray(), 'total' => User::all()->count()];
 
         $this->get(route('api.users',
             ['residentFilter' => json_encode(['current_tenant', 'main_tenant'])]))
             ->assertSuccessful()
             ->assertJson([
                 'data' => $users['data'],
-                'total' => $users['total'],
             ]);
+    }
+
+    /** @test */
+    public function an_admin_can_update_user(): void
+    {
+        $this->signInAdmin();
+
+        $user = create(User::class);
+        $user->username = 'Newname';
+
+        $this->withExceptionHandling()->post(route('api.users.update', $user->id), $user->toArray())
+            ->assertSuccessful();
+
+        $this->assertEquals('Newname', $user->fresh()->username);
+    }
+
+    /** @test */
+    public function an_authorized_user_can_update_user(): void
+    {
+        $this->signIn([], 'manage_users');
+
+        $user = create(User::class);
+        $user->username = 'Newname';
+
+        $this->post(route('api.users.update', $user->id), $user->toArray())
+            ->assertSuccessful();
+
+        $this->assertEquals('Newname', $user->fresh()->username);
+    }
+
+    /** @test */
+    public function an_unauthorized_user_cannot_update_user(): void
+    {
+        $this->withExceptionHandling()->signIn();
+
+        $user = create(User::class);
+        $oldName = $user->username;
+        $user->username = 'Newname';
+
+        $this->post(route('api.users.update', $user->id), $user->toArray())
+            ->assertStatus(403);
+
+        $this->assertEquals($oldName, $user->fresh()->username);
+        $this->assertNotEquals('Newname', $user->fresh()->username);
+    }
+
+    /** @test */
+    public function full_room_is_updated_after_user_room_update(): void
+    {
+        $this->signInAdmin();
+
+        $user = create(User::class);
+        ++$user->room;
+        $newFullRoom = str_pad($user->floor, 2, 0, STR_PAD_LEFT) . str_pad($user->room, 2, 0,
+                STR_PAD_LEFT);
+
+        $this->post(route('api.users.update', $user->id), $user->toArray())
+            ->assertSuccessful();
+
+        $this->assertEquals($newFullRoom, $user->fresh()->full_room);
     }
 }

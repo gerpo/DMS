@@ -69,13 +69,13 @@ class UsersController extends Controller
         $user->update(request()->validate([
             'firstname' => 'required|string|max:100',
             'lastname' => 'required|string|max:100',
-            'username' => 'required|max:255|alpha_dash|unique:users,username,'.$user->id,
+            'username' => 'required|max:255|unique:users,username,'.$user->id,
             'email' => 'required|email|max:255|unique:users,email,'.$user->id,
             'floor' => 'required|integer|max:255',
             'room' => 'required|integer|max:255',
             'house' => 'required|string|max:255|in:'.$dorms,
         ]));
 
-        return $user;
+        return $user->fresh();
     }
 }

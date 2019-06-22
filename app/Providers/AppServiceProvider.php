@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Observers\UserObserver;
+use App\User;
 use Blade;
 use Bouncer;
 use App\Role;
@@ -25,6 +27,8 @@ class AppServiceProvider extends ServiceProvider
         });
 
         Bouncer::useRoleModel(Role::class);
+
+        User::observe(UserObserver::class);
     }
 
     /**

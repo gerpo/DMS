@@ -1,7 +1,7 @@
 <template>
     <div class="transactions">
         <h4>Transactions</h4>
-        <table-component :data="transactions"
+        <!--<table-component :data="transactions"
                          table-class="table table-sm table-hover"
                          :show-filter="false"
                          :show-caption="false"
@@ -19,18 +19,29 @@
                 </template>
             </table-column>
             <table-column :label="$tv('DmsCredits::account.amount')" header-class="text-capitalize" show="amount" data-type="numeric"/>
+        </table-component>-->
+        <table-component :data="transactions" :searchable="false" sort-by="created_at" sort-order="desc">
+            <template #columns>
+                <th>{{ $tv('DmsCredits::account.created_at') }}</th>
+                <th>{{ $tv('DmsCredits::account.activity') }}</th>
+                <th>{{ $tv('DmsCredits::account.amount') }}</th>
+            </template>
+            <template slot-scope="{row, index}">
+                <td>{{ row.created_at | moment('calendar') }}</td>
+                <td>{{ $tv(row.message, {value: row.amount}) }}</td>
+                <td>{{ row.amount }}</td>
+            </template>
         </table-component>
     </div>
 </template>
 
 <script>
-    import {TableColumn, TableComponent} from 'vue-table-component';
+    import TableComponent from "@/components/TableComponent";
 
     export default {
         name: "account-transactions",
         components: {
-            TableComponent,
-            TableColumn
+            TableComponent
         },
         props: {
             transactions: {default: () => [], type: [Array]}

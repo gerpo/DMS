@@ -1,7 +1,8 @@
 <template>
     <div>
-        <input v-if="searchable" :placeholder="placeholder" @keyup="currentPage = 1" class="form-control my-2" title="search query"
-               type="text" v-model="search_query">
+        <input :placeholder="placeholder" @keyup="currentPage = 1" class="form-control my-2" title="search query"
+               type="text"
+               v-if="searchable" v-model="search_query">
         <table class="table table-hover">
             <thead class="text-capitalize text-nowrap">
             <tr>
@@ -12,9 +13,9 @@
                 </slot>
             </tr>
             </thead>
-            <tbody class="text-nowrap">
+            <tbody v-if="!loading" class="text-nowrap">
             <tr v-for="(item, index) in currentItems">
-                <slot :row="item" :index="index">
+                <slot :index="index" :row="item">
                     <td v-for="column in columns">
                         {{ item[column] }}
                     </td>
@@ -22,8 +23,11 @@
             </tr>
             </tbody>
         </table>
-        <div class="text-center font-weight-light my-2" v-if="currentItems.length===0">No search results found.</div>
-        <nav aria-label="table pagination d-block mx-auto" v-if="currentItems.length!==0">
+        <div v-if="loading" class="spinner-border text-primary d-block mx-auto" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+        <div class="text-center font-weight-light my-2" v-if="currentItems.length===0 && !loading">No search results found.</div>
+        <nav aria-label="table pagination d-block mx-auto" v-if="currentItems.length!==0 && !loading">
             <ul class="pagination justify-content-center">
                 <li :class="{disabled:(currentPage===1)}" class="page-item" v-if="pages > 1">
                     <button @click="previousPage" aria-label="Previous" class="page-link">
@@ -55,9 +59,11 @@
             itemsPerPage: {default: 50, type: [Number]},
             searchable: {default: true, type: [Boolean]},
             searchAttr: {type: [String]},
-            searchFunction: {type: [Function] },
+            searchFunction: {type: [Function]},
             sortBy: {default: '', type: [String]},
+            sortOrder: {default: 'asc', type: [String]},
             placeholder: {default: 'Search...', type: [String]},
+            loading: {default: false, type: [Boolean]},
         },
         data: () => ({
             currentPage: 1,
@@ -70,7 +76,7 @@
                     return this.data;
                 }
 
-                if(this.searchFunction){
+                if (this.searchFunction) {
                     return this.data.filter(item => this.searchFunction(item, this.search_query));
                 }
 
@@ -80,13 +86,26 @@
                 const start = (this.currentPage - 1) * this.itemsPerPage;
                 const end = start + this.itemsPerPage;
 
-                return this.filteredItems.slice(start, end);
+                return this.sort(this.filteredItems.slice(start, end));
             },
             pages() {
                 return Math.ceil(this.filteredItems.length / this.itemsPerPage);
             }
         },
         methods: {
+            sort(values) {
+                return values.sort((a, b) => {
+                    if (a[this.sortBy] < b[this.sortBy]){
+                        return this.sortOrder === 'asc' ? -1 : 1;
+                    }
+
+                    if (a[this.sortBy] > b[this.sortBy]){
+                        return this.sortOrder === 'asc' ? 1 : -1;
+                    }
+
+                    return 0
+                })
+            },
             compareFunction(value) {
                 return value.toLowerCase().includes(this.search_query.toLowerCase());
             },

@@ -17,4 +17,10 @@ return [
 
     'or' => 'or',
     'and' => 'and',
+
+    'password' => 'password',
+    'password_confirm' => 'password confirmation',
+    'change_password' => 'change password',
+
+    'save' => 'save',
 ];

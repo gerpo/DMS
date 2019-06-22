@@ -13,6 +13,14 @@ class PlugistoTableSeeder extends Seeder
     public function run()
     {
         Plugisto::create([
+            'name' => 'Profile',
+            'description' => 'View and manage user profile.',
+            'route' => '/me',
+            'namespace' => 'gerpo/dms/profile',
+            'manually_added' => true,
+        ]);
+
+        Plugisto::create([
             'name' => 'Residents',
             'description' => 'View and manage residents.',
             'route' => '/users',
@@ -29,15 +37,6 @@ class PlugistoTableSeeder extends Seeder
             'manually_added' => true,
             'needed_permission' => 'manage_roles',
         ]);
-
-        /*Plugisto::create([
-            'name' => 'Abilities',
-            'description' => 'View and manage abilities.',
-            'route' => '/abilities',
-            'namespace' => 'gerpo/dms/abilities',
-            'manually_added' => true,
-            'needed_permission' => 'manage_roles'
-        ]);*/
 
         Plugisto::create([
             'name' => 'Mails',

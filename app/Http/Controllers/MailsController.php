@@ -65,9 +65,6 @@ class MailsController extends Controller
         $mailData['recipients'] = $recipients;
 
         $this->dispatch(new SendGroupMail($mailData));
-        //foreach ($recipients as $recipient) {
-         //   Mail::to($recipients)->send(new RegularMail($mailData));
-        //}
     }
 
     private function sendMailToGroup($mailData, $user): void

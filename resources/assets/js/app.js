@@ -7,6 +7,7 @@
 require('./bootstrap');
 
 import Vue from 'vue';
+import Vuex from 'vuex';
 // Vue Extensions
 import VueMoment from 'vue-moment';
 import PortalVue from 'portal-vue';
@@ -20,6 +21,8 @@ import moment from 'moment';
 import VueFilter from './plugins/VueFilter';
 
 const lang = document.documentElement.lang.substr(0, 2);
+// TODO: change to detect browser language
+//const lang = navigator.language.substr(0, 2);
 
 moment.locale(lang);
 
@@ -61,6 +64,7 @@ Vue.use(VeeValidate, {errorBagName: 'validationErrors'});
 
 const i18n = new VueInternationalization({
     locale: lang,
+    fallbackLocale: 'en',
     messages: Locale
 });
 
@@ -83,6 +87,9 @@ Vue.mixin({
             return window.laravel.roles.includes('admin') ||
                 window.laravel.roles.includes(role) ||
                 window.laravel.user_id === user_id
+        },
+        $isAuthedUser: (user_id) => {
+            return window.laravel.user_id === user_id;
         }
     }
 });
@@ -98,14 +105,16 @@ Vue.mixin({
 
 Vue.use(VueFilter);
 Vue.use(PortalVue);
+Vue.use(Vuex);
 
-import ElementUi from 'element-ui';
-import 'element-ui/lib/theme-chalk/index.css'
-Vue.use(ElementUi, {
-    locale: lang,
+const store = new Vuex.Store({
+    state: {
+        locale: lang,
+    },
 });
 
 const app = new Vue({
     el: '#app',
+    store,
     i18n
 });

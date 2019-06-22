@@ -24,7 +24,6 @@ class SendGroupMail implements ShouldQueue
     public function __construct($mailData)
     {
         $this->mailData = $mailData;
-        dump($mailData['recipients']->count());
     }
 
     /**
