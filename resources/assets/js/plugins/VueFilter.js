@@ -20,6 +20,11 @@ const VueFilter = {
             if (!value) return '';
             return value.toString().replace('_', ' ');
         });
+
+        Vue.filter('number', function (value) {
+            if (!value) return 0;
+            return value.toLocaleString();
+        });
     }
 };
 

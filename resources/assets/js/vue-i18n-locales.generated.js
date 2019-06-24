@@ -145,6 +145,22 @@ export default {
                 }
             },
             "attributes": []
+        },
+        "vendor": {
+            "DmsCredits": {
+                "account": {
+                    "balance_long": "Your current balance",
+                    "activity": "activity",
+                    "created_at": "date",
+                    "amount": "amount",
+                    "add_credits_btn": "add credits",
+                    "account_created": "A new account was created."
+                },
+                "code": {
+                    "redeem_code": "Redeem your purchased code",
+                    "redeem_message": "Code with value of {value} was redeemed."
+                }
+            }
         }
     }
 }

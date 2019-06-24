@@ -20,8 +20,8 @@
                     </template>
                     <template slot-scope="{row, index}">
                         <td class="align-middle">
-                            <a :href="route('users.show', row.id)" class="btn btn-link text-capitalize px-0">
-                                <img src="/images/icons/info.svg" alt="user profile" style="width: 16px">
+                            <a :href="route('users.show', row.username)" class="btn btn-link text-capitalize px-0">
+                                <img src="/images/icons/info.svg" :title="$t('user.show_profile')" alt="user profile" style="width: 16px">
                             </a>
                         </td>
                         <td class="align-middle">{{ row.lastname }}</td>
@@ -217,9 +217,6 @@
 
             filters() {
                 return [{prop: 'house', value: this.houses.filter(house => house.checked).map(house => house.name)}];
-            },
-            totalPages() {
-                return this.users / this.itemsPerPage;
             }
         },
         methods: {

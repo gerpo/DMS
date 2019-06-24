@@ -2,14 +2,13 @@
 
 namespace App;
 
-use Bouncer;
-use Gerpo\Plugisto\Models\Plugisto;
-use Gerpo\DmsCredits\Traits\UsesCodes;
-use Illuminate\Notifications\Notifiable;
 use Gerpo\DmsCredits\Traits\HasCreditAccount;
+use Gerpo\DmsCredits\Traits\UsesCodes;
+use Gerpo\Plugisto\Models\Plugisto;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Silber\Bouncer\Database\HasRolesAndAbilities;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+use Silber\Bouncer\Database\HasRolesAndAbilities;
 
 class User extends Authenticatable
 {

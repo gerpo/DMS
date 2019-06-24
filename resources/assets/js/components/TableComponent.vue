@@ -13,7 +13,7 @@
                 </slot>
             </tr>
             </thead>
-            <tbody v-if="!loading" class="text-nowrap">
+            <tbody class="text-nowrap" v-if="!loading">
             <tr v-for="(item, index) in currentItems">
                 <slot :index="index" :row="item">
                     <td v-for="column in columns">
@@ -23,13 +23,15 @@
             </tr>
             </tbody>
         </table>
-        <div v-if="loading" class="spinner-border text-primary d-block mx-auto" role="status">
+        <div class="spinner-border text-primary d-block mx-auto" role="status" v-if="loading">
             <span class="sr-only">Loading...</span>
         </div>
-        <div class="text-center font-weight-light my-2" v-if="currentItems.length===0 && !loading">No search results found.</div>
-        <nav aria-label="table pagination d-block mx-auto" v-if="currentItems.length!==0 && !loading">
+        <div class="text-center font-weight-light my-2" v-if="currentItems.length===0 && !loading">No search results
+            found.
+        </div>
+        <nav aria-label="table pagination d-block mx-auto" v-if="currentItems.length!==0 && !loading && pages > 1">
             <ul class="pagination justify-content-center">
-                <li :class="{disabled:(currentPage===1)}" class="page-item" v-if="pages > 1">
+                <li :class="{disabled:(currentPage===1)}" class="page-item">
                     <button @click="previousPage" aria-label="Previous" class="page-link">
                         <span aria-hidden="true">&laquo;</span>
                         <span class="sr-only">Previous</span>
@@ -39,7 +41,7 @@
                     v-for="page in pages">
                     <button class="page-link">{{ page }}</button>
                 </li>
-                <li :class="{disabled:(currentPage===pages)}" class="page-item" v-if="pages > 1">
+                <li :class="{disabled:(currentPage===pages)}" class="page-item">
                     <button @click="nextPage" aria-label="Next" class="page-link">
                         <span aria-hidden="true">&raquo;</span>
                         <span class="sr-only">Next</span>
@@ -95,11 +97,11 @@
         methods: {
             sort(values) {
                 return values.sort((a, b) => {
-                    if (a[this.sortBy] < b[this.sortBy]){
+                    if (a[this.sortBy] < b[this.sortBy]) {
                         return this.sortOrder === 'asc' ? -1 : 1;
                     }
 
-                    if (a[this.sortBy] > b[this.sortBy]){
+                    if (a[this.sortBy] > b[this.sortBy]) {
                         return this.sortOrder === 'asc' ? 1 : -1;
                     }
 
