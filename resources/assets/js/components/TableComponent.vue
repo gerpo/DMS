@@ -14,7 +14,7 @@
             </tr>
             </thead>
             <tbody class="text-nowrap" v-if="!loading">
-            <tr v-for="(item, index) in currentItems">
+            <tr :class="rowClasses" v-for="(item, index) in currentItems">
                 <slot :index="index" :row="item">
                     <td v-for="column in columns">
                         {{ item[column] }}
@@ -26,8 +26,8 @@
         <div class="spinner-border text-primary d-block mx-auto" role="status" v-if="loading">
             <span class="sr-only">Loading...</span>
         </div>
-        <div class="text-center font-weight-light my-2" v-if="currentItems.length===0 && !loading">No search results
-            found.
+        <div class="text-center font-weight-light my-2" v-if="currentItems.length===0 && !loading">
+            No items found.
         </div>
         <nav aria-label="table pagination d-block mx-auto" v-if="currentItems.length!==0 && !loading && pages > 1">
             <ul class="pagination justify-content-center">
@@ -66,6 +66,7 @@
             sortOrder: {default: 'asc', type: [String]},
             placeholder: {default: 'Search...', type: [String]},
             loading: {default: false, type: [Boolean]},
+            rowClasses: {default: '', type: [String]}
         },
         data: () => ({
             currentPage: 1,
@@ -120,6 +121,11 @@
                 if (this.currentPage > 1) {
                     this.currentPage--;
                 }
+            }
+        },
+        watch: {
+            pages: function(val) {
+                this.currentPage = this.currentPage > val ? val : this.currentPage;
             }
         }
     }
