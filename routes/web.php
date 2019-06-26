@@ -81,8 +81,18 @@ Route::group(['middleware' => 'auth'], function () {
         'Api\UserPasswordController@update')->name('api.user.password')->middleware(OnlyAuthedUser::class);
 
     Route::get('/me', function () {
-        $user = User::where('id', auth()->user()['id'])->with(['roles'])->append('permissions')->first();
+        $user = User::where('id', auth()->user()['id'])->with(['roles'])->first()->append('permissions');
 
         return view('profile')->with(['user' => $user]);
+    });
+
+    Route::get('/test', function () {
+        auth()->loginUsingId(2);
+        return redirect()->back();
+    });
+
+    Route::get('/test1', function () {
+        auth()->loginUsingId(1);
+        return redirect()->back();
     });
 });
