@@ -4,8 +4,8 @@
             <table class="table table-hover">
                 <thead class="text-center">
                 <th></th>
-                <th v-for="ability in abilities" scope="col" data-toggle="tooltip" data-placement="auto"
-                    :title="ability.title" class="text-capitalize">
+                <th :title="ability.title" class="text-capitalize" data-placement="auto" data-toggle="tooltip"
+                    scope="col" v-for="ability in abilities">
                     {{ ability.name | transform-role }}
                 </th>
                 <th></th>
@@ -13,32 +13,33 @@
                 </thead>
                 <tbody>
                 <tr v-for="role in currentRoles">
-                    <th class="text-capitalize pl-4" scope="row" data-toggle="tooltip" data-placement="auto"
-                        :title="role.title">
+                    <th :title="role.title" class="text-capitalize pl-4" data-placement="auto" data-toggle="tooltip"
+                        scope="row">
                         {{ role.name }}
                     </th>
 
                     <td class="text-center" v-for="ability in abilities">
                         <div class="custom-control custom-checkbox d-inline">
-                            <input type="checkbox" class="custom-control-input"
+                            <input :checked="role.abilities.some(ab => ab.name === ability.name) || role.name === 'admin'"
+                                   :data-ability="ability.name"
                                    :data-role="role.name"
-                                   :data-ability="ability.name" :ref="role.name"
-                                   :id="role.name+'-'+ability.name"
-                                   :checked="role.abilities.some(ab => ab.name === ability.name) || role.name === 'admin'"
-                                   :disabled="role.name === 'admin'">
-                            <label class="custom-control-label"
-                                   :for="role.name+'-'+ability.name">&zwnj;</label>
+                                   :disabled="role.name === 'admin'" :id="role.name+'-'+ability.name"
+                                   :ref="role.name"
+                                   class="custom-control-input"
+                                   type="checkbox">
+                            <label :for="role.name+'-'+ability.name"
+                                   class="custom-control-label">&zwnj;</label>
                         </div>
                     </td>
 
                     <td>
-                        <button type="button" class="text-capitalize btn btn-sm btn-outline-primary"
-                                @click="updateRole(role)">Update
+                        <button @click="updateRole(role)" class="text-capitalize btn btn-sm btn-outline-primary"
+                                type="button">Update
                         </button>
                     </td>
                     <td>
-                        <button type="button" class="text-capitalize btn btn-sm btn-outline-danger"
-                                @click="confirmDeletion(role)">Delete
+                        <button @click="confirmDeletion(role)" class="text-capitalize btn btn-sm btn-outline-danger"
+                                type="button">Delete
                         </button>
                     </td>
                 </tr>
@@ -47,17 +48,17 @@
         </section>
         <section class="form-group row my-3">
             <div class="col-md-3 offset-md-1 pb-2">
-                <input type="text" class="form-control text-capitalize" placeholder="New Role Name.."
+                <input class="form-control text-capitalize" placeholder="New Role Name.." type="text"
                        v-model="newRole.name">
             </div>
 
             <div class="col-md-5 pb-2">
-                <input type="text" class="form-control text-capitalize" placeholder="New role Description.."
+                <input class="form-control text-capitalize" placeholder="New role Description.." type="text"
                        v-model="newRole.title">
             </div>
 
             <div class="col-md-2">
-                <button type="submit" @click="addRole" class="btn btn-block btn-outline-info text-capitalize">
+                <button @click="addRole" class="btn btn-block btn-outline-info text-capitalize" type="submit">
                     Add
                 </button>
             </div>
@@ -101,7 +102,7 @@
             async addRole() {
                 return await axios.post(route('api.roles.store'), this.newRole)
                     .then(response => {
-                        this.flash('Role was successfully added.', 'success');
+                        this.$notify({text: 'Role was successfully added.', type: 'success'});
                         this.currentRoles.push(Object.assign({}, this.newRole, response.data));
                         this.currentRoles.sort();
 
@@ -111,7 +112,7 @@
                     .catch(error => {
                         console.log(error);
                         this.errors = error.response.data.errors;
-                        this.flash('Role was not created. An error occurred.', 'danger');
+                        this.$notify({text: 'Role was not created. An error occurred.', type: 'error'});
                     })
             },
             async updateRole(role) {
@@ -134,10 +135,10 @@
 
                 return await axios.all(requests)
                     .then(response => {
-                        this.flash('Role was updated.', 'success');
+                        this.$notify({text: 'Role was updated.', type: 'success'});
                     })
                     .catch(error => {
-                        this.flash('Role was not updated. An error occurred.', 'danger');
+                        this.$notify({text: 'Role was not updated. An error occurred.', type: 'error'});
                     })
             },
             async deleteRole(role) {
@@ -146,13 +147,13 @@
                     .then(response => {
                         this.showConfirmDeletion = false;
                         this.roleToDelete = {};
-                        this.flash('Role was deleted successfully.', 'success');
+                        this.$notify({text: 'Role was deleted successfully.', type: 'success'});
 
                         this.currentRoles.splice(this.currentRoles.indexOf(role), 1);
                     })
                     .catch(error => {
                         console.log(error);
-                        this.flash('Role was not deleted. An error occurred.', 'danger');
+                        this.$notify({text: 'Role was not deleted. An error occurred.', type: 'error'});
                     })
             },
             confirmDeletion(role) {

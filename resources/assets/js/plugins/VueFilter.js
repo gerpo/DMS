@@ -21,8 +21,8 @@ const VueFilter = {
             return value.toString().replace('_', ' ');
         });
 
-        Vue.filter('number', function (value) {
-            if (!value) return 0;
+        Vue.filter('number', function (value, invalidValue = 0) {
+            if (!value) return invalidValue;
             return value.toLocaleString();
         });
     }

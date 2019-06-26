@@ -14,7 +14,7 @@
                     <tbody>
                     <tr v-for="plugin in localPlugins">
                         <td class="align-middle content-fit">
-                            <toggle class="align-middle" v-model="plugin.is_active" @change="updatePlugin(plugin)"/>
+                            <toggle @change="updatePlugin(plugin)" class="align-middle" v-model="plugin.is_active"/>
                         </td>
                         <td class="align-middle">
                             {{ plugin.name }}
@@ -22,8 +22,8 @@
                                   v-model="plugin.description"> - {{ plugin.description }}</span>
                         </td>
                         <td class="align-middle content-fit">
-                            <button class="btn btn-outline-danger" v-if="plugin.manually_added"
-                                    @click="confirmDeletion(plugin)">Delete
+                            <button @click="confirmDeletion(plugin)" class="btn btn-outline-danger"
+                                    v-if="plugin.manually_added">Delete
                             </button>
                         </td>
                     </tr>
@@ -72,20 +72,20 @@
 
                 await axios.patch(route('api.plugins.update', plugin.id), plugin)
                     .then(response => {
-                        this.flash(`Plugin "${plugin.name}" was successfully ${status}.`, 'success');
+                        this.$notify({text: `Plugin "${plugin.name}" was successfully ${status}.`, type: 'success'});
                     })
                     .catch(error => {
-                        this.flash(`Plugin "${plugin.name}" could not be ${status}.`, 'danger');
+                        this.$notify({text: `Plugin "${plugin.name}" could not be ${status}.`, type: 'error'});
                         plugin.is_active = !plugin.is_active;
                     });
             },
             async deletePlugin() {
                 await axios.delete(route('api.plugins.update', plugin.id))
                     .then(response => {
-                        this.flash(`Plugin "${plugin.name}" was successfully deleted.`, 'success');
+                        this.$notify({text: `Plugin "${plugin.name}" was successfully deleted.`, type: 'success'});
                     })
                     .catch(error => {
-                        this.flash(`Plugin "${plugin.name}" could not be deleted.`, 'danger');
+                        this.$notify({text: `Plugin "${plugin.name}" could not be deleted.`, type: 'error'});
                     })
             },
             confirmDeletion(plugin) {

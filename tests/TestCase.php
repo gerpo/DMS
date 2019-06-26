@@ -3,10 +3,11 @@
 namespace Tests;
 
 use App\Exceptions\Handler;
-use Illuminate\Support\Facades\DB;
+use App\User;
 use Illuminate\Contracts\Debug\ExceptionHandler;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
+use Illuminate\Support\Facades\DB;
 
 abstract class TestCase extends BaseTestCase
 {
@@ -24,34 +25,13 @@ abstract class TestCase extends BaseTestCase
         $this->disableExceptionHandling();
     }
 
-    protected function signIn($user = null, $ability = null)
-    {
-        $user = $user ?: create('App\User');
-
-        $user->allow($ability);
-
-        $this->actingAs($user);
-
-        return $this;
-    }
-
-    protected function signInAdmin($admin = null)
-    {
-        $admin = $admin ?: create('App\User');
-
-        $admin->assign('admin');
-
-        $this->actingAs($admin);
-
-        return $this;
-    }
-
     // Hat tip, @adamwathan.
     protected function disableExceptionHandling()
     {
         $this->oldExceptionHandler = $this->app->make(ExceptionHandler::class);
 
-        $this->app->instance(ExceptionHandler::class, new class extends Handler {
+        $this->app->instance(ExceptionHandler::class, new class extends Handler
+        {
             public function __construct()
             {
             }
@@ -65,6 +45,29 @@ abstract class TestCase extends BaseTestCase
                 throw $e;
             }
         });
+    }
+
+    protected function signIn($user = null, $ability = null)
+    {
+        $user = $user ?: create(User::class);
+
+        $user->allow($ability);
+
+        $this->actingAs($user);
+
+        return $this;
+    }
+
+
+    protected function signInAdmin($admin = null)
+    {
+        $admin = $admin ?: create(User::class);
+
+        $admin->assign('admin');
+
+        $this->actingAs($admin);
+
+        return $this;
     }
 
     protected function withExceptionHandling()

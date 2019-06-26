@@ -9,7 +9,7 @@ use Silber\Bouncer\Database\Ability;
 class AbilityTest extends TestCase
 {
     /** @test */
-    public function an_admin_can_create_new_ability()
+    public function an_admin_can_create_new_ability(): void
     {
         $this->signInAdmin();
 

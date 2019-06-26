@@ -16,7 +16,8 @@ import VueInternationalization from 'vue-i18n';
 import Locale from './vue-i18n-locales.generated';
 import route from "../../../vendor/tightenco/ziggy/src/js/route";
 // Vue components
-import VueFlashMessage from 'vue-flash-message';
+//import VueFlashMessage from 'vue-flash-message';
+import Notification from 'vue-notification'
 import moment from 'moment';
 import VueFilter from './plugins/VueFilter';
 
@@ -44,13 +45,14 @@ files.keys().forEach(file =>
 );
 
 // Alert components for vue
-Vue.use(VueFlashMessage, {
-    template: '@/templates/AlertTemplate.html',
+/*Vue.use(VueFlashMessage, {
+    template: './templates/AlertTemplate.html',
     messageOptions: {
-        timeout: 4000,
+        timeout: 40000,
         pauseOnInteract: true,
     }
-});
+});*/
+Vue.use(Notification);
 
 // moment.js for vue
 Vue.use(VueMoment, {

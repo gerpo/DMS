@@ -46,7 +46,7 @@
                     </div>
                 </div>
                 <div class="section col-12 col-md-10 offset-md-1"
-                     v-if="user.roles.length > 0 || user.abilities.length > 0">
+                     v-if="user.roles.length > 0 || user.permissions.length > 0">
                     <hr>
                     <h4>Roles & Abilities</h4>
                     <div class="row" v-if="user.roles.length > 0">
@@ -56,15 +56,14 @@
                                 <li v-for="role in user.roles">{{ role.title }}</li>
                             </ul>
                         </div>
-                        <div class="col" v-if="user.abilities.length > 0">
+                        <div class="col" v-if="user.roles.map((role) => role.name).includes('admin')">
+                            <p class="text-normal font-weight-bold">As an administrator all functions are available.</p>
+                        </div>
+                        <div class="col" v-else-if="user.permissions.length > 0">
                             <h5>Can</h5>
                             <ul class="text-normal">
-                                <li v-for="ability in user.abilities">{{ ability.title }}</li>
+                                <li v-for="permission in user.permissions">{{ permission.title }}</li>
                             </ul>
-                        </div>
-                        <div class="col" v-else-if="user.roles.includes('admin')">
-                            <h5>Can</h5>
-                            <p class="text-normal font-weight-bold">As an administrator all functions are available.</p>
                         </div>
                     </div>
                 </div>
@@ -179,12 +178,12 @@
                 await axios.post(route('api.user.password', this.user.id), payload)
                     .then(reponse => {
                         this.processingPassword = false;
-                        this.flash('Password successfully changed.')
+                        this.$notify({text: 'Password successfully changed.', type: 'success'})
                     })
                     .catch(error => {
                         this.processingPassword = false;
                         this.errors = error.response.data.errors;
-                        this.flash('Password was not updated. An error occurred.', 'danger');
+                        this.$notify({text: 'Password was not updated. An error occurred.', type: 'error'});
                     });
             },
             async changeEmail() {
@@ -197,12 +196,12 @@
                 await axios.post(route('api.user.email', this.user.id), payload)
                     .then(reponse => {
                         this.processingEmail = false;
-                        this.flash('Password successfully changed.')
+                        this.$notify({text: 'Password successfully changed.', type: 'success'})
                     })
                     .catch(error => {
                         this.processingEmail = false;
                         this.errors = error.response.data.errors;
-                        this.flash('Password was not updated. An error occurred.', 'danger');
+                        this.$notify({text: 'Password was not updated. An error occurred.', type: 'error'});
                     });
             }
         }

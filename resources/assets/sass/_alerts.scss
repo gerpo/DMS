@@ -35,3 +35,22 @@
 .flash__close-button:active, .flash__close-button:focus {
   outline: none
 }
+
+.alert-wrapper {
+  @extend .alert;
+  @extend .alert-primary;
+  @extend .container;
+  border-left: 5px solid $primary;
+
+  &.warn {
+    @extend .alert-warning;
+  }
+
+  &.success {
+    @extend .alert-success;
+  }
+
+  &.error {
+    @extend .alert-danger;
+  }
+}

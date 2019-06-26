@@ -111,7 +111,7 @@
                 <button @click="saveUser" class="btn btn-block btn-success text-capitalize">
                     {{ $t('general.save') }}
                     <span aria-hidden="true" class="spinner-border spinner-border-sm ml-1" role="status"
-                          v-if="loading"></span>
+                          v-if="isLoading"></span>
                 </button>
             </div>
         </div>
@@ -144,7 +144,7 @@
             errors: {},
             updatedUser: {},
             validationClass: '',
-            loading: false,
+            isLoading: false,
         }),
         created() {
             this.$store.registerModule('editUserModule', editUserModule);
@@ -154,17 +154,16 @@
         },
         methods: {
             async saveUser() {
-                this.loading = true;
+                this.isLoading = true;
                 return await axios.post(route('api.users.update', this.user.id), this.updatedUser)
                     .then(response => {
-                        this.flash('User updated', 'success');
+                        this.$notify({text: 'User updated', type: 'success'});
                         this.$store.dispatch('userUpdated', response.data);
                     })
                     .catch(error => {
-                        this.loading = false;
                         this.errors = error.response.data.errors;
-                        this.flash('User was not updated. An error occurred.', 'danger');
-                    });
+                        this.$notify({text: 'User was not updated. An error occurred.', type: 'error'});
+                    }).finally(() => this.isLoading = false);
             }
         },
         watch: {

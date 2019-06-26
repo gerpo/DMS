@@ -12,9 +12,9 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-    @yield('styles')
+@yield('styles')
 
-    <!-- Named routes for js -->
+<!-- Named routes for js -->
     @routes
 
     <!-- User information -->
@@ -48,7 +48,7 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
 
-            <div class= "collapse navbar-collapse" id="navbarSupportedContent">
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <!-- Left Side Of Navbar -->
                 <ul class="navbar-nav mr-auto">
 
@@ -89,7 +89,7 @@
     </nav>
 
     <main class="py-4">
-        <flash-message class="container px-0"></flash-message>
+        <notifications classes="alert-wrapper" width="100%" :max="2"></notifications>
         @yield('content')
     </main>
     <portal-target name="modals"></portal-target>

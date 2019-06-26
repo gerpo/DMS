@@ -1,60 +1,65 @@
 <template>
     <div class="col-10 offset-1">
-        <select class="custom-select mb-2" v-model="sender">
-            <option value="" selected>Choose role as sender</option>
-            <option v-for="s in senderList" :value="s.name">Send as {{ s.name | capitalize }}</option>
+        <select :class="{'is-invalid': errors.sender}"
+                :data-original-title="validationErrors.first('sender')" class="custom-select mb-2" data-toggle="tooltip"
+                data-vv-as="selected" name="sender"
+                v-model="sender" v-validate="'included:'+ senderList.map((item) => item.name).join(',')">
+            <option selected value="">Choose role as sender</option>
+            <option :value="s.name" v-for="s in senderList">Send as {{ s.name | capitalize }}</option>
         </select>
-        <input-tag :tags="recipients" :validate-tag="validateRecipient" :placeholder="$t('mail.to') | capitalize"
-                   :disabled="toAll || group !== ''"/>
-        <button class="btn btn-link btn-sm pt-0" :disabled="toAll"
-                @click="showMoreReceiverOptions = !showMoreReceiverOptions">
+        <input-tag :class="{'is-invalid': errors.recipients}" :disabled="toAll || group !== ''"
+                   :placeholder="$t('mail.to') | capitalize"
+                   :tags="recipients" :validate-tag="validateRecipient"/>
+        <button :disabled="toAll" @click="showMoreReceiverOptions = !showMoreReceiverOptions"
+                class="btn btn-link btn-sm pt-0">
             {{ showMoreReceiverOptions ? $tc('mail.lessReceiverOptions')
             :$t('mail.moreReceiverOptions')}}
         </button>
         <transition name="slide-in">
             <div class="bg-light p-1" v-show="showMoreReceiverOptions">
                 <div class="custom-control custom-checkbox mb-2">
-                    <input type="checkbox" class="custom-control-input" v-model="toAll" id="toAll">
+                    <input class="custom-control-input" id="toAll" type="checkbox" v-model="toAll">
                     <label class="custom-control-label" for="toAll">{{ $tc('mail.toAll') }}</label>
                 </div>
-                <select class="custom-select mb-2" v-model="group" :disabled="toAll">
-                    <option value="" selected>Choose group to send to</option>
-                    <option v-for="(g, key) in groupList" :value="key">Send to {{ g | capitalize }}</option>
+                <select :disabled="toAll" class="custom-select mb-2" v-model="group">
+                    <option selected value="">Choose group to send to</option>
+                    <option :value="key" v-for="(g, key) in groupList">Send to {{ g | capitalize }}</option>
                 </select>
-                <input-tag :tags="ccRecipients" :validate-tag="validateRecipient" class="mb-2"
-                           :placeholder="$t('mail.cc')" :disabled="toAll || group !== ''"/>
-                <input-tag :tags="bccRecipients" :validate-tag="validateRecipient" class="mb-2"
-                           :placeholder="$t('mail.bcc')" :disabled="toAll || group !== ''"/>
+                <input-tag :disabled="toAll || group !== ''" :placeholder="$t('mail.cc')" :tags="ccRecipients"
+                           :validate-tag="validateRecipient" class="mb-2"/>
+                <input-tag :disabled="toAll || group !== ''" :placeholder="$t('mail.bcc')" :tags="bccRecipients"
+                           :validate-tag="validateRecipient" class="mb-2"/>
             </div>
         </transition>
-        <input v-model="subject" type="text" class="form-control mb-2" :placeholder="$t('mail.subject') | capitalize"/>
-        <textarea v-model="content" class="form-control mb-2" id="message"
-                  :placeholder="$t('mail.message') | capitalize" rows="13"></textarea>
+        <input :placeholder="$t('mail.subject') | capitalize" class="form-control mb-2" type="text" v-model="subject"/>
+        <textarea :placeholder="$t('mail.message') | capitalize" class="form-control mb-2" id="message"
+                  rows="13" v-model="content"></textarea>
 
-        <div v-show="$refs.upload && $refs.upload.dropActive" class="drop-active">
+        <div class="drop-active" v-show="$refs.upload && $refs.upload.dropActive">
             <h3>Drop files to upload</h3>
         </div>
-        <div v-if="attachments.length" class="d-flex flex-wrap my-1">
-            <div v-for="(file, index) in attachments" :key="file.id"
+        <div class="d-flex flex-wrap my-1" v-if="attachments.length">
+            <div :class="{'border-danger': file.error, 'error': file.error, 'border-success': file.success, 'success': file.success}"
+                 :key="file.id"
                  class="d-xxl-inline-block border mr-1 mb-1 p-2 rounded border-primary"
-                 :class="{'border-danger': file.error, 'error': file.error, 'border-success': file.success, 'success': file.success}">
-                <button v-if="!file.active" type="button" class="close" aria-label="Close" @click="removeFile(index)">
+                 v-for="(file, index) in attachments">
+                <button @click="removeFile(index)" aria-label="Close" class="close" type="button" v-if="!file.active">
                     <span aria-hidden="true">&times;</span>
                 </button>
                 <p class="mb-0 mr-3 text-nowrap">{{ file.name }}</p>
                 <span class="small font-italic">{{ file.size | formatSize }}</span>
-                <span v-if="file.error" class="ml-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 510 510"
-                         style="enable-background:new 0 0 510 510;" xml:space="preserve">
+                <span class="ml-2" v-if="file.error">
+                    <svg height="16" style="enable-background:new 0 0 510 510;" viewBox="0 0 510 510" width="16"
+                         xml:space="preserve" xmlns="http://www.w3.org/2000/svg">
                         <g id="replay">
                             <path d="M255,102V0L127.5,127.5L255,255V153c84.15,0,153,68.85,153,153c0,84.15-68.85,153-153,153c-84.15,0-153-68.85-153-153H51
                             c0,112.2,91.8,204,204,204s204-91.8,204-204S367.2,102,255,102z" fill="#474747"></path>
                         </g>
                     </svg>
                 </span>
-                <span v-else-if="file.success" class="ml-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 510 510"
-                         style="enable-background:new 0 0 510 510;" xml:space="preserve">
+                <span class="ml-2" v-else-if="file.success">
+                    <svg height="16" style="enable-background:new 0 0 510 510;" viewBox="0 0 510 510" width="16"
+                         xml:space="preserve" xmlns="http://www.w3.org/2000/svg">
                         <g>
                             <g id="check-circle">
                                 <path d="M255,0C114.75,0,0,114.75,0,255s114.75,255,255,255s255-114.75,255-255S395.25,0,255,0z M204,382.5L76.5,255l35.7-35.7
@@ -63,20 +68,20 @@
                         </g>
                     </svg>
                 </span>
-                <span v-else-if="file.active" class="ml-2">
-                    <svg width="16" height="16" viewBox="0 0 38 38"
-                         xmlns="http://www.w3.org/2000/svg" stroke="#fff">
+                <span class="ml-2" v-else-if="file.active">
+                    <svg height="16" stroke="#fff" viewBox="0 0 38 38"
+                         width="16" xmlns="http://www.w3.org/2000/svg">
                         <g fill="none" fill-rule="evenodd">
-                            <g transform="translate(1 1)" stroke-width="2">
-                                <circle stroke-opacity=".5" cx="18" cy="18" r="18"></circle>
+                            <g stroke-width="2" transform="translate(1 1)">
+                                <circle cx="18" cy="18" r="18" stroke-opacity=".5"></circle>
                                 <path d="M36 18c0-9.94-8.06-18-18-18" stroke="blue">
                                     <animateTransform
                                             attributeName="transform"
-                                            type="rotate"
-                                            from="0 18 18"
-                                            to="360 18 18"
                                             dur="1s"
-                                            repeatCount="indefinite"></animateTransform>
+                                            from="0 18 18"
+                                            repeatCount="indefinite"
+                                            to="360 18 18"
+                                            type="rotate"></animateTransform>
                                 </path>
                             </g>
                         </g>
@@ -85,15 +90,17 @@
                 <span v-else></span>
             </div>
         </div>
-        <vue-upload ref="upload" :post-action="route('api.mailAttachments')" :custom-action="uploadAttachment"
-                    v-model="attachments" :multiple="true"
-                    :drop="true" :drop-directory="true" @input-file="inputFile"
-                    class="btn btn-outline-secondary mb-2">
+        <vue-upload :custom-action="uploadAttachment" :drop="true" :drop-directory="true"
+                    :multiple="true" :post-action="route('api.mailAttachments')"
+                    @input-file="inputFile" class="btn btn-outline-secondary mb-2" ref="upload"
+                    v-model="attachments">
             Attach Files
         </vue-upload>
         <div class="d-flex justify-content-lg-end justify-content-center">
-            <button class="btn btn-block btn-primary" type="submit" @click="sendMail">
+            <button @click="sendMail" class="btn btn-block btn-primary" type="submit">
                 {{ $t('mail.send') | capitalize }}
+                <span aria-hidden="true" class="spinner-border spinner-border-sm ml-1" role="status"
+                      v-if="isLoading"></span>
             </button>
         </div>
     </div>
@@ -125,21 +132,26 @@
             subject: '',
             content: '',
             attachments: [],
-            attachmentPaths: {}
+            attachmentPaths: {},
+            isLoading: false,
+            errors: [],
         }),
         mounted() {
             this.senderList = this.fetchSenderList();
             this.fetchGroupList();
-            //window.addEventListener('beforeunload', (e) => e.returnValue = true);
             window.addEventListener('unload', this.cleanUpAllAttachments);
 
-            if(this.to) this.recipients = [this.to];
+            if (this.to) this.recipients = [this.to];
+
+            $('[data-toggle="tooltip"]').tooltip();
         },
         methods: {
             validateRecipient(input) {
-                return true;
+                const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+                return re.test(String(input).toLowerCase());
             },
             async sendMail() {
+                this.isLoading = true;
                 return await axios.post(route('mails.store'), {
                     sender: this.sender,
                     toAll: this.toAll,
@@ -152,12 +164,13 @@
                     attachmentPaths: this.attachmentPaths,
                 })
                     .then(response => {
-                        this.flash('Mail send.', 'success');
+                        this.$notify({text: 'Mail sent.', type: 'success'});
                         this.resetForm();
                     })
                     .catch(error => {
-                        console.log(error);
-                    })
+                        this.$notify({text: 'Mail could not be sent.', type: 'error'});
+                        this.errors = error.response.data.errors;
+                    }).finally(() => this.isLoading = false)
             },
             fetchSenderList() {
                 const list = [];

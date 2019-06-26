@@ -89,7 +89,7 @@
                 const start = (this.currentPage - 1) * this.itemsPerPage;
                 const end = start + this.itemsPerPage;
 
-                return this.sort(this.filteredItems.slice(start, end));
+                return this.sort(this.filteredItems).slice(start, end);
             },
             pages() {
                 return Math.ceil(this.filteredItems.length / this.itemsPerPage);
@@ -124,7 +124,7 @@
             }
         },
         watch: {
-            pages: function(val) {
+            pages: function (val) {
                 this.currentPage = this.currentPage > val ? val : this.currentPage;
             }
         }

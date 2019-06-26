@@ -25,11 +25,16 @@ class UserObserver
 
     public function updating(User $user): void
     {
-        if ($user->getOriginal('email') !== $user->email)
-        {
+        if ($user->getOriginal('email') !== $user->email) {
             $user->confirmed = false;
-            $user->confirmation_token = str_limit(md5($user->email.str_random()), 25, '');
+            $user->confirmation_token = str_limit(md5($user->email . str_random()), 25, '');
             event(new UserEmailChanged($user));
+        }
+
+        if ($user->house === config('dms.owner_dorm') && $user->getOriginal('house') !== config('dms.owner_dorm')) {
+            Bouncer::assign('resident')->to($user);
+        } elseif ($user->house !== config('dms.owner_dorm') && $user->isA('resident')) {
+            Bouncer::retract('resident')->from($user);
         }
     }
 

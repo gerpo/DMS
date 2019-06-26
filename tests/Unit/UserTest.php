@@ -111,6 +111,38 @@ class UserTest extends TestCase
     }
 
     /** @test */
+    public function a_user_of_not_owner_dorm_is_not_assigned_resident_role_after_creation(): void
+    {
+        $user = create(User::class, ['house' => 'Not Owner Dorm']);
+
+        $this->assertFalse($user->isA('resident'));
+    }
+
+    /** @test */
+    public function a_user_is_assigned_resident_role_if_changed_to_owner_dorm(): void
+    {
+        $user = create(User::class, ['house' => 'Not Owner Dorm']);
+
+        $user->house = config('dms.owner_dorm');
+        $user->save();
+
+        $this->assertTrue($user->isA('resident'));
+    }
+
+    /** @test */
+    public function a_user_is_retracted_resident_role_if_changed_to_not_owner_dorm(): void
+    {
+        $user = create(User::class, ['house' => config('dms.owner_dorm')]);
+
+        $this->assertTrue($user->isA('resident'));
+
+        $user->house = 'Not Owner Dorm';
+        $user->save();
+
+        $this->assertFalse($user->isA('resident'));
+    }
+
+    /** @test */
     public function users_full_room_is_padded(): void
     {
         $user = create(User::class, ['room' => 1, 'floor' => 2]);

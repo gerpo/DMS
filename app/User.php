@@ -76,4 +76,11 @@ class User extends Authenticatable
     {
         return $this->getAbilities()->pluck('name')->toArray();
     }
+
+    public function getPermissionsAttribute()
+    {
+        return $this->abilities->merge($this->roles->flatMap(function ($role) {
+            return $role->abilities;
+        }))->unique();
+    }
 }
