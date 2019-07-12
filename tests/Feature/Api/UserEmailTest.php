@@ -3,10 +3,17 @@
 namespace Tests\Feature\Api;
 
 use App\User;
+use Mail;
 use Tests\TestCase;
 
 class UserEmailTest extends TestCase
 {
+    protected function setUp(): void
+    {
+        parent::setUp();
+        Mail::fake();
+    }
+
     /** @test */
     public function a_user_can_update_his_email(): void
     {
@@ -16,7 +23,7 @@ class UserEmailTest extends TestCase
         $newEmail = 'newemail@dms.test';
 
         $payload = [
-            'email' => $newEmail,
+            'new-email' => $newEmail,
         ];
 
         $this->post(route('api.user.email', $user->id), $payload)
@@ -38,7 +45,7 @@ class UserEmailTest extends TestCase
         $newEmail = 'newemail@dms.test';
 
         $payload = [
-            'email' => $newEmail,
+            'new-email' => $newEmail,
         ];
 
         $this->post(route('api.user.email', $user->id), $payload)

@@ -10,10 +10,10 @@ class UserEmailController extends Controller
     public function update(User $user)
     {
         $data = request()->validate([
-            'email' => 'required|string|email|max:255|unique:users'
+            'new-email' => 'required|string|email|max:255|unique:users,email'
         ]);
 
-        $user->email = $data['email'];
+        $user->email = $data['new-email'];
         $user->save();
     }
 }

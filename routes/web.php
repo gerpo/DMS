@@ -12,6 +12,8 @@
 */
 
 use App\Http\Middleware\OnlyAuthedUser;
+use App\Http\Middleware\RedirectIfConfirmed;
+use App\Http\Middleware\RedirectIfUnconfirmed;
 use App\User;
 
 Route::get('/', function () {
@@ -22,12 +24,35 @@ Auth::routes();
 
 Route::get('/register/confirm', 'Api\RegisterConfirmationController@index')->name('register.confirm');
 
-Route::group(['middleware' => 'auth'], function () {
+Route::group(['middleware' => ['auth', RedirectIfConfirmed::class]], function () {
+    Route::get('/verify', 'VerifyController@index')->name('verify.index');
+    Route::get('/verify/resend', 'VerifyController@create')->name('verify.resend');
+});
+
+Route::group(['middleware' => ['auth', RedirectIfUnconfirmed::class]], function () {
+    /*  Dashboard */
     Route::get('/home', 'HomeController@index')->name('home');
 
+    /* User / Profile */
     Route::get('/users', 'UsersController@index')->name('users')->middleware('check_ability:manage_users');
-    Route::get('/users/{user}', 'UsersController@show')->name('users.show')->middleware('check_ability:manage_users');
+    Route::get('/api/users',
+        'Api\UsersController@index')->name('api.users')->middleware('check_ability:manage_users');
+    Route::post('/api/users/{user}',
+        'Api\UsersController@update')->name('api.users.update')->middleware('check_ability:manage_users');
+    Route::get('/users/{user}',
+        'UsersController@show')->name('users.show')->middleware('check_ability:manage_users');
+    Route::post('/api/users/{user}/email',
+        'Api\UserEmailController@update')->name('api.user.email')->middleware(OnlyAuthedUser::class);
+    Route::post('/api/users/{user}/password',
+        'Api\UserPasswordController@update')->name('api.user.password')->middleware(OnlyAuthedUser::class);
 
+    Route::get('/me', function () {
+        $user = User::where('id', auth()->user()['id'])->with(['roles'])->first()->append('permissions');
+
+        return view('profile')->with(['user' => $user]);
+    });
+
+    /* Roles & Abilities */
     Route::get('/roles', 'RolesController@index')->name('roles');
     Route::post('/roles',
         'Api\RolesController@store')->name('api.roles.store')->middleware('check_ability:manage_roles');
@@ -50,12 +75,16 @@ Route::group(['middleware' => 'auth'], function () {
     Route::delete('/users/{user}/roles',
         'Api\UserRolesController@destroy')->name('api.user-roles.destroy')->middleware('check_ability:manage_users');
 
+
+    /* Plugins */
     Route::get('/plugins', 'PluginsController@index')->name('plugins');
     Route::patch('/plugins/{plugin}',
         'Api\PluginsController@update')->name('api.plugins.update')->middleware('check_ability:manage-plugins');
     Route::delete('/plugins/{plugin}',
         'Api\PluginsController@destroy')->name('api.plugins.destroy')->middleware('check_ability:manage-plugins');
 
+
+    /* Mails */
     Route::get('/mails', 'MailsController@index')->name('mails');
     Route::post('/mails',
         'MailsController@store')->name('mails.store')->middleware('check_ability:send_mails,send_floorMails,send_roleMails');
@@ -72,19 +101,9 @@ Route::group(['middleware' => 'auth'], function () {
     Route::delete('/api/attachments',
         'Api\MailAttachmentsController@destroy')->name('api.mailAttachments.destroy')->middleware('check_ability:send_mails');
 
-    Route::get('/api/users', 'Api\UsersController@index')->name('api.users')->middleware('check_ability:manage_users');
-    Route::post('/api/users/{user}',
-        'Api\UsersController@update')->name('api.users.update')->middleware('check_ability:manage_users');
-    Route::post('/api/users/{user}/email',
-        'Api\UserEmailController@update')->name('api.user.email')->middleware(OnlyAuthedUser::class);
-    Route::post('/api/users/{user}/password',
-        'Api\UserPasswordController@update')->name('api.user.password')->middleware(OnlyAuthedUser::class);
 
-    Route::get('/me', function () {
-        $user = User::where('id', auth()->user()['id'])->with(['roles'])->first()->append('permissions');
-
-        return view('profile')->with(['user' => $user]);
-    });
+    /* Notifications */
+    Route::get('/notifications', 'NotificationsController@index')->name('notifications')->middleware('check_ability:create_notifications');
 
     Route::get('/test', function () {
         auth()->loginUsingId(2);

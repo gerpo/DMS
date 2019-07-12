@@ -50,7 +50,7 @@ class DashboardTest extends TestCase
             Plugisto::withoutGlobalScope(ActiveScope::class)
                 ->get());
 
-        $allowedPackages = Plugisto::whereIn('needed_permission', ['manage_users', null])->get();
+        $allowedPackages = Plugisto::where('needed_permission', 'manage_users')->orWhereNull('needed_permission')->get();
 
         $this->assertEquals($allowedPackages, $packages);
     }
@@ -63,7 +63,7 @@ class DashboardTest extends TestCase
         $user = Auth::user();
         $user->allow('manage_users');
 
-        $packages = Plugisto::where('needed_permission', 'manage_users')->get();
+        $packages = Plugisto::where('needed_permission', 'manage_users')->orWhereNull('needed_permission')->get();
 
         $this->get(route('home'))
             ->assertViewHas(['packages' => $packages]);

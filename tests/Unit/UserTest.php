@@ -3,7 +3,6 @@
 namespace Tests\Unit;
 
 use App\Events\UserEmailChanged;
-use App\Listeners\SendEmailConfirmationEmail;
 use App\Mail\ConfirmEmailMail;
 use App\User;
 use Bouncer;
@@ -80,8 +79,6 @@ class UserTest extends TestCase
     /** @test */
     public function after_email_update_email_confirmation_email_send(): void
     {
-        Mail::fake();
-
         $user = create(User::class);
 
         $newEmail = 'newemail@dms.test';
@@ -182,7 +179,7 @@ class UserTest extends TestCase
 
         $user->allow('manage_users');
 
-        $this->assertEquals(Plugisto::where('needed_permission', 'manage_users')->get(), $user->packages());
+        $this->assertEquals(Plugisto::where('needed_permission', 'manage_users')->orWhere('needed_permission', null)->get(), $user->packages());
     }
 
     /** @test */
@@ -201,5 +198,7 @@ class UserTest extends TestCase
 
         $this->artisan('db:seed', ['--class' => 'PlugistoTableSeeder']);
         Bouncer::dontCache();
+
+        Mail::fake();
     }
 }

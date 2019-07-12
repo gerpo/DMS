@@ -188,11 +188,11 @@
             },
             async changeEmail() {
                 const payload = {
-                    'new-email': this.newPassword,
-                    'new-email_confirmation': this.newPasswordConfirm,
+                    'new-email': this.newEmail,
+                    'new-email_confirmation': this.newEmailConfirm,
                 };
 
-                this.processingPassword = true;
+                this.processingEmail = true;
                 await axios.post(route('api.user.email', this.user.id), payload)
                     .then(reponse => {
                         this.processingEmail = false;
@@ -201,7 +201,7 @@
                     .catch(error => {
                         this.processingEmail = false;
                         this.errors = error.response.data.errors;
-                        this.$notify({text: 'Password was not updated. An error occurred.', type: 'error'});
+                        this.$notify({text: 'Email was not updated. An error occurred.', type: 'error'});
                     });
             }
         }
