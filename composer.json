@@ -10,15 +10,6 @@
   ],
   "license": "MIT",
   "type": "project",
-  "repositories": {
-    "0": {
-      "type": "path",
-      "url": "D:\\Web-Projekte\\tower\\packages\\gerpo\\credit-package",
-      "options": {
-        "symlink": true
-      }
-    }
-  },
   "require": {
     "php": ">=7.3.0",
     "ext-json": "*",

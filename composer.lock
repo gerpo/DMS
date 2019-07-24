@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4d4ddac6fb672f6ecf26c7918ad1f82a",
+    "content-hash": "16d5df6f9cb91fd950f747bcb0666750",
     "packages": [
         {
             "name": "barryvdh/laravel-dompdf",
@@ -568,16 +568,16 @@
         },
         {
             "name": "gerpo/plugisto",
-            "version": "dev-master",
+            "version": "v0.1-alpha",
             "source": {
                 "type": "git",
                 "url": "https://github.com/gerpo/Plugisto.git",
-                "reference": "1df1d6b0e4fc9dbc5cfb1ae25f19766af97370b9"
+                "reference": "25ebcff046cb015a2bc081786384c9cda015f8ae"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/gerpo/Plugisto/zipball/1df1d6b0e4fc9dbc5cfb1ae25f19766af97370b9",
-                "reference": "1df1d6b0e4fc9dbc5cfb1ae25f19766af97370b9",
+                "url": "https://api.github.com/repos/gerpo/Plugisto/zipball/25ebcff046cb015a2bc081786384c9cda015f8ae",
+                "reference": "25ebcff046cb015a2bc081786384c9cda015f8ae",
                 "shasum": ""
             },
             "require-dev": {
@@ -607,7 +607,7 @@
                 }
             ],
             "description": "A plugin system for laravel",
-            "time": "2019-07-12T08:26:44+00:00"
+            "time": "2019-07-24T19:57:10+00:00"
         },
         {
             "name": "jakub-onderka/php-console-color",
