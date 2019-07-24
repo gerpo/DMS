@@ -15,7 +15,6 @@
     "ext-json": "*",
     "barryvdh/laravel-dompdf": "^0.8.3",
     "fideloper/proxy": "^4.0",
-    "gerpo/dms-credit-package": "*",
     "gerpo/plugisto": "*",
     "laravel/framework": "5.8.*",
     "laravel/telescope": "^2.0",
