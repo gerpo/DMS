@@ -104,6 +104,9 @@ Route::group(['middleware' => ['auth', RedirectIfUnconfirmed::class]], function 
 
     /* Notifications */
     Route::get('/notifications', 'NotificationsController@index')->name('notifications')->middleware('check_ability:create_notifications');
+    Route::post('/notifications', 'NotificationsController@store')->name('notifications.store')->middleware('check_ability:create_notifications');
+    Route::patch('/notifications/{notification}', 'NotificationsController@update')->name('notifications.update')->middleware('check_ability:create_notifications');
+    Route::delete('/notifications/{notification}', 'NotificationsController@destroy')->name('notifications.destroy')->middleware('check_ability:create_notifications');
 
     Route::get('/test', function () {
         auth()->loginUsingId(2);

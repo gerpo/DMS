@@ -103,6 +103,17 @@
                       v-if="isLoading"></span>
             </button>
         </div>
+
+        <div class="preview-container mt-2" v-if="content">
+            <button aria-controls="preview" aria-expanded="false" class="btn btn-small btn-outline-info" data-target="#preview"
+                    data-toggle="collapse" type="button">
+                Preview
+            </button>
+            <div class="collapse mt-2" id="preview">
+                <div class="card card-body" v-html="$markdown(content)">
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 

@@ -21,6 +21,7 @@ return [
     'password' => 'password',
     'password_confirm' => 'password confirmation',
     'change_password' => 'change password',
+    'change_email' => 'change email',
 
     'save' => 'save',
 ];

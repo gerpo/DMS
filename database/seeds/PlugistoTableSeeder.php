@@ -48,6 +48,15 @@ class PlugistoTableSeeder extends Seeder
         ]);
 
         Plugisto::create([
+            'name' => 'Notifications',
+            'description' => 'Send global notifications to all users.',
+            'route' => '/notifications',
+            'namespace' => 'gerpo/dms/notifications',
+            'manually_added' => true,
+            'needed_permission' => 'create_notifications',
+        ]);
+
+        Plugisto::create([
             'name' => 'Plugins',
             'description' => 'View and manage installed plugins.',
             'route' => '/plugins',

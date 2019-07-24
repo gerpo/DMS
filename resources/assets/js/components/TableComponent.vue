@@ -92,7 +92,7 @@
                 return this.sort(this.filteredItems).slice(start, end);
             },
             pages() {
-                return Math.ceil(this.filteredItems.length / this.itemsPerPage);
+                return Math.ceil(this.filteredItems.length / this.itemsPerPage) || 1;
             }
         },
         methods: {

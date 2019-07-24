@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Api;
 
+use App\Scopes\ActiveScope;
 use App\User;
 use Hash;
 use Tests\TestCase;
@@ -18,7 +19,7 @@ class UserTest extends TestCase
         $users = User::orderBy('lastname')->get()->toJson();
 
         $this->get(route('api.users',
-            ['residentFilter' => json_encode(['current_tenant', 'main_tenant', 'subtenant'])]))
+            ['residentFilter' => json_encode([User::ACTIVE, User::MAIN_TENANT, User::SUB_TENANT])]))
             ->assertSuccessful()
             ->assertSee($users);
     }
@@ -33,7 +34,7 @@ class UserTest extends TestCase
         $users = User::orderBy('lastname')->get()->toJson();
 
         $this->get(route('api.users',
-            ['residentFilter' => json_encode(['current_tenant', 'main_tenant', 'subtenant'])]))
+            ['residentFilter' => json_encode([User::ACTIVE, User::MAIN_TENANT, User::SUB_TENANT])]))
             ->assertSuccessful()
             ->assertSee($users);
     }
@@ -44,7 +45,7 @@ class UserTest extends TestCase
         $this->withExceptionHandling()->signIn();
 
         $this->get(route('api.users',
-            ['residentFilter' => json_encode(['current_tenant', 'main_tenant', 'subtenant'])]))
+            ['residentFilter' => json_encode([User::ACTIVE, User::MAIN_TENANT, User::SUB_TENANT])]))
             ->assertStatus(403);
     }
 
@@ -63,9 +64,9 @@ class UserTest extends TestCase
         $this->get(route('api.users', [
             'houses' => json_encode(['Dorm B']),
             'residentFilter' => json_encode([
-                'current_tenant',
-                'main_tenant',
-                'subtenant',
+                User::ACTIVE,
+                User::MAIN_TENANT,
+                User::SUB_TENANT,
             ]),
         ]))
             ->assertSuccessful()
@@ -84,9 +85,9 @@ class UserTest extends TestCase
         $this->get(route('api.users', [
             'sort' => json_encode(['fieldName' => 'firstname', 'order' => 'asc']),
             'residentFilter' => json_encode([
-                'current_tenant',
-                'main_tenant',
-                'subtenant',
+                User::ACTIVE,
+                User::MAIN_TENANT,
+                User::SUB_TENANT,
             ]),
         ]))
             ->assertSuccessful()
@@ -105,9 +106,9 @@ class UserTest extends TestCase
         $this->get(route('api.users', [
             'sort' => json_encode(['fieldName' => 'lastname', 'order' => 'desc']),
             'residentFilter' => json_encode([
-                'current_tenant',
-                'main_tenant',
-                'subtenant',
+                User::ACTIVE,
+                User::MAIN_TENANT,
+                User::SUB_TENANT,
             ]),
         ]))
             ->assertSuccessful()
@@ -127,9 +128,9 @@ class UserTest extends TestCase
         $this->get(route('api.users', [
             'filter' => 'user1',
             'residentFilter' => json_encode([
-                'current_tenant',
-                'main_tenant',
-                'subtenant',
+                User::ACTIVE,
+                User::MAIN_TENANT,
+                User::SUB_TENANT,
             ]),
         ]))
             ->assertSuccessful()
@@ -149,9 +150,9 @@ class UserTest extends TestCase
         $this->get(route('api.users', [
             'filter' => 'user1',
             'residentFilter' => json_encode([
-                'current_tenant',
-                'main_tenant',
-                'subtenant',
+                User::ACTIVE,
+                User::MAIN_TENANT,
+                User::SUB_TENANT,
             ]),
         ]))
             ->assertSuccessful()
@@ -171,9 +172,9 @@ class UserTest extends TestCase
         $this->get(route('api.users', [
             'filter' => 'user1',
             'residentFilter' => json_encode([
-                'current_tenant',
-                'main_tenant',
-                'subtenant',
+                User::ACTIVE,
+                User::MAIN_TENANT,
+                User::SUB_TENANT,
             ]),
         ]))
             ->assertSuccessful()
@@ -193,9 +194,9 @@ class UserTest extends TestCase
         $this->get(route('api.users', [
             'filter' => 'user1',
             'residentFilter' => json_encode([
-                'current_tenant',
-                'main_tenant',
-                'subtenant',
+                User::ACTIVE,
+                User::MAIN_TENANT,
+                User::SUB_TENANT,
             ]),
         ]))
             ->assertSuccessful()
@@ -215,7 +216,7 @@ class UserTest extends TestCase
         $users = User::orderBy('lastname')->get()->toArray();
 
         $this->get(route('api.users',
-            ['residentFilter' => json_encode(['current_tenant', 'main_tenant'])]))
+            ['residentFilter' => json_encode([User::ACTIVE, User::MAIN_TENANT])]))
             ->assertSuccessful()
             ->assertJson(['data' => $users, 'total' => 3]);
     }
@@ -225,31 +226,31 @@ class UserTest extends TestCase
     {
         $this->signInAdmin();
 
-        create(User::class)->delete();
+        create(User::class)->deactivate();
         create(User::class, [], 2);
 
-        $users = User::onlyTrashed()->orderBy('lastname')->get()->toArray();
+        $users = User::onlyInactive()->orderBy('lastname')->get()->toArray();
 
         $this->get(route('api.users',
-            ['residentFilter' => json_encode(['former_tenant', 'main_tenant'])]))
+            ['residentFilter' => json_encode([User::INACTIVE, User::MAIN_TENANT])]))
             ->assertSuccessful()
             ->assertJson(['data' => $users, 'total' => 1]);
     }
 
     /** @test */
-    public function former_and_current_users_can_be_shown(): void
+    public function inactive_and_current_users_can_be_shown(): void
     {
         $this->signInAdmin();
 
         $deletedUser = create(User::class);
-        $deletedUser->delete();
+        $deletedUser->deactivate();
 
         create(User::class, [], 2);
 
-        $users = User::withTrashed()->orderBy('lastname')->get()->toArray();
+        $users = User::withInactive()->orderBy('lastname')->get()->toArray();
 
         $this->get(route('api.users',
-            ['residentFilter' => json_encode(['former_tenant', 'current_tenant', 'main_tenant'])]))
+            ['residentFilter' => json_encode([User::INACTIVE, User::ACTIVE, User::MAIN_TENANT])]))
             ->assertSuccessful()
             ->assertJson(['data' => $users, 'total' => 4]);
     }
@@ -268,7 +269,7 @@ class UserTest extends TestCase
         $users = User::where('is_subtenant', false)->orderBy('lastname')->get()->toArray();
 
         $this->get(route('api.users',
-            ['residentFilter' => json_encode(['current_tenant', 'main_tenant'])]))
+            ['residentFilter' => json_encode([User::ACTIVE, User::MAIN_TENANT])]))
             ->assertSuccessful()
             ->assertJson(['data' => $users, 'total' => 3]);
     }
@@ -287,7 +288,7 @@ class UserTest extends TestCase
         $users = User::where('is_subtenant', true)->orderBy('lastname')->get()->toArray();
 
         $this->get(route('api.users',
-            ['residentFilter' => json_encode(['current_tenant', 'subtenant'])]))
+            ['residentFilter' => json_encode([User::ACTIVE, User::SUB_TENANT])]))
             ->assertSuccessful()
             ->assertJson(['data' => $users, 'total' => 2]);
     }
@@ -300,7 +301,7 @@ class UserTest extends TestCase
         create(User::class, [], 2);
 
         $this->get(route('api.users',
-            ['residentFilter' => json_encode(['main_tenant', 'subtenant'])]))
+            ['residentFilter' => json_encode([User::MAIN_TENANT, User::SUB_TENANT])]))
             ->assertSuccessful()
             ->assertJson([
                 'data' => [],
@@ -316,7 +317,7 @@ class UserTest extends TestCase
         create(User::class, [], 2);
 
         $this->get(route('api.users',
-            ['residentFilter' => json_encode(['current_tenant', 'former_tenant'])]))
+            ['residentFilter' => json_encode([User::ACTIVE, User::INACTIVE])]))
             ->assertSuccessful()
             ->assertJson([
                 'data' => [],
@@ -334,7 +335,7 @@ class UserTest extends TestCase
         $users = ['data' => User::orderBy('lastname')->get()->toArray(), 'total' => User::all()->count()];
 
         $this->get(route('api.users',
-            ['residentFilter' => json_encode(['current_tenant', 'main_tenant'])]))
+            ['residentFilter' => json_encode([User::ACTIVE, User::MAIN_TENANT])]))
             ->assertSuccessful()
             ->assertJson([
                 'data' => $users['data'],

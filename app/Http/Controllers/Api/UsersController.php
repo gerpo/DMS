@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Scopes\ActiveScope;
 use App\User;
 use App\Http\Controllers\Controller;
 
@@ -14,7 +15,7 @@ class UsersController extends Controller
         $order = json_decode(request()->sort)->order ?? 'asc';
         $dorms = json_decode(request()->houses) ?? [];
         $residentFilter = array_map('strtolower',
-            json_decode(request()->residentFilter) ?? ['current_tenant', 'main_tenant', 'subtenant']);
+            json_decode(request()->residentFilter) ?? [User::ACTIVE, User::MAIN_TENANT, User::SUB_TENANT]);
 
         $query = $this->buildResidentFilterQuery($residentFilter);
 
@@ -36,25 +37,25 @@ class UsersController extends Controller
         $query = new User();
 
         switch (true) {
-            case in_array('former_tenant', $residentFilter) && ! in_array('current_tenant', $residentFilter):
-                $query = $query->onlyTrashed();
+            case in_array(User::INACTIVE, $residentFilter) && ! in_array(User::ACTIVE, $residentFilter):
+                $query = $query->onlyInactive();
                 break;
-            case in_array('former_tenant', $residentFilter) && in_array('current_tenant', $residentFilter):
-                $query = $query->withTrashed();
+            case in_array(User::INACTIVE, $residentFilter) && in_array(User::ACTIVE, $residentFilter):
+                $query = $query->withInactive();
                 break;
-            case ! in_array('former_tenant', $residentFilter) && ! in_array('current_tenant', $residentFilter):
+            case ! in_array(User::INACTIVE, $residentFilter) && ! in_array(User::ACTIVE, $residentFilter):
                 $query = $query->where('house', 'INVALID');
                 break;
         }
 
         switch (true) {
-            case in_array('main_tenant', $residentFilter) && ! in_array('subtenant', $residentFilter):
+            case in_array(User::MAIN_TENANT, $residentFilter) && ! in_array(User::SUB_TENANT, $residentFilter):
                 $query = $query->where('is_subtenant', false);
                 break;
-            case in_array('subtenant', $residentFilter) && ! in_array('main_tenant', $residentFilter):
+            case in_array(User::SUB_TENANT, $residentFilter) && ! in_array(User::MAIN_TENANT, $residentFilter):
                 $query = $query->where('is_subtenant', true);
                 break;
-            case ! in_array('subtenant', $residentFilter) && ! in_array('main_tenant', $residentFilter):
+            case ! in_array(User::SUB_TENANT, $residentFilter) && ! in_array(User::MAIN_TENANT, $residentFilter):
                 $query = $query->where('house', 'INVALID');
                 break;
         }

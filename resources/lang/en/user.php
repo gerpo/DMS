@@ -16,6 +16,7 @@ return [
     'confirmed' => 'confirmed',
     'subtenant' => 'subtenant | subtenants',
     'main_tenant' => 'main tenant | main tenants',
-    'former_tenant' => 'former tenant | former tenants',
-    'current_tenant' => 'current tenant | current tenants',
+    'inactive_tenant' => 'former tenant | former tenants',
+    'active_tenant' => 'current tenant | current tenants',
+    'show_profile' => 'show profile',
 ];

@@ -2,13 +2,7 @@
 
 @section('content')
     <div class="container">
-        <div class="notification_container alert alert-warning alert-dismissible fade show p-2 mx-3">
-            <p class="lead alert-heading">Well done!</p>
-            <p>Test nachricht an alle benutzer der Plattform.</p>
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
+        <show-notifications-component :notifications="{{ $notifications }}"></show-notifications-component>
         <div class="d-flex flex-wrap">
             @foreach($packages as $package)
                 @can($package->needed_permission)
@@ -17,9 +11,11 @@
                             <div class="card-body d-flex flex-column justify-content-between h-100">
                                 @if (file_exists(public_path('images/icons/'.$package->name.'.svg')))
                                     <img class="card-img"
-                                         src="{{ secure_asset('images/icons/'.$package->name.'.svg') }}" alt="{{ $package->name }}">
+                                         src="{{ secure_asset('images/icons/'.$package->name.'.svg') }}"
+                                         alt="{{ $package->name }}">
                                 @else
-                                    <img class="card-img" src="{{ secure_asset('images/icons/default.png') }}" alt="{{ $package->name }}">
+                                    <img class="card-img" src="{{ secure_asset('images/icons/default.png') }}"
+                                         alt="{{ $package->name }}">
                                 @endif
 
                                 <h5 class="card-title text-center mt-2 text-dark text-capitalize align-bottom">{{ $package->name }}</h5>

@@ -4,6 +4,7 @@ namespace Tests\Unit;
 
 use App\Events\UserEmailChanged;
 use App\Mail\ConfirmEmailMail;
+use App\Notification;
 use App\User;
 use Bouncer;
 use Event;
@@ -179,7 +180,8 @@ class UserTest extends TestCase
 
         $user->allow('manage_users');
 
-        $this->assertEquals(Plugisto::where('needed_permission', 'manage_users')->orWhere('needed_permission', null)->get(), $user->packages());
+        $this->assertEquals(Plugisto::where('needed_permission', 'manage_users')->orWhere('needed_permission',
+            null)->get(), $user->packages());
     }
 
     /** @test */
@@ -190,6 +192,21 @@ class UserTest extends TestCase
         $user->assign('admin');
 
         $this->assertEquals(Plugisto::all(), $user->packages());
+    }
+
+    /** @test */
+    public function a_user_can_have_notifications(): void
+    {
+        $notification = [
+            'title' => 'Test Title',
+            'message' => 'Test Message',
+            'is_active' => false,
+        ];
+
+        $user = create(User::class);
+        $user->notifications()->save(Notification::make($notification));
+
+        $this->assertNotNull($user->notifications);
     }
 
     protected function setUp(): void

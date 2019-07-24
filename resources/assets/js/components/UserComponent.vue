@@ -193,8 +193,8 @@
             residentFilter: [
                 {name: 'main_tenant', checked: true},
                 {name: 'subtenant', checked: true},
-                {name: 'current_tenant', checked: true},
-                {name: 'former_tenant', checked: false},
+                {name: 'active_tenant', checked: true},
+                {name: 'inactive_tenant', checked: false},
             ],
             isLoading: false,
         }),

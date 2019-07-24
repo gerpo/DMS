@@ -308,7 +308,7 @@ class RegisterUserTest extends TestCase
     /** @test */
     public function email_is_unique()
     {
-        create('App\User', ['email' => 'johndoe@example.com']);
+        create(User::class, ['email' => 'johndoe@example.com']);
 
         $this->withExceptionHandling();
 

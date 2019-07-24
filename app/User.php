@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Scopes\ActiveScope;
 use Gerpo\DmsCredits\Traits\HasCreditAccount;
 use Gerpo\DmsCredits\Traits\UsesCodes;
 use Gerpo\Plugisto\Models\Plugisto;
@@ -14,36 +15,58 @@ class User extends Authenticatable
 {
     use Notifiable;
     use HasRolesAndAbilities;
-    use SoftDeletes;
     use HasCreditAccount;
     use UsesCodes;
 
-    protected $guarded = [];
+    public const MAIN_TENANT = 'main_tenant';
+    public const SUB_TENANT = 'sub_tenant';
+    public const ACTIVE = 'active_tenant';
+    public const INACTIVE = 'inactive_tenant';
 
+    protected $guarded = [];
     protected $dates = [
         'created_at',
         'updated_at',
-        'deleted_at',
     ];
-
     protected $hidden = [
         'password',
         'remember_token',
     ];
-
     protected $casts = [
         'confirmed' => 'boolean',
         'is_subtenant' => 'boolean',
+        'is_active' => 'boolean',
     ];
-
     protected $appends = [
         'full_name',
     ];
+
+    protected static function boot(): void
+    {
+        parent::boot();
+
+        static::addGlobalScope(new ActiveScope());
+    }
+
 
     public function confirm(): void
     {
         $this->confirmed = true;
         $this->confirmation_token = null;
+
+        $this->save();
+    }
+
+    public function activate(): void
+    {
+        $this->is_active = true;
+
+        $this->save();
+    }
+
+    public function deactivate(): void
+    {
+        $this->is_active = false;
 
         $this->save();
     }
@@ -82,5 +105,20 @@ class User extends Authenticatable
         return $this->abilities->merge($this->roles->flatMap(function ($role) {
             return $role->abilities;
         }))->unique();
+    }
+
+    public function notifications()
+    {
+        return $this->hasMany(Notification::class, 'user_id');
+    }
+
+    public function scopeWithInactive($query)
+    {
+        return $query->withoutGlobalScope(ActiveScope::class);
+    }
+
+    public function scopeOnlyInactive($query)
+    {
+        return $this->scopeWithInactive($query)->where('is_active', false);
     }
 }

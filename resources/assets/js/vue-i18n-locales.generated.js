@@ -19,6 +19,7 @@ export default {
             "password": "password",
             "password_confirm": "password confirmation",
             "change_password": "change password",
+            "change_email": "change email",
             "save": "save"
         },
         "mail": {
@@ -33,6 +34,15 @@ export default {
             "message": "message",
             "send": "send",
             "newMail": "new message"
+        },
+        "notification": {
+            "title": "title",
+            "message": "message",
+            "published_at": "published at",
+            "creator": "creator",
+            "publish": "publish",
+            "publish_active": "publish immediately",
+            "save": "save"
         },
         "pagination": {
             "previous": "&laquo; Previous",
@@ -61,8 +71,9 @@ export default {
             "confirmed": "confirmed",
             "subtenant": "subtenant | subtenants",
             "main_tenant": "main tenant | main tenants",
-            "former_tenant": "former tenant | former tenants",
-            "current_tenant": "current tenant | current tenants"
+            "inactive_tenant": "former tenant | former tenants",
+            "active_tenant": "current tenant | current tenants",
+            "show_profile": "show profile"
         },
         "validation": {
             "accepted": "The {attribute} must be accepted.",

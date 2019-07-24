@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Notification;
 use Auth;
 
 class HomeController extends Controller
@@ -18,13 +19,12 @@ class HomeController extends Controller
 
     /**
      * Show the application dashboard.
-     *
-     * @return \Illuminate\Http\Response
      */
     public function index()
     {
         $packages = Auth::user()->packages();
+        $notifications = Notification::where('published_at','!=' , null)->get();
 
-        return view('home', compact('packages'));
+        return view('home', compact('packages', 'notifications'));
     }
 }

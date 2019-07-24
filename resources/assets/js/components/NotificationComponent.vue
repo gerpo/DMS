@@ -3,32 +3,96 @@
         <div class="card-header text-capitalize">
             <span>Notifications</span>
         </div>
-        <div class="card-body row">
+        <div class="card-body">
+            <manage-notifications-component v-if="allNotifications.length > 0"
+                    :notifications="allNotifications"></manage-notifications-component>
+            <hr v-if="allNotifications.length > 0">
+            <p class="lead">Create New Notification</p>
             <div class="form-group">
-                <label for=""></label>
-                <input type="text" placeholder="Titel">
+                <label class="sr-only" for="title">Title</label>
+                <input class="form-control mb-2" id="title" placeholder="Titel" type="text"
+                       v-model="newNotification.title">
+                <label class="sr-only" for="message"></label>
+                <textarea class="form-control" cols="30" id="message" name="message" placeholder="Notification Message"
+                          :class="{'is-invalid': validationErrors.has('message')}"
+                          :data-original-title="validationErrors.first('message')"
+                          rows="10" v-validate="'required'"  data-toggle="tooltip"
+                          v-model="newNotification.message"></textarea>
+
             </div>
-            <div class="form-group">
-                <label for=""></label>
-                <textarea name="" id="" cols="30" rows="10"></textarea>
+            <div class="form-group d-flex align-content-center">
+                <button @click="createNotification" class="btn btn-primary">
+                    {{ (newNotification.is_active) ? $t('notification.publish') : $t('notification.save') }}
+                </button>
+                <div class="custom-control custom-checkbox ml-2 align-self-center">
+                    <input checked class="custom-control-input" id="isActive" type="checkbox"
+                           v-model="newNotification.is_active">
+                    <label class="custom-control-label" for="isActive">{{ $t('notification.publish_active') }}</label>
+                </div>
+                <div class="custom-control custom-checkbox ml-2 align-self-center">
+                    <input :disabled="!newNotification.is_active" checked class="custom-control-input" id="sendMail"
+                           type="checkbox" v-model="newNotification.send_mail">
+                    <label class="custom-control-label" for="sendMail">{{ $t('notification.send_mail') }}</label>
+                </div>
             </div>
         </div>
-        <div class="custom-control custom-checkbox">
-            <input class="custom-control-input" type="checkbox">
-            <label  class="custom-control-label"></label>
-        </div>
-        <button class="btn-btn-block btn-primary">Save</button>
     </div>
 </template>
 
 <script>
+    import ManageNotificationsComponent from "./ManageNotificationsComponent";
+
     export default {
         name: "notification-component",
         components: {
+            ManageNotificationsComponent,
+        },
+        props: {
+            activeNotifications: {default: () => [], type: [Array]},
         },
         data: () => ({
-            showNewMailModal: false,
-        })
+            newNotification: {
+                title: '',
+                message: '',
+                is_active: false,
+                send_mail: false,
+            },
+            allNotifications: [],
+        }),
+        created() {
+            this.allNotifications = this.activeNotifications;
+        },
+        mounted() {
+            $('[data-toggle="tooltip"]').tooltip();
+        },
+        methods: {
+            async createNotification() {
+                await this.$validator.validate();
+                if(this.validationErrors.any()) return;
+
+                return await axios.post(route('notifications.store'), this.newNotification)
+                    .then(response => {
+                        this.allNotifications.push(response.data);
+                        this.$notify({
+                            text: `Notification "${this.newNotification.title}" was successfully added.`,
+                            type: 'success'
+                        });
+                    })
+                    .catch(error => {
+                        this.$notify({
+                            text: `Unfortunately an error occurred. Please, try again later.`,
+                            type: 'error'
+                        });
+                    })
+            }
+        },
+        watch: {
+            'newNotification.is_active': function (value) {
+                if (!value) {
+                    this.newNotification.send_mail = value;
+                }
+            }
+        }
     }
 </script>
 

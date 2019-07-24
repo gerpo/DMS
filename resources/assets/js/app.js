@@ -5,6 +5,7 @@
  */
 
 require('./bootstrap');
+const showdown = require('showdown');
 
 import Vue from 'vue';
 import Vuex from 'vuex';
@@ -16,7 +17,6 @@ import VueInternationalization from 'vue-i18n';
 import Locale from './vue-i18n-locales.generated';
 import route from "../../../vendor/tightenco/ziggy/src/js/route";
 // Vue components
-//import VueFlashMessage from 'vue-flash-message';
 import Notification from 'vue-notification'
 import moment from 'moment';
 import VueFilter from './plugins/VueFilter';
@@ -24,7 +24,9 @@ import VueFilter from './plugins/VueFilter';
 const lang = document.documentElement.lang.substr(0, 2);
 // TODO: change to detect browser language
 //const lang = navigator.language.substr(0, 2);
-
+if (lang !== 'en') {
+    require(`moment/locale/${lang}`);
+}
 moment.locale(lang);
 
 
@@ -56,7 +58,7 @@ Vue.use(Notification);
 
 // moment.js for vue
 Vue.use(VueMoment, {
-    moment
+    moment,
 });
 
 // Translation helper for vue
@@ -101,6 +103,14 @@ Vue.mixin({
         $tv: function (key, ...values) {
             const newKey = `vendor.${key.replace('::', '.')}`;
             return this.$t(newKey, ...values)
+        }
+    }
+});
+Vue.mixin({
+    methods: {
+        $markdown(value) {
+            const converter = new showdown.Converter();
+            return converter.makeHtml(value);
         }
     }
 });
