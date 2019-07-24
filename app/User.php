@@ -15,8 +15,6 @@ class User extends Authenticatable
 {
     use Notifiable;
     use HasRolesAndAbilities;
-    use HasCreditAccount;
-    use UsesCodes;
 
     public const MAIN_TENANT = 'main_tenant';
     public const SUB_TENANT = 'sub_tenant';
