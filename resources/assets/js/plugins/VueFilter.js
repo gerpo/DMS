@@ -18,7 +18,7 @@ const VueFilter = {
 
         Vue.filter('transform-role', function (value) {
             if (!value) return '';
-            return value.toString().replace('_', ' ');
+            return value.toString().replace(/_/g, ' ');
         });
 
         Vue.filter('number', function (value, invalidValue = 0) {
