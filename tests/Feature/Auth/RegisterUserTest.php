@@ -3,6 +3,7 @@
 namespace Tests\Feature\Auth;
 
 use App\User;
+use Illuminate\Support\Arr;
 use Tests\TestCase;
 use App\Mail\ConfirmEmailMail;
 use Illuminate\Support\Facades\Auth;
@@ -21,7 +22,7 @@ class RegisterUserTest extends TestCase
     }
 
     /** @test */
-    public function users_can_register_an_account()
+    public function users_can_register_an_account(): void
     {
         $ownerDorm = config('dms.owner_dorm');
 
@@ -46,7 +47,7 @@ class RegisterUserTest extends TestCase
     }
 
     /** @test */
-    public function a_confirmation_email_is_sent_upon_registration()
+    public function a_confirmation_email_is_sent_upon_registration(): void
     {
         $this->post(route('register'), $this->validParams());
 
@@ -487,7 +488,7 @@ class RegisterUserTest extends TestCase
         $this->assertCount(0, User::all());
 
         $validDorm = config('dms.dorms');
-        $validDorm = array_random($validDorm);
+        $validDorm = Arr::random($validDorm);
 
         $this->post(route('register'), $this->validParams([
             'house' => $validDorm,

@@ -1,36 +1,39 @@
 <template>
     <div class="col-10 offset-1">
-        <select :class="{'is-invalid': errors.sender}"
-                :data-original-title="validationErrors.first('sender')" class="custom-select mb-2" data-toggle="tooltip"
-                data-vv-as="selected" name="sender"
+
+        <select :class="{'is-invalid': errors.sender}" class="custom-select mb-2"
+                data-vv-as="selected" id="sender-input" name="sender"
                 v-model="sender" v-validate="'included:'+ senderList.map((item) => item.name).join(',')">
             <option selected value="">Choose role as sender</option>
             <option :value="s.name" v-for="s in senderList">Send as {{ s.name | capitalize }}</option>
         </select>
+        <b-tooltip target="sender-input" v-if="errors.sender">{{ errors.sender[0] }}</b-tooltip>
+
         <input-tag :class="{'is-invalid': errors.recipients}" :disabled="toAll || group !== ''"
-                   :placeholder="$t('mail.to') | capitalize"
-                   :tags="recipients" :validate-tag="validateRecipient"/>
+                   :placeholder="$t('mail.to') | capitalize" :tags="recipients"
+                   :validate-tag="validateRecipient" id="recipients-input"/>
+        <b-tooltip target="recipients-input" v-if="errors.recipients">{{ errors.recipients[0] }}</b-tooltip>
+
         <button :disabled="toAll" @click="showMoreReceiverOptions = !showMoreReceiverOptions"
                 class="btn btn-link btn-sm pt-0">
             {{ showMoreReceiverOptions ? $tc('mail.lessReceiverOptions')
             :$t('mail.moreReceiverOptions')}}
         </button>
-        <transition name="slide-in">
-            <div class="bg-light p-1" v-show="showMoreReceiverOptions">
-                <div class="custom-control custom-checkbox mb-2">
-                    <input class="custom-control-input" id="toAll" type="checkbox" v-model="toAll">
-                    <label class="custom-control-label" for="toAll">{{ $tc('mail.toAll') }}</label>
-                </div>
-                <select :disabled="toAll" class="custom-select mb-2" v-model="group">
-                    <option selected value="">Choose group to send to</option>
-                    <option :value="key" v-for="(g, key) in groupList">Send to {{ g | capitalize }}</option>
-                </select>
-                <input-tag :disabled="toAll || group !== ''" :placeholder="$t('mail.cc')" :tags="ccRecipients"
-                           :validate-tag="validateRecipient" class="mb-2"/>
-                <input-tag :disabled="toAll || group !== ''" :placeholder="$t('mail.bcc')" :tags="bccRecipients"
-                           :validate-tag="validateRecipient" class="mb-2"/>
+        <b-collapse class="bg-light p-1" id="more-options-collapse" v-model="showMoreReceiverOptions">
+            <div class="custom-control custom-checkbox mb-2">
+                <input class="custom-control-input" id="toAll" type="checkbox" v-model="toAll">
+                <label class="custom-control-label" for="toAll">{{ $tc('mail.toAll') }}</label>
             </div>
-        </transition>
+            <select :disabled="toAll" class="custom-select mb-2" v-model="group">
+                <option selected value="">Choose group to send to</option>
+                <option :value="key" v-for="(g, key) in groupList">Send to {{ g | capitalize }}</option>
+            </select>
+            <input-tag :disabled="toAll || group !== ''" :placeholder="$t('mail.cc')" :tags="ccRecipients"
+                       :validate-tag="validateRecipient" class="mb-2"/>
+            <input-tag :disabled="toAll || group !== ''" :placeholder="$t('mail.bcc')" :tags="bccRecipients"
+                       :validate-tag="validateRecipient" class="mb-2"/>
+        </b-collapse>
+
         <input :placeholder="$t('mail.subject') | capitalize" class="form-control mb-2" type="text" v-model="subject"/>
         <textarea :placeholder="$t('mail.message') | capitalize" class="form-control mb-2" id="message"
                   rows="13" v-model="content"></textarea>
@@ -105,14 +108,14 @@
         </div>
 
         <div class="preview-container mt-2" v-if="content">
-            <button aria-controls="preview" aria-expanded="false" class="btn btn-small btn-outline-info" data-target="#preview"
-                    data-toggle="collapse" type="button">
+            <button aria-controls="preview" aria-expanded="false" class="btn btn-small btn-outline-info" type="button"
+                    v-b-toggle.preview>
                 Preview
             </button>
-            <div class="collapse mt-2" id="preview">
+            <b-collapse class="collapse mt-2" id="preview">
                 <div class="card card-body" v-html="$markdown(content)">
                 </div>
-            </div>
+            </b-collapse>
         </div>
     </div>
 </template>
@@ -120,12 +123,18 @@
 <script>
     import InputTag from './InputTagComponent';
     import VueUpload from 'vue-upload-component';
+    import {BCollapse, BTooltip, VBToggle} from 'bootstrap-vue'
 
     export default {
         name: "new-mail-component",
         components: {
             InputTag,
-            VueUpload
+            VueUpload,
+            BCollapse,
+            BTooltip,
+        },
+        directives: {
+            'b-toggle': VBToggle,
         },
         props: {
             to: {default: '', type: [String]},
@@ -153,8 +162,6 @@
             window.addEventListener('unload', this.cleanUpAllAttachments);
 
             if (this.to) this.recipients = [this.to];
-
-            $('[data-toggle="tooltip"]').tooltip();
         },
         methods: {
             validateRecipient(input) {
@@ -186,9 +193,11 @@
             fetchSenderList() {
                 const list = [];
 
-                window.laravel.roles.forEach(role => list.push({
-                    name: role,
-                }));
+                Object.keys(window.dms.roles).forEach(role => {
+                    if (window.dms.roles[role].includes('send_mails') || role === 'admin') {
+                        list.push({name: role,})
+                    }
+                });
 
                 return list;
             },

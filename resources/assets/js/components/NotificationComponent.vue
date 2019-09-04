@@ -4,20 +4,22 @@
             <span>Notifications</span>
         </div>
         <div class="card-body">
-            <manage-notifications-component v-if="allNotifications.length > 0"
-                    :notifications="allNotifications"></manage-notifications-component>
+            <manage-notifications-component :notifications="allNotifications"
+                                            v-if="allNotifications.length > 0"></manage-notifications-component>
             <hr v-if="allNotifications.length > 0">
             <p class="lead">Create New Notification</p>
             <div class="form-group">
                 <label class="sr-only" for="title">Title</label>
-                <input class="form-control mb-2" id="title" placeholder="Titel" type="text"
+                <input class="form-control mb-2" id="title" placeholder="Title" type="text"
                        v-model="newNotification.title">
                 <label class="sr-only" for="message"></label>
-                <textarea class="form-control" cols="30" id="message" name="message" placeholder="Notification Message"
-                          :class="{'is-invalid': validationErrors.has('message')}"
-                          :data-original-title="validationErrors.first('message')"
-                          rows="10" v-validate="'required'"  data-toggle="tooltip"
-                          v-model="newNotification.message"></textarea>
+                <textarea :class="{'is-invalid': validationErrors.has('message')}" class="form-control" cols="30"
+                          id="message" name="message"
+                          placeholder="Notification Message" rows="10" v-model="newNotification.message"
+                          v-validate="'required'"></textarea>
+                <b-tooltip target="message" v-if="validationErrors.has('message')">
+                    {{ validationErrors.first('message') }}
+                </b-tooltip>
 
             </div>
             <div class="form-group d-flex align-content-center">
@@ -41,11 +43,13 @@
 
 <script>
     import ManageNotificationsComponent from "./ManageNotificationsComponent";
+    import {BTooltip} from 'bootstrap-vue'
 
     export default {
         name: "notification-component",
         components: {
             ManageNotificationsComponent,
+            BTooltip,
         },
         props: {
             activeNotifications: {default: () => [], type: [Array]},
@@ -62,13 +66,10 @@
         created() {
             this.allNotifications = this.activeNotifications;
         },
-        mounted() {
-            $('[data-toggle="tooltip"]').tooltip();
-        },
         methods: {
             async createNotification() {
                 await this.$validator.validate();
-                if(this.validationErrors.any()) return;
+                if (this.validationErrors.any()) return;
 
                 return await axios.post(route('notifications.store'), this.newNotification)
                     .then(response => {

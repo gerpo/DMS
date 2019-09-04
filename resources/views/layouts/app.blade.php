@@ -20,10 +20,10 @@
     <!-- User information -->
     @if(Auth::check())
         <script>
-            window.laravel = {!! json_encode([
+            window.dms = {!! json_encode([
             'user_id' => Auth::user()->id,
-            'roles' => Auth::user()->roles->pluck('name'),
-            'permissions' => Auth::user()->abilities->pluck('name')->merge(Auth::user()->roles->flatMap(function($role) {return $role->abilities;})->pluck('name'))->unique(),
+            'roles' => Auth::user()->roles->load('abilities')->mapWithKeys(function($role) { return [$role->name => $role->abilities->pluck('name')];}),
+            'permissions' => Auth::user()->getAbilities()->pluck('name'),
             'user' => Auth::user()->only(['firstname', 'lastname', 'email', 'floor', 'room'])
         ]) !!}
         </script>
@@ -100,6 +100,50 @@
 {{--<script src="{{ asset('js/manifest.js') }}"></script>
 <script src="{{ asset('js/vendor.js') }}"></script>--}}
 <script src="{{ asset('js/app.js') }}"></script>
+<script>
+    // Navbar and dropdowns
+    let toggle = document.getElementsByClassName('navbar-toggler')[0],
+        collapse = document.getElementsByClassName('navbar-collapse')[0],
+        dropdowns = document.getElementsByClassName('dropdown');
 
+    // Toggle if navbar menu is open or closed
+    function toggleMenu() {
+        collapse.classList.toggle('collapse');
+        collapse.classList.toggle('in');
+    }
+
+    // Close all dropdown menus
+    function closeMenus() {
+        for (let j = 0; j < dropdowns.length; j++) {
+            dropdowns[j].getElementsByClassName('dropdown-menu')[0].classList.remove('show');
+            dropdowns[j].classList.remove('show');
+        }
+    }
+
+    // Add click handling to dropdowns
+    for (let i = 0; i < dropdowns.length; i++) {
+        dropdowns[i].addEventListener('click', function() {
+                const open = this.classList.contains('show');
+                closeMenus();
+                if (!open) {
+                    this.getElementsByClassName('dropdown-menu')[0].classList.toggle('show');
+                    this.classList.toggle('show');
+                }
+        });
+    }
+
+    // Close dropdowns when screen becomes big enough to switch to open by hover
+    function closeMenusOnResize() {
+        if (document.body.clientWidth >= 768) {
+            closeMenus();
+            collapse.classList.add('collapse');
+            collapse.classList.remove('in');
+        }
+    }
+
+    // Event listeners
+    window.addEventListener('resize', closeMenusOnResize, false);
+    toggle.addEventListener('click', toggleMenu, false);
+</script>
 </body>
 </html>

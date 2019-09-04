@@ -7,7 +7,7 @@ use App\Http\Controllers\Controller;
 
 class RoleAbilitiesController extends Controller
 {
-    public function store(Role $role)
+    public function store(Role $role): void
     {
         request()->validate([
             'data' => 'array|required',
@@ -22,7 +22,7 @@ class RoleAbilitiesController extends Controller
         });
     }
 
-    public function destroy(Role $role)
+    public function destroy(Role $role): void
     {
         request()->validate([
             'data' => 'array|required',

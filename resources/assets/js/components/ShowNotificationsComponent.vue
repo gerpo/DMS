@@ -1,19 +1,21 @@
 <template>
     <div class="notification-wrapper">
-        <div class="notification_container alert alert-warning alert-dismissible fade show p-2 mx-3"
-             v-for="notification in activeNotifications">
-            <p class="lead alert-heading"><strong>{{ notification.title }}</strong></p>
+        <b-alert @dismissed="dismiss(notification)" class="notification_container mx-3" dismissible fade show
+                 v-for="notification in activeNotifications" variant="warning" :key="`notification_${notification.id}`">
+            <p class="lead alert-heading mb-2"><strong>{{ notification.title }}</strong></p>
             <p v-html="$markdown(notification.message)"></p>
-            <button @click="dismiss(notification)" aria-label="Close" class="close" data-dismiss="alert" type="button">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
+        </b-alert>
     </div>
 </template>
 
 <script>
+    import {BAlert} from 'bootstrap-vue'
+
     export default {
         name: "ShowNotificationsComponent",
+        components: {
+            BAlert,
+        },
         props: {
             notifications: {default: () => [], type: [Array]},
         },

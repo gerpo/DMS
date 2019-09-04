@@ -21,7 +21,7 @@ mix.copyDirectory('resources/assets/images', 'public/images')
     .purgeCss();
 
 mix.browserSync({
-    proxy: 'https://tower.test',
+    proxy: 'https://dms.test',
     https: true
 });
 

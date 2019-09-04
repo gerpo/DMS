@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Auth;
 
+use Illuminate\Auth\Events\Registered;
+use Illuminate\Support\Str;
 use Mail;
 use App\User;
 use Illuminate\Http\Request;
@@ -82,7 +84,7 @@ class RegisterController extends Controller
             'room' => $data['room'],
             'house' => $data['house'],
             'password' => Hash::make($data['password']),
-            'confirmation_token' => str_limit(md5($data['email'].str_random()), 25, ''),
+            'confirmation_token' => Str::limit(md5($data['email'].Str::random()), 25, ''),
         ]);
     }
 
@@ -93,8 +95,11 @@ class RegisterController extends Controller
      * @param  \App\User $user
      * @return void
      */
-    protected function registered(Request $request, $user)
+    protected function registered(Request $request, $user): void
     {
+        event(new Registered($user));
+
+        $this->guard()->login($user);
         Mail::to($user)->send(new ConfirmEmailMail($user));
     }
 }

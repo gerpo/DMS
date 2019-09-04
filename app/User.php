@@ -9,6 +9,7 @@ use Gerpo\Plugisto\Models\Plugisto;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Str;
 use Silber\Bouncer\Database\HasRolesAndAbilities;
 
 class User extends Authenticatable
@@ -71,12 +72,12 @@ class User extends Authenticatable
 
     public function setFirstnameAttribute($value): void
     {
-        $this->attributes['firstname'] = title_case($value);
+        $this->attributes['firstname'] = Str::title($value);
     }
 
     public function setLastnameAttribute($value): void
     {
-        $this->attributes['lastname'] = title_case($value);
+        $this->attributes['lastname'] = Str::title($value);
     }
 
     public function getFullNameAttribute(): string

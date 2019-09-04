@@ -5,6 +5,7 @@ namespace App\Observers;
 use App\Events\UserEmailChanged;
 use App\User;
 use Bouncer;
+use Illuminate\Support\Str;
 
 class UserObserver
 {
@@ -27,7 +28,7 @@ class UserObserver
     {
         if ($user->getOriginal('email') !== $user->email) {
             $user->confirmed = false;
-            $user->confirmation_token = str_limit(md5($user->email . str_random()), 25, '');
+            $user->confirmation_token = Str::limit(md5($user->email . Str::random()), 25, '');
             event(new UserEmailChanged($user));
         }
 

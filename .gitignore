@@ -4,7 +4,7 @@
 /public/mix-manifest.json
 /vendor/
 /node_modules/
-/packages/
+packages/
 /.vscode
 /.vagrant
 /.phpstorm.*
@@ -14,15 +14,11 @@
 .env
 .idea
 _ide_helper.php
-.env.dusk.*
 Homestead.json
 Homestead.yaml
 npm-debug.log
-yarn-error.log
 /storage/*.key
 .env.backup
 .phpunit.result.cache
-
-\.php_cs\.dist
-
 \.php_cs\.cache
+/storage/clockwork/

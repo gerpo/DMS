@@ -46,14 +46,7 @@ files.keys().forEach(file =>
     )
 );
 
-// Alert components for vue
-/*Vue.use(VueFlashMessage, {
-    template: './templates/AlertTemplate.html',
-    messageOptions: {
-        timeout: 40000,
-        pauseOnInteract: true,
-    }
-});*/
+
 Vue.use(Notification);
 
 // moment.js for vue
@@ -83,17 +76,17 @@ Vue.mixin({
 Vue.mixin({
     methods: {
         $can: (permission, user_id = 0) => {
-            return window.laravel.roles.includes('admin') ||
-                window.laravel.permissions.includes(permission) ||
-                window.laravel.user_id === user_id;
+            return window.dms.roles.hasOwnProperty('admin') ||
+                window.dms.permissions.includes(permission) ||
+                window.dms.user_id === user_id;
         },
         $is: (role, user_id = 0) => {
-            return window.laravel.roles.includes('admin') ||
-                window.laravel.roles.includes(role) ||
-                window.laravel.user_id === user_id
+            return window.dms.roles.hasOwnProperty('admin') ||
+                window.dms.roles.hasOwnProperty(role) ||
+                window.dms.user_id === user_id
         },
         $isAuthedUser: (user_id) => {
-            return window.laravel.user_id === user_id;
+            return window.dms.user_id === user_id;
         }
     }
 });

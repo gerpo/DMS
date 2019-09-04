@@ -3,19 +3,21 @@
         <section class="table-responsive">
             <table class="table table-hover">
                 <thead class="text-center">
-                <th></th>
-                <th :title="ability.title" class="text-capitalize" data-placement="auto" data-toggle="tooltip"
-                    scope="col" v-for="ability in abilities">
-                    {{ ability.name | transform-role }}
-                </th>
-                <th></th>
-                <th></th>
+                <tr>
+                    <th></th>
+                    <th :id="`header_${ability.name}`" class="text-capitalize" scope="col" v-for="ability in abilities">
+                        {{ ability.name | transform-role }}
+                        <b-tooltip :target="`header_${ability.name}`">{{ ability.title }}</b-tooltip>
+                    </th>
+                    <th></th>
+                    <th></th>
+                </tr>
                 </thead>
                 <tbody>
                 <tr v-for="role in currentRoles">
-                    <th :title="role.title" class="text-capitalize pl-4" data-placement="auto" data-toggle="tooltip"
-                        scope="row">
+                    <th :id="`header_${role.name}`" class="text-capitalize pl-4" scope="row">
                         {{ role.name }}
+                        <b-tooltip :target="`header_${role.name}`">{{ role.title }}</b-tooltip>
                     </th>
 
                     <td class="text-center" v-for="ability in abilities">
@@ -48,12 +50,12 @@
         </section>
         <section class="form-group row my-3">
             <div class="col-md-3 offset-md-1 pb-2">
-                <input class="form-control text-capitalize" placeholder="New Role Name.." type="text"
+                <input class="form-control" placeholder="New Role Name.." type="text"
                        v-model="newRole.name">
             </div>
 
             <div class="col-md-5 pb-2">
-                <input class="form-control text-capitalize" placeholder="New role Description.." type="text"
+                <input class="form-control" placeholder="New role Description.." type="text"
                        v-model="newRole.title">
             </div>
 
@@ -76,8 +78,13 @@
 </template>
 
 <script>
+    import {BTooltip} from 'bootstrap-vue'
+
     export default {
         name: "role-abilities-component",
+        components: {
+            BTooltip
+        },
         props: {
             roles: {default: () => [], type: [Array]},
             abilities: {default: () => [], type: [Array]},
@@ -96,7 +103,6 @@
         }),
         mounted() {
             this.currentRoles = this.roles;
-            $('[data-toggle="tooltip"]').tooltip();
         },
         methods: {
             async addRole() {

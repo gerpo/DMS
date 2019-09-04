@@ -24,6 +24,7 @@ class HideInactivePlugistoRoutes
         ])->get()->isNotEmpty()) {
             abort(404);
         }
+
         return $next($request);
     }
 }

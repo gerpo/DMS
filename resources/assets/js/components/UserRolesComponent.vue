@@ -1,16 +1,15 @@
 <template>
     <section id="accordion">
         <div class="card" v-for="role in currentRoles">
-            <div :data-target="'#' + role.name"
-                 class="card-header text-capitalize d-flex justify-content-between align-items-center"
-                 data-toggle="collapse">
+            <div v-b-toggle="role.name"
+                 class="card-header text-capitalize d-flex justify-content-between align-items-center">
                 <div>
                     <p class="h5 m-0">{{ role.name }}</p>
                     <p class="card-subtitle m-0">{{ role.title }}</p>
                 </div>
                 <span class="badge badge-primary badge-pill">{{ role.users.length }}</span>
             </div>
-            <div :id="role.name" class="collapse" data-parent="#accordion">
+            <b-collapse :id="role.name">
                 <div class="card-body row">
                     <list-pagination-component :data="role.users" :key="role.id" searchAttr="full_name"
                                                v-if="role.users.length > 0">
@@ -40,7 +39,7 @@
                         </autocomplete>
                     </div>
                 </div>
-            </div>
+            </b-collapse>
         </div>
     </section>
 </template>
@@ -48,12 +47,17 @@
 <script>
     import Autocomplete from './AutoCompleteComponent.vue';
     import ListPaginationComponent from "./ListPaginationComponent";
+    import { BCollapse, VBToggle} from 'bootstrap-vue';
 
     export default {
         name: "user-roles-component",
         components: {
             ListPaginationComponent,
-            Autocomplete
+            Autocomplete,
+            BCollapse,
+        },
+        directives: {
+            'b-toggle': VBToggle,
         },
         props: {
             roles: {default: () => [], type: [Array]},

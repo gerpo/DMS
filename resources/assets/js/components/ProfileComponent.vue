@@ -73,13 +73,14 @@
                     <div class="row form-group">
                         <div class="col-12 col-md-6 mb-2 mb-md-0">
                             <input :class="{'is-invalid': validationErrors.has('new-password')}"
-                                   :data-original-title="validationErrors.first('new-password')"
                                    :placeholder="$t('general.password') | capitalize"
-                                   class="form-control"
-                                   data-toggle="tooltip" id="new-password"
+                                   class="form-control" id="new-password"
                                    name="new-password" type="password" v-model="newPassword"
                                    v-validate="'min:6|confirmed:new-password_confirmation'">
                         </div>
+                        <b-tooltip target="new-password" v-if="validationErrors.has('new-password')">
+                            {{ validationErrors.first('new-password') }}
+                        </b-tooltip>
                         <div class="col-12 col-md-6">
                             <input :placeholder="$t('general.password_confirm') | capitalize" class="form-control"
                                    id="new-password_confirmation"
@@ -104,13 +105,14 @@
                     <div class="row form-group">
                         <div class="col-12 col-md-6 mb-2 mb-md-0">
                             <input :class="{'is-invalid': validationErrors.has('new-email')}"
-                                   :data-original-title="validationErrors.first('new-email')"
                                    :placeholder="$t('general.email') | capitalize"
-                                   class="form-control"
-                                   data-toggle="tooltip" id="new-email"
+                                   class="form-control" id="new-email"
                                    name="new-email" type="text" v-model="newEmail"
                                    v-validate="'email|confirmed:new-email_confirmation'">
                         </div>
+                        <b-tooltip target="new-email" v-if="validationErrors.has('new-email')">
+                            {{ validationErrors.first('new-email') }}
+                        </b-tooltip>
                         <div class="col-12 col-md-6">
                             <input :placeholder="$t('general.email_confirm') | capitalize" class="form-control"
                                    id="new-email_confirmation"
@@ -138,11 +140,13 @@
 
 <script>
     import EditUserComponent from './EditUserComponent.vue';
+    import {BTooltip} from 'bootstrap-vue';
 
     export default {
         name: "profile-component",
         components: {
-            EditUserComponent
+            EditUserComponent,
+            BTooltip,
         },
         props: {
             user: {
@@ -161,9 +165,6 @@
             processingEmail: false,
             errors: []
         }),
-        mounted() {
-            $('[data-toggle="tooltip"]').tooltip();
-        },
         methods: {
             changeEditMode() {
                 this.showEditUserModal = true;

@@ -1,6 +1,8 @@
 <?php
 
 use Faker\Generator as Faker;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,10 +23,10 @@ $factory->define(App\User::class, function (Faker $faker) {
         'email' => $faker->unique()->safeEmail,
         'floor' => $faker->numberBetween(0, 15),
         'room' => $faker->numberBetween(0, 10),
-        'house' => array_random(config('dms.dorms')),
+        'house' => Arr::random(config('dms.dorms')),
         'password' => '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', // secret
         'confirmed' => true,
         'is_active' => true,
-        'remember_token' => str_random(10),
+        'remember_token' => Str::random(10),
     ];
 });

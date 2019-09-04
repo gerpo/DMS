@@ -24,7 +24,7 @@ class UserRolesTest extends TestCase
         $user = create(User::class);
         $role = create(Role::class);
 
-        $this->post(route('api.user-roles.store', ['id' => $user->id]), ['data' => [$role->toArray()]])
+        $this->post(route('api.user-roles.store', ['user' => $user->id]), ['data' => [$role->toArray()]])
             ->assertSuccessful();
 
         $this->assertTrue($user->isA($role->name));
@@ -38,7 +38,7 @@ class UserRolesTest extends TestCase
         $user = create(User::class);
         $roles = create(Role::class, [], 2);
 
-        $this->post(route('api.user-roles.store', ['id' => $user->id]), ['data' => $roles->toArray()])
+        $this->post(route('api.user-roles.store', ['user' => $user->id]), ['data' => $roles->toArray()])
             ->assertSuccessful();
 
         $roles->each(function ($role, $key) use ($user) {
@@ -58,7 +58,7 @@ class UserRolesTest extends TestCase
 
         $this->assertTrue($user->isA($role->name));
 
-        $this->delete(route('api.user-roles.destroy', ['id' => $user->id]), ['data' => [$role->toArray()]])
+        $this->delete(route('api.user-roles.destroy', ['user' => $user->id]), ['data' => [$role->toArray()]])
             ->assertSuccessful();
 
         $this->assertFalse($user->isA($role->name));
@@ -78,7 +78,7 @@ class UserRolesTest extends TestCase
             $this->assertTrue($user->isA($role->name));
         });
 
-        $this->delete(route('api.user-roles.destroy', ['id' => $user->id]), ['data' => $roles->toArray()])
+        $this->delete(route('api.user-roles.destroy', ['user' => $user->id]), ['data' => $roles->toArray()])
             ->assertSuccessful();
 
         $roles->each(function ($role, $key) use ($user) {
@@ -94,7 +94,7 @@ class UserRolesTest extends TestCase
         $user = create(User::class);
         $role = create(Role::class);
 
-        $this->post(route('api.user-roles.store', ['id' => $user->id]), ['data' => [$role->toArray()]])
+        $this->post(route('api.user-roles.store', ['user' => $user->id]), ['data' => [$role->toArray()]])
             ->assertSuccessful();
 
         $this->assertTrue($user->isA($role->name));
@@ -108,7 +108,7 @@ class UserRolesTest extends TestCase
         $user = create(User::class);
         $roles = create(Role::class, [], 2);
 
-        $this->post(route('api.user-roles.store', ['id' => $user->id]), ['data' => $roles->toArray()])
+        $this->post(route('api.user-roles.store', ['user' => $user->id]), ['data' => $roles->toArray()])
             ->assertSuccessful();
 
         $roles->each(function ($role, $key) use ($user) {
@@ -128,7 +128,7 @@ class UserRolesTest extends TestCase
 
         $this->assertTrue($user->isA($role->name));
 
-        $this->delete(route('api.user-roles.destroy', ['id' => $user->id]), ['data' => [$role->toArray()]])
+        $this->delete(route('api.user-roles.destroy', ['user' => $user->id]), ['data' => [$role->toArray()]])
             ->assertSuccessful();
 
         $this->assertFalse($user->isA($role->name));
@@ -148,7 +148,7 @@ class UserRolesTest extends TestCase
             $this->assertTrue($user->isA($role->name));
         });
 
-        $this->delete(route('api.user-roles.destroy', ['id' => $user->id]), ['data' => $roles->toArray()])
+        $this->delete(route('api.user-roles.destroy', ['user' => $user->id]), ['data' => $roles->toArray()])
             ->assertSuccessful();
 
         $roles->each(function ($role, $key) use ($user) {
@@ -164,7 +164,7 @@ class UserRolesTest extends TestCase
         $user = create(User::class);
         $role = create(Role::class);
 
-        $this->post(route('api.user-roles.store', ['id' => $user->id]), ['data' => [$role->toArray()]])
+        $this->post(route('api.user-roles.store', ['user' => $user->id]), ['data' => [$role->toArray()]])
             ->assertStatus(403);
 
         $this->assertFalse($user->isA($role->name));
@@ -182,7 +182,7 @@ class UserRolesTest extends TestCase
 
         $this->assertTrue($user->isA($role->name));
 
-        $this->delete(route('api.user-roles.destroy', ['id' => $user->id]), ['data' => [$role->toArray()]])
+        $this->delete(route('api.user-roles.destroy', ['user' => $user->id]), ['data' => [$role->toArray()]])
             ->assertStatus(403);
 
         $this->assertTrue($user->isA($role->name));
@@ -197,7 +197,7 @@ class UserRolesTest extends TestCase
 
         $user = create(User::class);
 
-        $this->post(route('api.user-roles.store', ['id' => $user->id]), ['data' => null])
+        $this->post(route('api.user-roles.store', ['user' => $user->id]), ['data' => null])
             ->assertSessionHasErrors('data')
             ->assertRedirect(route('users'));
     }
@@ -211,7 +211,7 @@ class UserRolesTest extends TestCase
 
         $user = create(User::class);
 
-        $this->delete(route('api.user-roles.destroy', ['id' => $user->id]), ['data' => null])
+        $this->delete(route('api.user-roles.destroy', ['user' => $user->id]), ['data' => null])
             ->assertSessionHasErrors('data')
             ->assertRedirect(route('users'));
     }
@@ -226,7 +226,7 @@ class UserRolesTest extends TestCase
         $user = create(User::class);
         $role = create(Role::class);
 
-        $this->post(route('api.user-roles.store', ['id' => $user->id]), ['data' => $role->name])
+        $this->post(route('api.user-roles.store', ['user' => $user->id]), ['data' => $role->name])
             ->assertSessionHasErrors('data')
             ->assertRedirect(route('users'));
 
@@ -247,7 +247,7 @@ class UserRolesTest extends TestCase
 
         $this->assertTrue($user->isA($role->name));
 
-        $this->delete(route('api.user-roles.destroy', ['id' => $user->id]), ['data' => $role->name])
+        $this->delete(route('api.user-roles.destroy', ['user' => $user->id]), ['data' => $role->name])
             ->assertSessionHasErrors('data')
             ->assertRedirect(route('users'));
 
@@ -264,7 +264,7 @@ class UserRolesTest extends TestCase
         $user = create(User::class);
         $role = create(Role::class);
 
-        $this->post(route('api.user-roles.store', ['id' => $user->id]), ['data' => $role->toArray()])
+        $this->post(route('api.user-roles.store', ['user' => $user->id]), ['data' => $role->toArray()])
             ->assertSessionHasErrors('data.*')
             ->assertRedirect(route('users'));
 
@@ -285,7 +285,7 @@ class UserRolesTest extends TestCase
 
         $this->assertTrue($user->isA($role->name));
 
-        $this->delete(route('api.user-roles.destroy', ['id' => $user->id]), ['data' => $role->toArray()])
+        $this->delete(route('api.user-roles.destroy', ['user' => $user->id]), ['data' => $role->toArray()])
             ->assertSessionHasErrors('data.*')
             ->assertRedirect(route('users'));
 
@@ -302,7 +302,7 @@ class UserRolesTest extends TestCase
         $user = create(User::class);
         $role = create(Role::class);
 
-        $this->post(route('api.user-roles.store', ['id' => $user->id]), ['data' => [$role->name]])
+        $this->post(route('api.user-roles.store', ['user' => $user->id]), ['data' => [$role->name]])
             ->assertSessionHasErrors('data.*')
             ->assertRedirect(route('users'));
 
@@ -323,7 +323,7 @@ class UserRolesTest extends TestCase
 
         $this->assertTrue($user->isA($role->name));
 
-        $this->delete(route('api.user-roles.destroy', ['id' => $user->id]), ['data' => [$role->name]])
+        $this->delete(route('api.user-roles.destroy', ['user' => $user->id]), ['data' => [$role->name]])
             ->assertSessionHasErrors('data.*')
             ->assertRedirect(route('users'));
 
@@ -339,7 +339,7 @@ class UserRolesTest extends TestCase
 
         $user = create(User::class);
 
-        $this->post(route('api.user-roles.store', ['id' => $user->id]), ['data' => ['name' => null]])
+        $this->post(route('api.user-roles.store', ['user' => $user->id]), ['data' => ['name' => null]])
             ->assertSessionHasErrors('data.*.name')
             ->assertRedirect(route('users'));
     }
@@ -358,7 +358,7 @@ class UserRolesTest extends TestCase
 
         $this->assertTrue($user->isA($role->name));
 
-        $this->delete(route('api.user-roles.destroy', ['id' => $user->id]), ['data' => ['name' => null]])
+        $this->delete(route('api.user-roles.destroy', ['user' => $user->id]), ['data' => ['name' => null]])
             ->assertSessionHasErrors('data.*.name')
             ->assertRedirect(route('users'));
 
@@ -374,7 +374,7 @@ class UserRolesTest extends TestCase
 
         $user = create(User::class);
 
-        $this->post(route('api.user-roles.store', ['id' => $user->id]), ['data' => ['name' => 'not_existing']])
+        $this->post(route('api.user-roles.store', ['user' => $user->id]), ['data' => ['name' => 'not_existing']])
             ->assertSessionHasErrors('data.*.name')
             ->assertRedirect(route('users'));
     }
@@ -393,7 +393,7 @@ class UserRolesTest extends TestCase
 
         $this->assertTrue($user->isA($role->name));
 
-        $this->delete(route('api.user-roles.destroy', ['id' => $user->id]), ['data' => ['name' => 'not_existing']])
+        $this->delete(route('api.user-roles.destroy', ['user' => $user->id]), ['data' => ['name' => 'not_existing']])
             ->assertSessionHasErrors('data.*.name')
             ->assertRedirect(route('users'));
 
