@@ -2,11 +2,11 @@
 
 namespace App\Providers;
 
-use App\Observers\UserObserver;
-use App\User;
 use Blade;
 use Bouncer;
 use App\Role;
+use App\User;
+use App\Observers\UserObserver;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider

@@ -2,12 +2,12 @@
 
 namespace Tests;
 
-use App\Exceptions\Handler;
 use App\User;
+use App\Exceptions\Handler;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Contracts\Debug\ExceptionHandler;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
-use Illuminate\Support\Facades\DB;
 
 abstract class TestCase extends BaseTestCase
 {
@@ -30,8 +30,7 @@ abstract class TestCase extends BaseTestCase
     {
         $this->oldExceptionHandler = $this->app->make(ExceptionHandler::class);
 
-        $this->app->instance(ExceptionHandler::class, new class extends Handler
-        {
+        $this->app->instance(ExceptionHandler::class, new class extends Handler {
             public function __construct()
             {
             }
@@ -57,7 +56,6 @@ abstract class TestCase extends BaseTestCase
 
         return $this;
     }
-
 
     protected function signInAdmin($admin = null)
     {

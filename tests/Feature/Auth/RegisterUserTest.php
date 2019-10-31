@@ -3,8 +3,8 @@
 namespace Tests\Feature\Auth;
 
 use App\User;
-use Illuminate\Support\Arr;
 use Tests\TestCase;
+use Illuminate\Support\Arr;
 use App\Mail\ConfirmEmailMail;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;

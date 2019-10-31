@@ -2,10 +2,10 @@
 
 namespace App\Observers;
 
-use App\Events\UserEmailChanged;
-use App\User;
 use Bouncer;
+use App\User;
 use Illuminate\Support\Str;
+use App\Events\UserEmailChanged;
 
 class UserObserver
 {
@@ -20,7 +20,7 @@ class UserObserver
 
     public function saving(User $user): void
     {
-        $user->full_room = str_pad($user->floor, 2, 0, STR_PAD_LEFT) . str_pad($user->room, 2, 0,
+        $user->full_room = str_pad($user->floor, 2, 0, STR_PAD_LEFT).str_pad($user->room, 2, 0,
                 STR_PAD_LEFT);
     }
 
@@ -28,7 +28,7 @@ class UserObserver
     {
         if ($user->getOriginal('email') !== $user->email) {
             $user->confirmed = false;
-            $user->confirmation_token = Str::limit(md5($user->email . Str::random()), 25, '');
+            $user->confirmation_token = Str::limit(md5($user->email.Str::random()), 25, '');
             event(new UserEmailChanged($user));
         }
 
@@ -38,5 +38,4 @@ class UserObserver
             Bouncer::retract('resident')->from($user);
         }
     }
-
 }

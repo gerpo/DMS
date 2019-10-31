@@ -1,8 +1,8 @@
 <?php
 
-use Faker\Generator as Faker;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
+use Faker\Generator as Faker;
 
 /*
 |--------------------------------------------------------------------------

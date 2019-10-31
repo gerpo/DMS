@@ -1,12 +1,10 @@
 <?php
 
-
 namespace Tests\Unit;
 
-
-use App\Notification;
 use App\User;
 use Tests\TestCase;
+use App\Notification;
 
 class NotificationTest extends TestCase
 {

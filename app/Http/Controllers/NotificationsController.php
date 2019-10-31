@@ -2,16 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Jobs\SendNotificationMail;
-use App\Notification;
 use App\User;
+use App\Notification;
 use Illuminate\Http\Request;
+use App\Jobs\SendNotificationMail;
 
 class NotificationsController extends Controller
 {
     public function index()
     {
         $notifications = Notification::with('creator')->get();
+
         return view('notifications')->with(compact('notifications'));
     }
 
@@ -21,7 +22,7 @@ class NotificationsController extends Controller
         $data = $request->validate([
             'title' => 'string|nullable',
             'message' => 'required|string',
-            'is_active' => 'boolean'
+            'is_active' => 'boolean',
         ]);
         $notification = Notification::make($data);
         $request->user()->notifications()->save($notification);
@@ -47,10 +48,11 @@ class NotificationsController extends Controller
     public function update(Notification $notification)
     {
         $data = request()->validate([
-            'is_active' => 'required|boolean'
+            'is_active' => 'required|boolean',
         ]);
 
         $notification->publish($data['is_active']);
+
         return $notification->fresh();
     }
 

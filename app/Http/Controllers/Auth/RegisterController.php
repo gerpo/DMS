@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers\Auth;
 
-use Illuminate\Auth\Events\Registered;
-use Illuminate\Support\Str;
 use Mail;
 use App\User;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Mail\ConfirmEmailMail;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
 

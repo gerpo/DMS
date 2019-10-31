@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Scopes\ActiveScope;
 use App\User;
 use App\Http\Controllers\Controller;
 

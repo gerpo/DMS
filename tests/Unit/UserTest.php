@@ -2,15 +2,15 @@
 
 namespace Tests\Unit;
 
-use App\Events\UserEmailChanged;
-use App\Mail\ConfirmEmailMail;
-use App\Notification;
-use App\User;
-use Bouncer;
-use Event;
-use Gerpo\Plugisto\Models\Plugisto;
 use Mail;
+use Event;
+use Bouncer;
+use App\User;
 use Tests\TestCase;
+use App\Notification;
+use App\Mail\ConfirmEmailMail;
+use App\Events\UserEmailChanged;
+use Gerpo\Plugisto\Models\Plugisto;
 
 class UserTest extends TestCase
 {

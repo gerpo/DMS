@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Mail\ConfirmEmailMail;
 use Auth;
 use Mail;
+use App\Mail\ConfirmEmailMail;
 
 class VerifyController extends Controller
 {

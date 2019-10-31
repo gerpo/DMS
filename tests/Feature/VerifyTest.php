@@ -1,13 +1,11 @@
 <?php
 
-
 namespace Tests\Feature;
 
-
-use App\Mail\ConfirmEmailMail;
-use App\User;
 use Mail;
+use App\User;
 use Tests\TestCase;
+use App\Mail\ConfirmEmailMail;
 
 class VerifyTest extends TestCase
 {

@@ -2,8 +2,8 @@
 
 namespace Tests\Feature\Api;
 
-use App\User;
 use Hash;
+use App\User;
 use Tests\TestCase;
 
 class UserPasswordTest extends TestCase
@@ -17,7 +17,7 @@ class UserPasswordTest extends TestCase
 
         $payload = [
             'new-password' => $newPassword,
-            'new-password_confirmation' => $newPassword
+            'new-password_confirmation' => $newPassword,
         ];
 
         $this->post(route('api.user.password', $user->id), $payload)
@@ -35,7 +35,7 @@ class UserPasswordTest extends TestCase
 
         $payload = [
             'new-password' => $newPassword,
-            'new-password_confirmation' => $newPassword
+            'new-password_confirmation' => $newPassword,
         ];
 
         $this->post(route('api.user.password', $user->id), $payload)

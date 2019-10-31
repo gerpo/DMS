@@ -2,11 +2,9 @@
 
 namespace App\Listeners;
 
-use App\Events\UserEmailChanged;
-use App\Mail\ConfirmEmailMail;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Mail;
+use App\Mail\ConfirmEmailMail;
+use App\Events\UserEmailChanged;
 
 class SendEmailConfirmationEmail
 {

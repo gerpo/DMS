@@ -2,13 +2,12 @@
 
 namespace Tests\Feature;
 
-use App\Mail\NotificationMail;
-use App\Mail\RegularMail;
-use App\Notification;
-use App\User;
-use Event;
 use Mail;
+use Event;
+use App\User;
 use Tests\TestCase;
+use App\Notification;
+use App\Mail\NotificationMail;
 
 class NotificationsTest extends TestCase
 {
@@ -72,8 +71,8 @@ class NotificationsTest extends TestCase
         $this->signInAdmin();
 
         $notification = [
-            'title' => "Test Title",
-            'message' => "Test Message",
+            'title' => 'Test Title',
+            'message' => 'Test Message',
             'is_active' => true,
         ];
 
@@ -92,8 +91,8 @@ class NotificationsTest extends TestCase
         $this->signIn($user);
 
         $notification = [
-            'title' => "Test Title",
-            'message' => "Test Message",
+            'title' => 'Test Title',
+            'message' => 'Test Message',
             'is_active' => true,
         ];
 
@@ -109,8 +108,8 @@ class NotificationsTest extends TestCase
         $this->withExceptionHandling()->signIn();
 
         $notification = [
-            'title' => "Test Title",
-            'message' => "Test Message",
+            'title' => 'Test Title',
+            'message' => 'Test Message',
             'is_active' => true,
         ];
 
@@ -222,8 +221,8 @@ class NotificationsTest extends TestCase
         create(User::class);
 
         $notification = [
-            'title' => "Test Title",
-            'message' => "Test Message",
+            'title' => 'Test Title',
+            'message' => 'Test Message',
             'is_active' => true,
             'send_mail' => true,
         ];
@@ -241,8 +240,8 @@ class NotificationsTest extends TestCase
         create(User::class);
 
         $notification = [
-            'title' => "Test Title",
-            'message' => "Test Message",
+            'title' => 'Test Title',
+            'message' => 'Test Message',
             'is_active' => true,
             'send_mail' => false,
         ];
@@ -260,8 +259,8 @@ class NotificationsTest extends TestCase
         create(User::class);
 
         $notification = [
-            'title' => "Test Title",
-            'message' => "Test Message",
+            'title' => 'Test Title',
+            'message' => 'Test Message',
             'is_active' => false,
             'send_mail' => true,
         ];

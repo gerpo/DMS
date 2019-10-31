@@ -16,6 +16,7 @@ class UsersController extends Controller
     public function show(User $user)
     {
         $user->load(['roles'])->append('permissions');
+
         return view('profile')->with(['user' => $user]);
     }
 }

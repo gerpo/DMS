@@ -2,9 +2,7 @@
 
 namespace Tests\Feature\Api;
 
-use App\Scopes\ActiveScope;
 use App\User;
-use Hash;
 use Tests\TestCase;
 
 class UserTest extends TestCase
@@ -392,8 +390,8 @@ class UserTest extends TestCase
         $this->signInAdmin();
 
         $user = create(User::class);
-        ++$user->room;
-        $newFullRoom = str_pad($user->floor, 2, 0, STR_PAD_LEFT) . str_pad($user->room, 2, 0,
+        $user->room++;
+        $newFullRoom = str_pad($user->floor, 2, 0, STR_PAD_LEFT).str_pad($user->room, 2, 0,
                 STR_PAD_LEFT);
 
         $this->post(route('api.users.update', $user->id), $user->toArray())
