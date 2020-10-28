@@ -36,6 +36,7 @@ class UserEmailTest extends TestCase
      * This endpoint is only to be used for the signed in user.
      * An admin or authorized user can use the api.users.update endpoint.
      */
+
     /** @test */
     public function an_admin_cannot_update_a_users_email(): void
     {
@@ -53,6 +54,4 @@ class UserEmailTest extends TestCase
 
         $this->assertNotEquals($newEmail, $user->fresh()->email);
     }
-
-
 }

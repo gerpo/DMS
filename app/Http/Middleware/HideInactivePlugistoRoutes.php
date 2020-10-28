@@ -20,7 +20,7 @@ class HideInactivePlugistoRoutes
         $baseUri = explode('/', $request->path())[0];
         if (Plugisto::withoutGlobalScope(ActiveScope::class)->where([
             'route' => "/{$baseUri}",
-            'is_active' => false
+            'is_active' => false,
         ])->get()->isNotEmpty()) {
             abort(404);
         }

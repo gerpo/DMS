@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Api;
 
-use Storage;
-use Illuminate\Support\Str;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+use Storage;
 
 class MailAttachmentsController extends Controller
 {

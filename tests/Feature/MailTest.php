@@ -2,13 +2,13 @@
 
 namespace Tests\Feature;
 
-use Mail;
-use Event;
-use App\User;
-use Tests\TestCase;
 use App\Mail\RegularMail;
+use App\User;
+use Event;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
+use Mail;
+use Tests\TestCase;
 
 class MailTest extends TestCase
 {

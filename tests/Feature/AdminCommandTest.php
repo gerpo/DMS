@@ -2,14 +2,14 @@
 
 namespace Tests\Feature;
 
+use App\User;
 use Artisan;
 use Bouncer;
-use App\User;
 use Tests\TestCase;
 
 class AdminCommandTest extends TestCase
 {
-    public function setUp():void
+    public function setUp(): void
     {
         parent::setUp();
 

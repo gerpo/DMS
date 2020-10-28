@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Database\Seeder;
 use Gerpo\Plugisto\Models\Plugisto;
+use Illuminate\Database\Seeder;
 
 class PlugistoTableSeeder extends Seeder
 {

@@ -30,8 +30,7 @@ abstract class TestCase extends BaseTestCase
     {
         $this->oldExceptionHandler = $this->app->make(ExceptionHandler::class);
 
-        $this->app->instance(ExceptionHandler::class, new class extends Handler
-        {
+        $this->app->instance(ExceptionHandler::class, new class extends Handler {
             public function __construct()
             {
             }
@@ -57,7 +56,6 @@ abstract class TestCase extends BaseTestCase
 
         return $this;
     }
-
 
     protected function signInAdmin($admin = null)
     {
