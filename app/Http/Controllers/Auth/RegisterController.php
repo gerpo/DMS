@@ -2,16 +2,16 @@
 
 namespace App\Http\Controllers\Auth;
 
-use Illuminate\Auth\Events\Registered;
-use Illuminate\Support\Str;
-use Mail;
-use App\User;
-use Illuminate\Http\Request;
-use App\Mail\ConfirmEmailMail;
 use App\Http\Controllers\Controller;
+use App\Mail\ConfirmEmailMail;
+use App\User;
+use Illuminate\Auth\Events\Registered;
+use Illuminate\Foundation\Auth\RegistersUsers;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Foundation\Auth\RegistersUsers;
+use Illuminate\Support\Str;
+use Mail;
 
 class RegisterController extends Controller
 {

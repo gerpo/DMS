@@ -10,8 +10,8 @@ class UserPasswordController extends Controller
 {
     public function update(User $user): void
     {
-        $data= request()->validate([
-            'new-password' => 'required|string|min:6|confirmed'
+        $data = request()->validate([
+            'new-password' => 'required|string|min:6|confirmed',
         ]);
 
         $user->password = Hash::make($data['new-password']);

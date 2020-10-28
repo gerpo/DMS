@@ -2,8 +2,8 @@
 
 namespace Tests\Feature;
 
-use Auth;
 use App\Role;
+use Auth;
 use Tests\TestCase;
 
 class RoleTest extends TestCase

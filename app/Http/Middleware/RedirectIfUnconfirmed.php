@@ -16,7 +16,7 @@ class RedirectIfUnconfirmed
      */
     public function handle($request, Closure $next)
     {
-        if (!Auth::user()->confirmed) {
+        if (! Auth::user()->confirmed) {
             return redirect('/verify');
         }
 

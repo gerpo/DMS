@@ -2,8 +2,8 @@
 
 namespace Tests\Feature;
 
-use Tests\TestCase;
 use Gerpo\Plugisto\Models\Plugisto;
+use Tests\TestCase;
 
 class PluginsTest extends TestCase
 {
