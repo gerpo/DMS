@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use PDF;
 use App\Role;
+use PDF;
 
 class RolePosterController extends Controller
 {

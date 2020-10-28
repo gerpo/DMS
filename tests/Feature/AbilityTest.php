@@ -3,8 +3,8 @@
 namespace Tests\Feature;
 
 use Auth;
-use Tests\TestCase;
 use Silber\Bouncer\Database\Ability;
+use Tests\TestCase;
 
 class AbilityTest extends TestCase
 {

@@ -2,8 +2,8 @@
 
 namespace Tests\Feature;
 
-use Artisan;
 use App\User;
+use Artisan;
 use Tests\TestCase;
 
 class ConfirmUserCommandTest extends TestCase

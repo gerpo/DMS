@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Api;
 
-use Gerpo\Plugisto\Models\Plugisto;
 use App\Http\Controllers\Controller;
+use Gerpo\Plugisto\Models\Plugisto;
 use Gerpo\Plugisto\Scopes\ActiveScope;
 
 class PluginsController extends Controller

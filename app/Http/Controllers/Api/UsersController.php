@@ -2,9 +2,8 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Scopes\ActiveScope;
-use App\User;
 use App\Http\Controllers\Controller;
+use App\User;
 
 class UsersController extends Controller
 {
@@ -20,7 +19,7 @@ class UsersController extends Controller
         $query = $this->buildResidentFilterQuery($residentFilter);
 
         $users = $query->whereNotIn('house', $dorms)
-            ->where(function ($subQuery) use ($filter, $orderColumn, $order) {
+            ->where(function ($subQuery) use ($filter) {
                 $subQuery->where('email', 'LIKE', $filter)
                     ->orWhere('firstname', 'LIKE', $filter)
                     ->orWhere('lastname', 'LIKE', $filter)

@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Controller;
 use App\Role;
 use App\User;
 use Illuminate\Support\Collection;
-use App\Http\Controllers\Controller;
 
 class MailGroupController extends Controller
 {

@@ -3,10 +3,10 @@
 namespace App\Providers;
 
 use App\Observers\UserObserver;
+use App\Role;
 use App\User;
 use Blade;
 use Bouncer;
-use App\Role;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider

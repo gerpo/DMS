@@ -75,14 +75,12 @@ Route::group(['middleware' => ['auth', RedirectIfUnconfirmed::class]], function 
     Route::delete('/users/{user}/roles',
         'Api\UserRolesController@destroy')->name('api.user-roles.destroy')->middleware('check_ability:manage_users');
 
-
     /* Plugins */
     Route::get('/plugins', 'PluginsController@index')->name('plugins');
     Route::patch('/plugins/{plugin}',
         'Api\PluginsController@update')->name('api.plugins.update')->middleware('check_ability:manage-plugins');
     Route::delete('/plugins/{plugin}',
         'Api\PluginsController@destroy')->name('api.plugins.destroy')->middleware('check_ability:manage-plugins');
-
 
     /* Mails */
     Route::get('/mails', 'MailsController@index')->name('mails');
@@ -101,7 +99,6 @@ Route::group(['middleware' => ['auth', RedirectIfUnconfirmed::class]], function 
     Route::delete('/api/attachments',
         'Api\MailAttachmentsController@destroy')->name('api.mailAttachments.destroy')->middleware('check_ability:send_mails');
 
-
     /* Notifications */
     Route::get('/notifications', 'NotificationsController@index')->name('notifications')->middleware('check_ability:create_notifications');
     Route::post('/notifications', 'NotificationsController@store')->name('notifications.store')->middleware('check_ability:create_notifications');
@@ -110,11 +107,13 @@ Route::group(['middleware' => ['auth', RedirectIfUnconfirmed::class]], function 
 
     Route::get('/test', function () {
         auth()->loginUsingId(2);
+
         return redirect()->back();
     });
 
     Route::get('/test1', function () {
         auth()->loginUsingId(1);
+
         return redirect()->back();
     });
 });

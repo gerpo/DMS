@@ -2,14 +2,14 @@
 
 namespace Tests\Feature\Auth;
 
-use App\User;
-use Illuminate\Support\Arr;
-use Tests\TestCase;
 use App\Mail\ConfirmEmailMail;
+use App\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 class RegisterUserTest extends TestCase
 {

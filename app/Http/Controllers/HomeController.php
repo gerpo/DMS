@@ -23,7 +23,7 @@ class HomeController extends Controller
     public function index()
     {
         $packages = Auth::user()->packages();
-        $notifications = Notification::where('published_at','!=' , null)->get();
+        $notifications = Notification::where('published_at', '!=', null)->get();
 
         return view('home', compact('packages', 'notifications'));
     }

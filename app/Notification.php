@@ -4,7 +4,6 @@ namespace App;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
-use Parsedown;
 
 class Notification extends Model
 {
@@ -17,7 +16,7 @@ class Notification extends Model
     ];
 
     protected $casts = [
-        'is_active' => 'boolean'
+        'is_active' => 'boolean',
     ];
 
     public static function boot()
@@ -25,7 +24,7 @@ class Notification extends Model
         parent::boot();
 
         static::saving(function ($notification) {
-            if (!$notification->is_active || $notification->published_at !== null) {
+            if (! $notification->is_active || $notification->published_at !== null) {
                 return;
             }
 
